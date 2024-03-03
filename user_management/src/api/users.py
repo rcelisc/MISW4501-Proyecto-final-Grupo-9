@@ -1,5 +1,5 @@
-from flask import jsonify, request, Blueprint
-from ..commands.create_user import CreateUser
+# from flask import jsonify, request, Blueprint
+# from ..commands.create_user import CreateUser
 # from ..commands.update_user import UpdateUser
 # from ..commands.generate_token import GenerateToken
 # from ..queries.get_user import GetUser
@@ -7,24 +7,24 @@ from ..commands.create_user import CreateUser
 # from ..commands.reset_user import ResetUserDataBase
 # from ..commands.update_user_native import UpdateUserNative
 # import os
-from ..models.user import UserSchema
+# from ..models.users import DeportistaNoProfesionalesSchema
 
 
-user_schema = UserSchema()
-users_api = Blueprint('users', __name__)
+# user_schema = DeportistaNoProfesionalesSchema()
+# users_api = Blueprint('users', __name__)
 
 
-@users_api.route('/api/user/create', methods = ['POST'])
-def create_user():
-    json = request.get_json()
-    fields_request = ['username','password','email','dni','fullName','phoneNumber']
+# @users_api.route('/api/user/create', methods = ['POST'])
+# def create_user():
+#     json = request.get_json()
+#     fields_request = ['username','password','email','dni','fullName','phoneNumber']
 
-    for field in fields_request:
-        if field not in json:
-            json[field]=""
+#     for field in fields_request:
+#         if field not in json:
+#             json[field]=""
     
-    result = CreateUser(json['username'],json['password'],json['email'],json['dni'],json['fullName'],json['phoneNumber']).execute()    
-    return jsonify(result), 201
+#     result = CreateUser(json['username'],json['password'],json['email'],json['dni'],json['fullName'],json['phoneNumber']).execute()    
+#     return jsonify(result), 201
 
 
 # # 2. Actualización de usuarios
