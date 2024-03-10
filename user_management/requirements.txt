@@ -2,6 +2,7 @@ marshmallow
 sqlalchemy
 wheel
 flask
+Flask-Migrate
 python-abc
 python-dotenv
 psycopg2-binary

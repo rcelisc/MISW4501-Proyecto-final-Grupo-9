@@ -1,18 +1,16 @@
 from dotenv import load_dotenv
 from flask import Flask, jsonify
-from .api.users import users_api
+from .api.users import api_users
 from .errors.errors import ApiError
 import os
 from .models.database import init_db
-from .models.database_queries import init_db_queries
 
 
 loaded = load_dotenv('.env.development')
 
 
 app = Flask(__name__)
-app.register_blueprint(users_api)
-init_db_queries()
+app.register_blueprint(api_users)
 init_db()
 
 @app.errorhandler(ApiError)
