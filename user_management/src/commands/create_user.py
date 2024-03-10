@@ -3,10 +3,11 @@ from ..errors.errors import InvalidParams,EmailUsernameExist
 
 from sqlalchemy.exc import IntegrityError
 from psycopg2.errors import UniqueViolation
-#
-from ..models.database import db_session, init_db
-from ..models.users import DeportistasNoProfesionales
-import os, requests, uuid
+from ..models.database import db_session #, init_db
+from ..models.user import User
+import asyncio
+from google.cloud import pubsub_v1
+# import os, requests, uuid
 
 
 class CreateUser(BaseCommannd):
@@ -18,19 +19,22 @@ class CreateUser(BaseCommannd):
     self.fullName=fullName
     self.phoneNumber=phoneNumber
 
-  async def execute(self):
-    u = DeportistasNoProfesionales(self.username, self.email, self.phoneNumber, self.dni, self.fullName, self.password,"POR_VERIFICAR")
-    await db_session.add(u)
+  # async def execute(self):
+  def execute(self):
+    u = User(self.username, self.email, self.phoneNumber, self.dni, self.fullName, self.password,"POR_VERIFICAR")
+    db_session.add(u)
     
     if (self.username=="" or self.email=="" or self.password=="" or self.username is None or self.email is None or self.password is None ):
       raise InvalidParams
     
     else:
       try:
-        await db_session.commit()
+        # await db_session.commit()
+        db_session.commit()
         response={"id":u.id, "createdAt":u.createdAt}
-        await db_session.close()
-        CreateUser.CreateTaskVerify(self, str(u.id))
+        db_session.close()
+        # Funcion - Native/Verifiy.
+        # CreateUser.CreateTaskVerify(self, str(u.id))
 
         return response
       except IntegrityError  as e:
