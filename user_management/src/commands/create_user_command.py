@@ -1,25 +1,20 @@
 from .base_command import BaseCommannd
 from ..errors.errors import InvalidParams,EmailUsernameExist
-
 from sqlalchemy.exc import IntegrityError
 from psycopg2.errors import UniqueViolation
 from ..models.database import db_session #, init_db
 from ..models.user import User
-import asyncio
-from google.cloud import pubsub_v1
-# import os, requests, uuid
 
 
 class CreateUser(BaseCommannd):
   def __init__(self, username, password, email, dni, fullName, phoneNumber):
-    self.username=username
-    self.password=password
-    self.email=email
-    self.dni=dni
-    self.fullName=fullName
-    self.phoneNumber=phoneNumber
+    self.username = username
+    self.password = password
+    self.email = email
+    self.dni = dni
+    self.fullName = fullName
+    self.phoneNumber = phoneNumber
 
-  # async def execute(self):
   def execute(self):
     u = User(self.username, self.email, self.phoneNumber, self.dni, self.fullName, self.password,"POR_VERIFICAR")
     db_session.add(u)
@@ -29,17 +24,13 @@ class CreateUser(BaseCommannd):
     
     else:
       try:
-        # await db_session.commit()
         db_session.commit()
         response={"id":u.id, "createdAt":u.createdAt}
         db_session.close()
-        # Funcion - Native/Verifiy.
-        # CreateUser.CreateTaskVerify(self, str(u.id))
-
         return response
       except IntegrityError  as e:
         if isinstance(e.orig, UniqueViolation):
-          await db_session.close()
+          db_session.close()
           raise EmailUsernameExist
 
 
