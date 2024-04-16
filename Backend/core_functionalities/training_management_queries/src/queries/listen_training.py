@@ -1,49 +1,25 @@
+from google.cloud import pubsub_v1
 from datetime import datetime
-from kafka import KafkaConsumer
 import json
 from ..models.training_session import TrainingSession, db
-from kafka.errors import NoBrokersAvailable
 import time
 import threading
 
-def json_deserializer(data):
-    try:
-        return json.loads(data.decode('utf-8'))
-    except json.JSONDecodeError:
-        print("Error decoding JSON")
-        return None
-
-def create_kafka_consumer():
-    for _ in range(5):  # Retry up to 5 times
-        try:
-            consumer = KafkaConsumer(
-                'training-events',
-                bootstrap_servers=['kafka:9092'],
-                #bootstrap_servers=['localhost:9092'],
-                auto_offset_reset='earliest',
-                group_id='training-events-consumer',
-                value_deserializer=json_deserializer
-            )
-            return consumer
-        except NoBrokersAvailable:
-            print("Waiting for Kafka to become available...")
-            time.sleep(5)  # Wait 5 seconds before retrying
-    raise Exception("Failed to connect to Kafka after several attempts.")
-
 
 class EventUpdatesListener:
-    def __init__(self,app):
+    def __init__(self, app):
         self.app = app
-        self.consumer = create_kafka_consumer()
-
-    def start_listening(self):
+        self.subscriber = pubsub_v1.SubscriberClient()
+        self.subscription_path = self.subscriber.subscription_path('miso-proyecto-de-grado-g09', 'training-events-sub')
+    
+    def callback(self, message):
         with self.app.app_context():
-            for message in self.consumer:
-                print(f"Received message: {message}")  # Ensuring messages are received
-                if isinstance(message.value, dict) and message.value.get('type') == 'TrainingSessionStopped':
-                    self.update_query_model(message.value.get('data', {}))
-                else:
-                    print("Received non-compliant message or failed to deserialize:", message.value)
+            print(f"Received message: {message.data}")
+            message_data = json.loads(message.data.decode('utf-8'))
+            message.ack()
+
+            if message_data['type'] == 'TrainingSessionStopped':
+                self.update_query_model(message_data.get('data', {}))
 
     def update_query_model(self, event_data):
         print("Processing data:", event_data)
@@ -64,6 +40,17 @@ class EventUpdatesListener:
         except Exception as e:
             db.session.rollback()
             print(f"Failed to update session data: {e}")
+    
+    def start_listening(self):
+        streaming_pull_future = self.subscriber.subscribe(self.subscription_path, callback=self.callback)
+        print("Listening for messages on {}".format(self.subscription_path))
+
+        with self.subscriber:
+            try:
+                streaming_pull_future.result()  # Block indefinitely.
+            except TimeoutError:
+                streaming_pull_future.cancel()
+                streaming_pull_future.result()
 
 def start_listener_in_background(app):
     listener = EventUpdatesListener(app)

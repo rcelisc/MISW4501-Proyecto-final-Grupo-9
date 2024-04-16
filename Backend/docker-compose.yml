@@ -1,37 +1,6 @@
 version: '3'
 
 services:
-
-  zookeeper:
-    image: wurstmeister/zookeeper
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
-    networks:
-      - em_net
-  
-  kafka:
-    image: wurstmeister/kafka
-    container_name: kafka
-    ports:
-      - "9092:9092"
-    environment:
-      KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      #KAFKA_LISTENERS: INTERNAL://0.0.0.0:9093,EXTERNAL://0.0.0.0:9092
-      #KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-      #KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      #KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9093,EXTERNAL://localhost:9092
-      #KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
-      KAFKA_LISTENERS: PLAINTEXT://:9092
-      #KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - zookeeper
-    networks:
-      - em_net
   
   db_event_management_commands:
     image: postgres:13
@@ -59,6 +28,9 @@ services:
       - db_event_management_commands
     environment:
       DATABASE_URL: postgresql://postgres:emCommands@db_event_management_commands:5432/db_event_management_commands
+      GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+    volumes:
+      - ../../../service-account.json:/secrets/service-account.json
     networks:
       - em_net
 
@@ -87,10 +59,11 @@ services:
     depends_on:
       db_event_management_queries:
         condition: service_healthy
-      kafka:
-        condition: service_started
     environment:
       DATABASE_URL: postgresql://postgres:emQueries@db_event_management_queries:5432/db_event_management_queries
+      GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+    volumes:
+      - ../../../service-account.json:/secrets/service-account.json
     networks:
       - em_net
 
@@ -120,6 +93,9 @@ services:
       - db_training_management_commands
     environment:
       DATABASE_URL: postgresql://postgres:tmCommands@db_training_management_commands:5432/db_training_management_commands
+      GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+    volumes:
+      - ../../../service-account.json:/secrets/service-account.json
     networks:
       - em_net
 
@@ -148,10 +124,11 @@ services:
     depends_on:
       db_training_management_queries:
         condition: service_healthy
-      kafka:
-        condition: service_started
     environment:
       DATABASE_URL: postgresql://postgres:tmQueries@db_training_management_queries:5432/db_training_management_queries
+      GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+    volumes:
+      - ../../../service-account.json:/secrets/service-account.json
     networks:
       - em_net
 
