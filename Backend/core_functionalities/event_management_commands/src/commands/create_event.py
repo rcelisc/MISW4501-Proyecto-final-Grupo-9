@@ -1,18 +1,16 @@
-from kafka import KafkaProducer
+from google.cloud import pubsub_v1
 import json
 from datetime import datetime, timedelta
 from ..models.event import Event, db
 from sqlalchemy.exc import IntegrityError
 
 class CreateEventCommandHandler:
-
-    def __init__(self):
-        self.producer = KafkaProducer(
-            bootstrap_servers=['kafka:9092'],
-            #bootstrap_servers=['localhost:9092'],
-            value_serializer=lambda v: json.dumps(v, default=str).encode('utf-8')
-        )
     
+    def __init__(self):
+        # Initialize Pub/Sub publisher
+        self.publisher = pubsub_v1.PublisherClient()
+        self.topic_path = self.publisher.topic_path('miso-proyecto-de-grado-g09', 'event-events')
+
     def validate_data(self, data):
         # Ensure all mandatory fields are present
         mandatory_fields = ['name', 'description', 'event_date', 'duration', 'location', 'category', 'fee']
@@ -64,8 +62,9 @@ class CreateEventCommandHandler:
                 "event_id": event.id,
                 "data": kafka_data
             }
-            self.producer.send('event-events', value=message)
-            self.producer.flush()
+
+            # Publish an event to Pub/Sub
+            self.publisher.publish(self.topic_path, json.dumps(message).encode('utf-8'))
             return event.id
         except IntegrityError:
             db.session.rollback()

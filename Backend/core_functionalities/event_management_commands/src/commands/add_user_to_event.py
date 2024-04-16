@@ -1,16 +1,15 @@
+from google.cloud import pubsub_v1
 from ..models.event import Event, db
 from sqlalchemy.orm.attributes import flag_modified
-from kafka import KafkaProducer
 import json
 
 class AddUserToEventCommand:
     def __init__(self, user_id, event_id):
         self.user_id = user_id
         self.event_id = event_id
-        self.producer = KafkaProducer(bootstrap_servers=['kafka:9092'],
-                                      value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-        #self.producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
-        #                    value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+        self.publisher = pubsub_v1.PublisherClient()
+        self.topic_path = self.publisher.topic_path('miso-proyecto-de-grado-g09', 'event-events')
+
 
     def execute(self):
         event = Event.query.get(self.event_id)
@@ -24,7 +23,10 @@ class AddUserToEventCommand:
             event.attendees["user_ids"].append(self.user_id)
             flag_modified(event, "attendees")
             db.session.commit()
-            # Publish an event to Kafka after updating the database
-            message = {"event_id": self.event_id, "user_id": self.user_id, "type": "UserAddedToEvent"}
-            self.producer.send('event-events', value=message)
-            self.producer.flush()
+            message = {
+                "event_id": self.event_id,
+                "user_id": self.user_id,
+                "type": "UserAddedToEvent"
+            }
+            # Data must be a byte string
+            self.publisher.publish(self.topic_path, json.dumps(message).encode('utf-8'))
