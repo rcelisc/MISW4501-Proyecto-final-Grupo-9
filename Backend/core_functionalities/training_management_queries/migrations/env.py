@@ -26,10 +26,8 @@ def get_engine():
 
 def get_engine_url():
     try:
-        url= get_engine().url.render_as_string(hide_password=False).replace(
+        return get_engine().url.render_as_string(hide_password=False).replace(
             '%', '%%')
-        print("Using database URL for migrations:", url)
-        return url
     except AttributeError:
         return str(get_engine().url).replace('%', '%%')
 

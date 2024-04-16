@@ -17,4 +17,3 @@ google-cloud-pubsub
 Flask[async]
 Flask-Testing
 Flask-Migrate
-kafka-python

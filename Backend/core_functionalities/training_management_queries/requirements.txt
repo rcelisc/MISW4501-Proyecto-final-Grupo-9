@@ -12,5 +12,5 @@ pytest
 pytest-cov
 pytest-mock
 pytest-env
-kafka-python
 # bcrypt
+google-cloud-pubsub

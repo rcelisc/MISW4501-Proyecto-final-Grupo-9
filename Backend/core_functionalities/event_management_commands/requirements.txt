@@ -15,4 +15,4 @@ pytest-env
 # bcrypt
 Flask-Testing
 Flask-Migrate
-kafka-python
+google-cloud-pubsub
