@@ -3,7 +3,6 @@ kind: Service
 metadata:
   name: event-management-commands
 spec:
-  type: LoadBalancer
   ports:
     - name: http
       port: 3001

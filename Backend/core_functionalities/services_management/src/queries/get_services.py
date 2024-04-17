@@ -8,5 +8,5 @@ def get_services_and_events():
     return services, events
 
 def fetch_events():
-    response = requests.get('http://event_management_queries_container:3002/events')
+    response = requests.get('http://event-management-queries.default.svc.cluster.local:3002/events/get')
     return response.json()

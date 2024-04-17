@@ -3,7 +3,6 @@ kind: Service
 metadata:
   name: training-management-queries
 spec:
-  type: LoadBalancer
   ports:
     - name: http
       port: 3003
