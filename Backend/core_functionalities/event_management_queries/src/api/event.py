@@ -5,7 +5,7 @@ from ..queries.get_user_calendar import GetUserCalendarQueryHandler
 
 event_blueprint = Blueprint('event', __name__)
 
-@event_blueprint.route('/events', methods=['GET'])
+@event_blueprint.route('/events/get', methods=['GET'])
 def get_events():
     handler = GetEventsQueryHandler()
     events_data = handler.handle()
