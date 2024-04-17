@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-training-management-commands
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-training-management-commands
+  template:
+    metadata:
+      labels:
+        app: db-training-management-commands
+    spec:
+      containers:
+      - name: db-tm-commands
+        image: postgres:13  # Ensure the correct Docker image version
+        env:
+        - name: POSTGRES_DB
+          value: db_training_management_commands
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-tm-commands-secret
+              key: password
+        - name: POSTGRES_USER
+          value: postgres
+        ports:
+        - containerPort: 5432
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - "-U"
+            - postgres
+            - "-d"
+            - db_training_management_commands
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      restartPolicy: Always
