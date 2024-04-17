@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-service-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-service-management
+  template:
+    metadata:
+      labels:
+        app: db-service-management
+    spec:
+      containers:
+      - name: db-service-management
+        image: postgres:13  # Make sure to use the correct Docker image tag
+        env:
+        - name: POSTGRES_DB
+          value: db_service_management
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-sm-services-secret
+              key: password
+        - name: POSTGRES_USER
+          value: postgres
+        ports:
+        - containerPort: 5432
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - "-U"
+            - postgres
+            - "-d"
+            - db_service_management
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      restartPolicy: Always

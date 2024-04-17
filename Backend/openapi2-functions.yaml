@@ -1,0 +1,405 @@
+swagger: '2.0'
+info:
+  title: Microservices API Gateway
+  description: Gateway to route to microservices
+  version: '1.0'
+host: 'api.mydomain.com'
+schemes:
+  - https
+basePath: /api/v1
+paths:
+  # Event Management
+  /events:
+    post:
+      summary: Create an event
+      operationId: createEvent
+      x-google-backend:
+        address: https://EVENT_MANAGEMENT_COMMANDS_URL/events
+      requestBody:
+        description: Create Event
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Event'
+      responses:
+        '201':
+          description: Event created
+    get:
+      summary: Get all events
+      operationId: getEvents
+      x-google-backend:
+        address: https://EVENT_MANAGEMENT_QUERIES_URL/events
+      responses:
+        '200':
+          description: Returns a list of events
+  /events/{event_id}:
+    put:
+      summary: Update an event
+      operationId: updateEvent
+      parameters:
+        - name: event_id
+          in: path
+          required: true
+          type: integer
+      requestBody:
+        description: Update Event
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Event'
+      x-google-backend:
+        address: https://EVENT_MANAGEMENT_COMMANDS_URL/events/{event_id}
+      responses:
+        '200':
+          description: Event updated
+    get:
+      summary: Get an event
+      operationId: getEvent
+      parameters:
+        - name: event_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://EVENT_MANAGEMENT_QUERIES_URL/events/{event_id}
+      responses:
+        '200':
+          description: Returns a single event
+  /events/{event_id}/add:
+    post:
+      summary: Add user to an event
+      operationId: addUserToEvent
+      parameters:
+        - name: event_id
+          in: path
+          required: true
+          type: integer
+      requestBody:
+        description: Add user to event
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/AddUserToEvent'
+      x-google-backend:
+        address: https://EVENT_MANAGEMENT_COMMANDS_URL/events/{event_id}/add
+      responses:
+        '200':
+          description: Item added to event
+  /user/{user_id}/calendar:
+    get:
+      summary: Get user's calendar
+      operationId: getUserCalendar
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://EVENT_MANAGEMENT_QUERIES_URL/user/{user_id}/calendar
+      responses:
+        '200':
+          description: Returns a list of events
+  # Service Management
+  /services:
+    post:
+      summary: Create a service
+      operationId: createService
+      requestBody:
+        description: Create Service
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Service'
+      x-google-backend:
+        address: https://SERVICE_MANAGEMENT_URL/services
+      responses:
+        '201':
+          description: Service created
+    get:
+      summary: Get all services
+      operationId: getServices
+      x-google-backend:
+        address: https://SERVICE_MANAGEMENT_URL/services
+      responses:
+        '200':
+          description: Returns a list of services
+  # Training Management
+  /calculate-ftp-vo2max:
+    post:
+      summary: Calculate FTP and VO2Max
+      operationId: calculateMetrics
+      requestBody:
+        description: Training session ID for metrics calculation
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/CalculateMetrics'
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_COMMANDS_URL/calculate-ftp-vo2max
+      responses:
+        '200':
+          description: Metrics calculated
+  /training-plan:
+    post:
+      summary: Create a training plan
+      operationId: createTrainingPlan
+      requestBody:
+        description: Details of the training plan to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/TrainingPlan'
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_COMMANDS_URL/training-plan
+      responses:
+        '201':
+          description: Training plan created
+  /training-plan/{training_plan_id}:
+    get:
+      summary: Get a training plan
+      operationId: getTrainingPlan
+      parameters:
+        - name: training_plan_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_QUERIES_URL/training-plan/{training_plan_id}
+      responses:
+        '200':
+          description: Returns a single training plan
+  /start-training:
+    post:
+      summary: Start a training
+      operationId: startTraining
+      requestBody:
+        description: Training session ID to start
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/StartTraining'
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_COMMANDS_URL/start-training
+      responses:
+        '200':
+          description: Training started
+  /stop-training:
+    post:
+      summary: Stop a training
+      operationId: stopTraining
+      requestBody:
+        description: Training session ID to stop
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/StopTraining'
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_COMMANDS_URL/stop-training
+      responses:
+        '200':
+          description: Training stopped
+  /receive-session-data:
+    post:
+      summary: Receive session data
+      operationId: receiveSessionData
+      requestBody:
+        description: Data from a training session
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/SessionData'
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_COMMANDS_URL/receive-session-data
+      responses:
+        '200':
+          description: Session data received
+  /api/training/history:
+    get:
+      summary: Get training history
+      operationId: getTrainingHistory
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_QUERIES_URL/api/training/history
+      responses:
+        '200':
+          description: Returns a list of training sessions
+  /training-sessions:
+    get:
+      summary: Get training sessions
+      operationId: getTrainingSessions
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_QUERIES_URL/training-sessions
+      responses:
+        '200':
+          description: Returns a list of training sessions
+  /training-sessions/{training_session_uuid}:
+    get:
+      summary: Get a training session
+      operationId: getTrainingSession
+      parameters:
+        - name: training_session_uuid
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_QUERIES_URL/training-sessions/{training_session_uuid}
+      responses:
+        '200':
+          description: Returns a single training session
+
+definitions:
+  Event:
+    type: object
+    required:
+      - name
+      - description
+      - event_date
+      - duration
+      - location
+      - category
+      - fee
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      event_date:
+        type: string
+        format: date-time
+      duration:
+        type: integer
+      location:
+        type: string
+      category:
+        type: string
+      fee:
+        type: number
+      additional_info:
+        $ref: '#/definitions/AdditionalInfo'
+  AdditionalInfo:
+    type: object
+    properties:
+      registration_deadline:
+        type: string
+        format: date
+      max_participants:
+        type: integer
+      min_age:
+        type: integer
+  CalculateMetrics:
+    type: object
+    required:
+      - session_id
+    properties:
+      session_id:
+        type: string
+        format: uuid
+  SessionData:
+    type: object
+    required:
+      - session_id
+      - power_output
+      - max_heart_rate
+      - resting_heart_rate
+    properties:
+      session_id:
+        type: string
+        format: uuid
+      power_output:
+        type: integer
+        description: Average power output in watts
+      max_heart_rate:
+        type: integer
+        description: Maximum heart rate during the session
+      resting_heart_rate:
+        type: integer
+        description: Resting heart rate before the session
+  TrainingPlan:
+    type: object
+    required:
+      - objectives
+      - description
+      - exercises
+      - frequency
+      - duration
+    properties:
+      objectives:
+        type: string
+        description: Main objectives of the training plan
+      description:
+        type: string
+        description: Detailed description of the training plan
+      exercises:
+        type: string
+        description: Types of exercises included in the plan
+      frequency:
+        type: string
+        description: How often the plan should be executed
+      duration:
+        type: string
+        description: Duration of the training plan in weeks
+  StartTraining:
+    type: object
+    required:
+      - user_id
+      - training_type
+    properties:
+      user_id:
+        type: integer
+      training_type:
+        type: string
+        description: Type of training session
+  StopTraining:
+    type: object
+    required:
+      - session_id
+      - end_time
+      - duration
+      - calories_burned
+    properties:
+      session_id:
+        type: string
+        format: uuid
+      end_time:
+        type: string
+        format: date-time
+      duration:
+        type: integer
+        description: Duration of the training session in minutes
+      calories_burned:
+        type: number
+        description: Estimated calories burned during the session
+  AddUserToEvent:
+    type: object
+    required:
+      - user_id
+    properties:
+      user_id:
+        type: integer
+        description: ID of the user to add to the event
+  Service:
+    type: object
+    required:
+      - name
+      - description
+      - category
+      - fee
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      category:
+        type: string
+      fee:
+        type: number
+  
+
