@@ -1,10 +1,8 @@
 steps:
-  - name: 'alpine'
-    args: ['ls', '-R', '/workspace']
   # Build and push the Event Management Commands service
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA', '.']
-    dir: 'core_functionalities/event_management_commands'
+    dir: 'Backend/core_functionalities/event_management_commands'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA']
@@ -19,7 +17,7 @@ steps:
   # Build and push the Event Management Queries service
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/event-management-queries:$SHORT_SHA', '.']
-    dir: 'core_functionalities/event_management_queries'
+    dir: 'Backend/core_functionalities/event_management_queries'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/event-management-queries:$SHORT_SHA']
@@ -34,7 +32,7 @@ steps:
   # Build and push the Service Management service
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/service-management:$SHORT_SHA', '.']
-    dir: 'core_functionalities/service_management'
+    dir: 'Backend/core_functionalities/service_management'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/service-management:$SHORT_SHA']
@@ -50,7 +48,7 @@ steps:
   # Build and push the Training Management Commands service
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/training-management-commands:$SHORT_SHA', '.']
-    dir: 'core_functionalities/training_management_commands'
+    dir: 'Backend/core_functionalities/training_management_commands'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/training-management-commands:$SHORT_SHA']
@@ -65,7 +63,7 @@ steps:
   # Build and push the Training Management Queries service
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/training-management-queries:$SHORT_SHA', '.']
-    dir: 'core_functionalities/training_management_queries'
+    dir: 'Backend/core_functionalities/training_management_queries'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/training-management-queries:$SHORT_SHA']
