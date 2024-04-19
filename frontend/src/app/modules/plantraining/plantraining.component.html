@@ -4,16 +4,8 @@
     <div class="col-12 text-center">
       <h2 style="margin-right: 10px; font-size: 48px;  margin-top: 40px; font-family:'Lato'; font-weight: bold; color: #00355F;">Crear plan de entrenamiento</h2><br>
     </div>
-
-    <div class="form-group col-12" style="margin-bottom: 40px; margin-top: 20px;margin-right: 40px">
-      <label class="col-3" for="seleccion" style="margin-right: 40px; margin-left: 20px; font-size: 32px; font-family: 'Lato'; font-weight: bold; color: #00355F;">Usuario:</label>
-      <select class="form-control col-4" id="seleccion" name="seleccion"  style="background-color: #0582CA; width: 263px; color:white; font-size: 20px; font-family: 'Inter-Bold', sans-serif; border: none;">
-        <option value="opcion1">Seleccione una opción:</option>
-        <option value="opcion1">Jane Doe 1</option>
-        <option value="opcion2">Jane Doe 2</option>
-        <option value="opcion3">Jane Doe 3</option>
-      </select>
-    </div>
+    
+    <div *ngIf="errorMessage" class="alert alert-danger">{{ this.errorMessage }}</div>
     
     <form [formGroup]="formulario" (ngSubmit)="enviarFormulario()">
 
@@ -43,7 +35,7 @@
       </div>
 
       <div class="col-12" style="margin-bottom: 10px;">
-        <button type="submit" class="btn" [disabled]="!formulario.valid">Crear</button>
+        <button type="submit" class="btn">Crear</button>
       </div>
 
     </form>
@@ -54,6 +46,7 @@
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
+    
 
   </div>
 </div>

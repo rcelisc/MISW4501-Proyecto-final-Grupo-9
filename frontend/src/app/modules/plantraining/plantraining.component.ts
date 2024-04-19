@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TrainingPlanService } from '../services/training-plan.service';
+import { TrainingPlanService } from '../../services/training-plan.service';
+import { TrainingPlanRequest } from '../../models/plan-training.model';
 
 @Component({
   selector: 'app-plantraining',
@@ -15,6 +16,7 @@ export class PlantrainingComponent implements OnInit {
 
   formulario: FormGroup;
   mostrarAlerta: boolean = false;
+  errorMessage: string = '';
 
   constructor(private fb: FormBuilder, private trainingPlanService: TrainingPlanService) {
     this.formulario = this.fb.group({
@@ -33,6 +35,7 @@ export class PlantrainingComponent implements OnInit {
     if (this.formulario.valid) {
       console.log(this.formulario);
       const formData = this.formulario.value;
+
       this.trainingPlanService.createPlan(formData).subscribe(
         (respuesta) => {
           console.log('Datos enviados correctamente:', respuesta);
@@ -41,10 +44,14 @@ export class PlantrainingComponent implements OnInit {
         },
         (error) => {
           console.error('Error al enviar datos:', error);
+          this.errorMessage = 'Error al enviar los datos. Por favor, inténtalo de nuevo más tarde.';
         }
       );
     } else {
+      
+      
       console.error('El formulario no es válido. Por favor, completa todos los campos.');
+      this.errorMessage = 'El formulario no es válido. Por favor, completa todos los campos.';
     }
   }
 

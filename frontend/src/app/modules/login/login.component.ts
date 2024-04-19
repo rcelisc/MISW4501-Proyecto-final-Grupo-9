@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-tipousuario',
+  selector: 'app-login',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './tipousuario.component.html',
-  styleUrls: ['./tipousuario.component.css']
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class TipousuarioComponent implements OnInit {
+export class LoginComponent implements OnInit {
 
   constructor() { }
 
