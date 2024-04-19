@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-management
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: service-management
+    spec:
+      containers:
+      - name: service-management-container
+        image: gcr.io/miso-proyecto-de-grado-g09/service-management:latest
+        ports:
+        - containerPort: 3005
+        env:
+        - name: DATABASE_URL
+          value: postgresql://postgres:smServices@db-service-management:5432/db_service_management
+      restartPolicy: Always

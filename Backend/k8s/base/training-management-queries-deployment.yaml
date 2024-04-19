@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: training-management-queries
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: training-management-queries
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: training-management-queries
+    spec:
+      containers:
+      - name: training-management-queries-container
+        image: gcr.io/miso-proyecto-de-grado-g09/training-management-queries:latest
+        ports:
+        - containerPort: 3003
+        env:
+        - name: DATABASE_URL
+          value: postgresql://postgres:tmQueries@db-training-management-queries:5432/db_training_management_queries
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /secrets/service-account.json
+        volumeMounts:
+        - mountPath: /secrets
+          name: sa-key-volume
+          readOnly: true
+      volumes:
+      - name: sa-key-volume
+        secret:
+          secretName: sa-key
+      restartPolicy: Always
