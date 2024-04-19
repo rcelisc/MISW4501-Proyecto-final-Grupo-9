@@ -1,8 +1,8 @@
 steps:
   # Build and push the Event Management Commands service
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA', '.']
-    dir: 'core_functionalities/event_management_commands'
+    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA', './event_management_commands']
+    #dir: 'core_functionalities/event_management_commands'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA']
