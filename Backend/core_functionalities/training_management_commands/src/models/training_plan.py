@@ -8,4 +8,5 @@ class TrainingPlan(db.Model):
     duration = db.Column(db.String(50), nullable=False)
     frequency = db.Column(db.String(50), nullable=False)
     objectives = db.Column(db.Text, nullable=False)
+    profile_type = db.Column(db.String(50), nullable=False)
     assigned_users = db.Column(db.Text, nullable=True) # This should be handle through events
