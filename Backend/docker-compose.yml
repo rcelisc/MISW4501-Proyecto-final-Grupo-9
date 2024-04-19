@@ -162,6 +162,71 @@ services:
     networks:
       - em_net
 
+  db_user_management_commands:
+    image: postgres:13
+    container_name: db_um_commands
+    environment:
+      POSTGRES_DB: db_user_management_commands
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: umCommands
+    networks:
+      - em_net
+
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres -d db_user_management_commands"]
+        interval: 5s
+        timeout: 10s
+        retries: 5
+
+  user_management_commands:
+    build:
+      context: ./core_functionalities/user_management_commands
+    container_name: user_management_commands_container
+    ports:
+      - "3006:3006"
+    depends_on:
+      - db_user_management_commands
+    environment:
+      DATABASE_URL: postgresql://postgres:umCommands@db_user_management_commands:5432/db_user_management_commands
+      GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+    volumes:
+      - ../../../service-account.json:/secrets/service-account.json
+    networks:
+      - em_net
+
+  db_user_management_queries:
+    image: postgres:13
+    container_name: db_um_queries
+    environment:
+      POSTGRES_DB: db_user_management_queries
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: umQueries
+    networks:
+      - em_net
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d db_user_management_queries"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  user_management_queries:
+    build:
+      context: ./core_functionalities/user_management_queries
+    container_name: user_management_queries_container
+    ports:
+      - "3007:3007"
+    depends_on:
+      db_user_management_queries:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:umQueries@db_user_management_queries:5432/db_user_management_queries
+      GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+    volumes:
+      - ../../../service-account.json:/secrets/service-account.json
+    networks:
+      - em_net
+
 networks:
   # app_net:
   tmq_net:

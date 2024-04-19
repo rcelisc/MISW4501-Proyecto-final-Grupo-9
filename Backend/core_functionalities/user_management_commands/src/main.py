@@ -2,8 +2,8 @@ from flask import Flask
 from .extensions import db, migrate
 from .api.user import user_blueprint
 from .config import DevelopmentConfig, TestingConfig, ProductionConfig
-from .queries.listen_user import start_listener_in_background
 import os
+
 
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
@@ -19,11 +19,8 @@ def create_app(config_class=DevelopmentConfig):
     migrate.init_app(app, db)
 
     app.register_blueprint(user_blueprint)
-    start_listener_in_background(app)
-
-
     return app
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(host="0.0.0.0", port=3007)
+    app.run(host="0.0.0.0", port=3006)
