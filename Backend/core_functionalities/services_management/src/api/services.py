@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from ..queries.get_services import get_services_and_events
-from ..commands.add_service import add_service
+from ..commands.create_service import create_service
 
 service_blueprint = Blueprint('service', __name__)
 
@@ -13,7 +13,7 @@ def get_services():
     })
 
 @service_blueprint.route('/services', methods=['POST'])
-def create_service():
+def create_services():
     data = request.json
-    service_id = add_service(data)
-    return jsonify({"message": "Service added successfully", "service_id": service_id}), 201
+    service_id = create_service(data)
+    return jsonify({"message": "Service created successfully", "service_id": service_id}), 201
