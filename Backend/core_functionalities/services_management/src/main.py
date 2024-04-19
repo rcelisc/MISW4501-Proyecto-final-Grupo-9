@@ -2,6 +2,7 @@ from flask import Flask
 from .extensions import db, migrate
 
 from .api.services import service_blueprint
+from .api.nutrition_plan import nutrition_blueprint
 import os
 from .config import DevelopmentConfig, ProductionConfig, TestingConfig
 
@@ -28,6 +29,7 @@ def create_app():
             print(f"Error initializing database tables: {e}")
 
     app.register_blueprint(service_blueprint)
+    app.register_blueprint(nutrition_blueprint)
 
     return app
 
