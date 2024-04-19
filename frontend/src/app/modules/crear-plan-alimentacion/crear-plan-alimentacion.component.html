@@ -1,0 +1,50 @@
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="col-12 text-center">
+      <h2 style="margin-right: 10px; font-size: 48px;  margin-top: 40px; font-family:'Lato'; font-weight: bold; color: #00355F;">Crear Plan de alimentación</h2><br>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">{{ this.errorMessage }}</div>
+
+    <form [formGroup]="formulario" (ngSubmit)="crearPlanAlimentacion()">
+
+      <div class="col-12" style="margin-bottom: 20px; margin-top: 20px;">
+        <label class="col-3" for="objetivo" style="margin-right: 40px; font-size: 32px; font-family: 'Lato'; font-weight: bold; color: #00355F;">Usuario:</label>
+        <select formControlName="usuario" class="form-control col-4 text-left" id="usuario" style="width: 538px; height: 57px; font-size: 32px; font-family: 'Inter-Thin', sans-serif;">
+        <option *ngFor="let usuario of usuarios" [value]="usuario.id">{{ usuario.nombre }}</option>
+        </select>
+      </div>
+
+
+      <div class="col-12" style="margin-bottom: 20px; margin-top: 20px;">
+        <label class="col-3" for="objetivo" style="margin-right: 40px; font-size: 32px; font-family: 'Lato'; font-weight: bold; color: #00355F;">Objetivo:</label>
+        <input formControlName="objetivo" type="text" class="form-control col-4 text-left" id="objetivo" placeholder="" style="width: 538px; height: 57px; font-size: 32px; font-family: 'Inter-Thin', sans-serif;">
+      </div>
+
+      <div class="col-12" style="margin-bottom: 20px; margin-top: 20px;">
+        <label class="col-3" for="descripcion" style="margin-right: 40px; font-size: 32px; font-family: 'Lato'; font-weight: bold; color: #00355F;">Descripción:</label>
+        <input formControlName="descripcion" type="text" class="form-control col-4 text-left" id="descripcion" placeholder="" style="width: 538px; height: 57px; font-size: 32px; font-family: 'Inter-Thin', sans-serif;">
+      </div>
+
+      <div class="col-12" style="margin-bottom: 20px; margin-top: 20px;">
+        <label class="col-3" for="frecuencia" style="margin-right: 40px; font-size: 32px; font-family: 'Lato'; font-weight: bold; color: #00355F;">Frecuencia:</label>
+        <input formControlName="frecuencia" type="text" class="form-control col-4 text-left" id="frecuencia" placeholder="" style="width: 538px; height: 57px; font-size: 32px; font-family: 'Inter-Thin', sans-serif;">
+      </div>
+
+
+      <div class="col-12" style="margin-bottom: 10px;">
+          <button type="submit" class="btn">Crear</button>
+      </div>
+
+    </form>
+
+    <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="mostrarAlerta">
+      <strong>¡Registro creado satisfactoriamente!</strong> Tu registro se ha guardado correctamente.
+      <button type="button" class="close" aria-label="Close" (click)="mostrarAlerta = false">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,16 @@
+.btn-link {
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #ffffff;
+    color: #006494;
+    border-radius: 5px;
+    font-family: 'Lato';
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .btn-link:hover {
+    background-color: #f0f0f0;
+  }

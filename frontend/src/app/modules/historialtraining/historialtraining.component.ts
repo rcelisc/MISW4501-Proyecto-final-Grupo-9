@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { TrainingPlanService } from '../services/training-plan.service';
+import { TrainingPlanService } from '../../services/training-plan.service';
 
 @Component({
   selector: 'app-historialtraining',
@@ -19,19 +19,19 @@ export class HistorialtrainingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getTrainings();
+    //this.getTrainings();
   }
 
-  getTrainings(): void {
-    this.trainingPlan.getTrainings().subscribe(
-      (response) => {
-        this.plans = response;
-        console.log(response);
-      },
-      (error) => {
-        console.error('Error al obtener los planes de entrenamiento:', error);
-      }
-    );
-  }
+  // getTrainings(): void {
+  //   this.trainingPlan.getTrainings().subscribe(
+  //     (response) => {
+  //       this.plans = response;
+  //       console.log(response);
+  //     },
+  //     (error) => {
+  //       console.error('Error al obtener los planes de entrenamiento:', error);
+  //     }
+  //   );
+  //}
 
 }
