@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-event-management-queries
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-event-management-queries
+  template:
+    metadata:
+      labels:
+        app: db-event-management-queries
+    spec:
+      containers:
+      - name: db-em-queries
+        image: postgres:13  # Ensure this is the correct version or use a specific version tag
+        env:
+        - name: POSTGRES_DB
+          value: db_event_management_queries
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-queries-secret
+              key: password
+        - name: POSTGRES_USER
+          value: postgres
+        ports:
+        - containerPort: 5432
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - "-U"
+            - postgres
+            - "-d"
+            - db_event_management_queries
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      restartPolicy: Always
