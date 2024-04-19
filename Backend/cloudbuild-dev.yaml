@@ -74,3 +74,7 @@ steps:
       - '-c'
       - |
         docker run --rm gcr.io/$PROJECT_ID/training-management-queries:latest python -m unittest discover -s tests
+
+options:
+  default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
+  substitution_option: ALLOW_LOOSE

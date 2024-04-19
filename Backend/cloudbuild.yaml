@@ -109,3 +109,7 @@ steps:
 substitutions:
   _CLUSTER_NAME: 'autopilot-cluster-1'
   _COMPUTE_ZONE: 'us-central1'
+
+options:
+  default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
+  substitution_option: MUST_MATCH
