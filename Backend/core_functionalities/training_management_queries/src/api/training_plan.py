@@ -1,6 +1,6 @@
 from flask import jsonify, request, Blueprint, Response
 from ..queries.get_training_history import GetTrainingHistory
-from ..queries.get_training_plan import GetTrainingPlanQueryHandler
+from ..queries.get_training_plan import GetTrainingPlanQueryHandler, GetTrainingPlansByProfileQueryHandler
 from ..models.training_history import TrainingHistorySchema
 
 
@@ -20,3 +20,9 @@ def get_training_plan(plan_id):
     handler = GetTrainingPlanQueryHandler()
     plan = handler.handle(plan_id)
     return jsonify(plan), 200
+
+@training_plan_blueprint.route('/training-plans/<profile>', methods=['GET'])
+def get_training_plans_by_profile(profile):
+    handler = GetTrainingPlansByProfileQueryHandler()
+    training_plans = handler.handle(profile)
+    return jsonify(training_plans), 200

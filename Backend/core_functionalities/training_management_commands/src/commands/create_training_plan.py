@@ -21,6 +21,7 @@ class CreateTrainingPlanCommandHandler:
                 "duration": plan.duration,
                 "frequency": plan.frequency,
                 "objectives": plan.objectives,
+                "profile_type": plan.profile_type,
             }
         }
         self.publisher.publish(self.topic_path, json.dumps(event_data).encode('utf-8'))
