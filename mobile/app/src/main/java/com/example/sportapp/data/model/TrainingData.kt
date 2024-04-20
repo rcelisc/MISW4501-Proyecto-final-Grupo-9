@@ -39,3 +39,14 @@ data class ReceiveSesionDataRequest(
 data class ReceiveSesionDataResponse (
     val message: String
 )
+
+data class TrainingPlansResponse(
+    val assigned_users: String,
+    val description: String,
+    val duration: String,
+    val exercises: String,
+    val frequency: String,
+    val id: Int,
+    val objectives: String,
+    val profile_type: String
+)

@@ -4,9 +4,11 @@ import android.util.Log
 import com.example.sportapp.SportApp
 import com.example.sportapp.data.api.CalculateFTPVo2Service
 import com.example.sportapp.data.api.EventsService
+import com.example.sportapp.data.api.EventsSuggestionsService
 import com.example.sportapp.data.api.ReceiveSesionDataService
 import com.example.sportapp.data.api.StartTrainingService
 import com.example.sportapp.data.api.StopTrainingService
+import com.example.sportapp.data.api.TrainingPlansService
 import com.example.sportapp.data.model.CalculateFtpVo2maxRequest
 import com.example.sportapp.data.model.ReceiveSesionDataRequest
 import com.example.sportapp.data.model.ReceiveSesionDataResponse
@@ -62,4 +64,12 @@ class ReceiveSesionDataRepository(private val receiveSesionDataService: ReceiveS
         val requestBody = jsonRequest.toRequestBody("application/json".toMediaTypeOrNull())
         receiveSesionDataService.receiveSesionDataServiceService(requestBody).enqueue(callback)
     }
+}
+
+class TrainingPlansRepository(private val trainingPlansService: TrainingPlansService) {
+    fun getTrainingPlans(profile: String) = trainingPlansService.getTrainingPlans(profile)
+}
+
+class EventsSuggestionsRepository(private val eventsSuggestionsService: EventsSuggestionsService) {
+    fun getEventsSuggestions() = eventsSuggestionsService.getEventsSuggestions()
 }

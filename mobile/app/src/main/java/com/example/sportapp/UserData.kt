@@ -10,6 +10,7 @@ class SportApp : Application() {
         var powerOutput: Int = 0
         var maxHeartRate: Int = 0
         var restingHeartRate: Int = 0
+        lateinit var profile: String
     }
 
     override fun onCreate() {
@@ -19,5 +20,6 @@ class SportApp : Application() {
         powerOutput = 0
         maxHeartRate = 0
         restingHeartRate = 0
+        profile = ""
     }
 }
