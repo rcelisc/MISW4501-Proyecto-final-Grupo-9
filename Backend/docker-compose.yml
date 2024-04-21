@@ -159,6 +159,9 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgresql://postgres:smServices@db_service_management:5432/db_service_management
+      GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+    volumes:
+      - ../../../service-account.json:/secrets/service-account.json
     networks:
       - em_net
 
