@@ -12,6 +12,7 @@ class Event(db.Model):
     category = db.Column(db.String(255), nullable=True)
     fee = db.Column(db.Float, nullable=True)
     attendees = db.Column(JSON, default=lambda: {"user_ids": []})
+    status = db.Column(db.String(50), default='created', nullable=False)
     additional_info = db.Column(JSON)  # This column can store any additional JSON-structured info
 
     def __repr__(self):

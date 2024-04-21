@@ -8,6 +8,7 @@ class Service(db.Model):
     description = Column(String, nullable=False)
     rate = Column(Float, nullable=False)
     available = Column(Boolean, default=True)
+    status = Column(String, default='created', nullable=False)
 
     def __repr__(self):
         return f"<Service(name={self.name}, available={self.available})>"
