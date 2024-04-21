@@ -29,4 +29,14 @@
     <string name="promt_data_sended">Receive Data.!!!</string>
     <string name="units_minutes">min.</string>
     <string name="boton_finish">FTP-Vo2Max</string>
+    <string name="tittle_suggestions">Suggestions</string>
+    <string name="training_objectives">Objetivos</string>
+    <string name="training_duration">Duration</string>
+    <string name="training_excercises">Exercises</string>
+    <string name="training_description">Plan</string>
+    <string name="table_training_plans_tittle">Trainings Plans</string>
+    <string name="event_description">Event</string>
+    <string name="event_name">Name</string>
+    <string name="event_date">Date</string>
+    <string name="event_fee">Fee</string>
 </resources>
