@@ -39,4 +39,9 @@
     <string name="event_name">Name</string>
     <string name="event_date">Date</string>
     <string name="event_fee">Fee</string>
+    <string name="prompt_dashboard_tittle">My Trainings</string>
+    <string name="dash_date">Date</string>
+    <string name="dash_duration">Duration</string>
+    <string name="dash_type">Type</string>
+    <string name="dash_calories">Calories</string>
 </resources>
