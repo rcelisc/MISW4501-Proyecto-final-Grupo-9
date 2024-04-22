@@ -15,5 +15,11 @@ def get_all_training_sessions():
 @training_session_blueprint.route('/training-sessions/<uuid:session_id>', methods=['GET'])
 def get_training_session(session_id):
     handler = GetTrainingSessionHandler()
-    session = handler.handle(session_id)
+    session = handler.handle(session_id=session_id)
+    return jsonify(session), 200
+
+@training_session_blueprint.route('/training-sessions/user/<int:user_id>', methods=['GET'])
+def get_training_session_by_user_id(user_id):
+    handler = GetTrainingSessionHandler()
+    session = handler.handle(user_id=user_id)
     return jsonify(session), 200
