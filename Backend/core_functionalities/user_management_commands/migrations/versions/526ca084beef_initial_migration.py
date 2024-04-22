@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: 7bd51988237a
+Revision ID: 526ca084beef
 Revises: 
-Create Date: 2024-04-19 03:05:06.743071
+Create Date: 2024-04-22 13:51:45.861262
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7bd51988237a'
+revision = '526ca084beef'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,6 +27,7 @@ def upgrade():
     sa.Column('city_of_living', sa.String(length=100), nullable=True),
     sa.Column('country_of_living', sa.String(length=100), nullable=True),
     sa.Column('type', sa.String(length=50), nullable=True),
+    sa.Column('ethnicity', sa.String(length=50), nullable=True),
     sa.Column('age', sa.Integer(), nullable=True),
     sa.Column('gender', sa.String(length=10), nullable=True),
     sa.Column('weight', sa.Float(), nullable=True),
@@ -35,6 +36,15 @@ def upgrade():
     sa.Column('country_of_birth', sa.String(length=100), nullable=True),
     sa.Column('sports', sa.String(length=200), nullable=True),
     sa.Column('profile_type', sa.String(length=50), nullable=True),
+    sa.Column('heart_rate', sa.Integer(), nullable=True),
+    sa.Column('vo2_max', sa.Float(), nullable=True),
+    sa.Column('blood_pressure', sa.String(length=50), nullable=True),
+    sa.Column('respiratory_rate', sa.Integer(), nullable=True),
+    sa.Column('training_frequency', sa.String(length=50), nullable=True),
+    sa.Column('sports_practiced', sa.String(length=200), nullable=True),
+    sa.Column('average_session_duration', sa.Integer(), nullable=True),
+    sa.Column('recovery_time', sa.Integer(), nullable=True),
+    sa.Column('training_pace', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
