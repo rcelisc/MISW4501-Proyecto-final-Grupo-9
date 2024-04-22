@@ -13,6 +13,7 @@ import com.example.sportapp.R
 import com.example.sportapp.ui.home.Home
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
+import com.example.sportapp.SportApp
 import com.example.sportapp.data.repository.DataRepository
 import com.example.sportapp.data.services.RetrofitEventsManagementQueries
 import com.example.sportapp.data.model.CalendarEvent
@@ -30,6 +31,7 @@ class CalendarEvents : AppCompatActivity() {
 
         val ivHome = findViewById<ImageView>(R.id.ivHome)
         val ivRunExe = findViewById<ImageView>(R.id.ivRunExe)
+        val ivNotif = findViewById<ImageView>(R.id.ivNotifications)
 
         ivHome.setOnClickListener{
             val home = Intent(this, Home::class.java)
@@ -41,6 +43,12 @@ class CalendarEvents : AppCompatActivity() {
             startActivity(home)
         }
 
+        ivNotif.setOnClickListener{
+            val notif = Intent(this, Notifications::class.java)
+            startActivity(notif)
+        }
+
+
         //Tabla de eventos
         val recyclerView = findViewById<RecyclerView>(R.id.rvEvents)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -49,7 +57,7 @@ class CalendarEvents : AppCompatActivity() {
         recyclerView.adapter = tableAdapter
 
 
-        repository.getCalendarEvents(1).enqueue(object : Callback<List<CalendarEvent>> {
+        repository.getCalendarEvents(SportApp.userCodeId).enqueue(object : Callback<List<CalendarEvent>> {
             override fun onResponse(call: Call<List<CalendarEvent>>, response: Response<List<CalendarEvent>>) {
                 if (response.isSuccessful) {
                     val calendarResponse = response.body()
