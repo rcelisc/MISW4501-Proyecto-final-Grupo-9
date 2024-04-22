@@ -159,12 +159,15 @@ steps:
           -Dsonar.python.coverage.reportPaths=coverage.xml
     secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
 
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/SONAR_TOKEN/versions/latest
+      env: '_SONAR_TOKEN'
+    - versionName: projects/$PROJECT_ID/secrets/SONAR_PROJECT_KEY/versions/latest
+      env: '_SONAR_PROJECT_KEY'
+    - versionName: projects/$PROJECT_ID/secrets/SONAR_ORG/versions/latest
+      env: '_SONAR_ORG'
+
 options:
   default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
   substitution_option: ALLOW_LOOSE
-
-secrets:
-  - secretEnv:
-      SONAR_TOKEN: 'projects/$PROJECT_ID/secrets/SONAR_TOKEN/versions/latest'
-      SONAR_PROJECT_KEY: 'projects/$PROJECT_ID/secrets/SONAR_PROJECT_KEY/versions/latest'
-      SONAR_ORG: 'projects/$PROJECT_ID/secrets/SONAR_ORG/versions/latest'
