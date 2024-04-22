@@ -29,7 +29,7 @@ steps:
           -Dsonar.sources=. \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.python.coverage.reportPaths=coverage.xml
-    secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
+    secretEnv: ['_SONAR_TOKEN', '_SONAR_PROJECT_KEY', '_SONAR_ORG']
 
   # Build and push the Event Management Queries service
   - name: 'gcr.io/cloud-builders/docker'
