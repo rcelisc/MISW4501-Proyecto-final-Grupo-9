@@ -1,8 +1,8 @@
 from ..models.event import Event
 
-class GetEventsQueryHandler:
-    def handle(self):
-        events = Event.query.all()
+class GetEventsPublishedQueryHandler:
+    def handle(self, status):
+        events = Event.query.filter_by(status=status).all()
         events_data = [{
             'id': event.id,
             'name': event.name,
@@ -12,8 +12,6 @@ class GetEventsQueryHandler:
             'location': event.location,
             'category': event.category,
             'fee': event.fee,
-            'status': event.status,
             'additional_info': event.additional_info
         } for event in events]
         return events_data
-    

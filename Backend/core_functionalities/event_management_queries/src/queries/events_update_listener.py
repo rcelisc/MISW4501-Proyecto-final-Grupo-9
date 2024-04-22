@@ -23,6 +23,8 @@ class EventUpdatesListener:
                 self.process_event_created(message_data)
             elif message_data['type'] == 'UserAddedToEvent':
                 self.process_user_added(message_data)
+            elif message_data['type'] == 'EventPublished':
+                self.process_event_published(message_data)
     
     def start_listening(self):
         streaming_pull_future = self.subscriber.subscribe(self.subscription_path, callback=self.callback)
@@ -56,6 +58,27 @@ class EventUpdatesListener:
             print(f"Added user {user_id} to event {event_id}.")
 
         print(f"Processing UserAddedToEvent: {message}")
+
+    def process_event_published(self, message):
+        print(f"Processing EventPublished: {message}")
+        event_id = message['event_id']
+        event = Event.query.get(event_id)
+        if not event:
+            print(f"Event {event_id} not found.")
+            return
+
+        if event.status != 'created':
+            print(f"Event {event_id} is not in a state that can be published.")
+            return
+
+        event.status = 'published'
+        flag_modified(event, "status")
+        try:
+            db.session.commit()
+            print(f"Event {event_id} published in query service.")
+        except Exception as e:
+            print(f"Failed to publish event in query service: {e}")
+            db.session.rollback()
     
     def process_event_created(self, message):
         print(f"Processing EventCreated: {message}")
