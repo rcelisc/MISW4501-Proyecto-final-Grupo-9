@@ -35,6 +35,7 @@ class Athlete(User):
     average_session_duration = db.Column(db.Integer)  # in minutes
     recovery_time = db.Column(db.Integer)  # in hours, typical recovery period
     training_pace = db.Column(db.String(50))  # e.g., '7 min/km'
+    plan_type = db.Column(db.String(50), default='basic')
 
     __mapper_args__ = {
         'polymorphic_identity':'athlete',
