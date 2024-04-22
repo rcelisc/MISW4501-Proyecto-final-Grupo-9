@@ -17,6 +17,7 @@ class User(db.Model):
     }
 
 class Athlete(User):
+    ethnicity = db.Column(db.String(50))
     age = db.Column(db.Integer)
     gender = db.Column(db.String(10))
     weight = db.Column(db.Float)
@@ -25,6 +26,15 @@ class Athlete(User):
     country_of_birth = db.Column(db.String(100))
     sports = db.Column(db.String(200))  # Comma-separated list of sports
     profile_type = db.Column(db.String(50))
+    heart_rate = db.Column(db.Integer)  # beats per minute
+    vo2_max = db.Column(db.Float)       # maximal oxygen uptake
+    blood_pressure = db.Column(db.String(50))  # e.g., '120/80'
+    respiratory_rate = db.Column(db.Integer)  # breaths per minute
+    training_frequency = db.Column(db.String(50))  # e.g., '3 times a week'
+    sports_practiced = db.Column(db.String(200))   # e.g., 'Running, Swimming'
+    average_session_duration = db.Column(db.Integer)  # in minutes
+    recovery_time = db.Column(db.Integer)  # in hours, typical recovery period
+    training_pace = db.Column(db.String(50))  # e.g., '7 min/km'
 
     __mapper_args__ = {
         'polymorphic_identity':'athlete',
