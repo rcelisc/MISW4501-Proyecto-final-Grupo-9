@@ -15,6 +15,7 @@ class GetEventQueryHandler:
             'location': event.location,
             'category': event.category,
             'fee': event.fee,
+            'status': event.status,
             'additional_info': event.additional_info
         }
         return event_data
