@@ -29,16 +29,6 @@ def create_app():
 
     app.register_blueprint(event_blueprint)
 
-    # Function to register CLI commands
-    # def register_cli_commands(app):
-    #     @app.cli.command("init-db")
-    #     def init_db():
-    #         """Create database tables."""
-    #         db.create_all()
-    #         print("Database tables created.")
-    
-    # register_cli_commands(app)
-
     return app
 
 if __name__ == "__main__":
