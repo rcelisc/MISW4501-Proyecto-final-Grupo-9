@@ -12,6 +12,10 @@ Es importante que siempre trabajes sobre un ambiente virtual y tengas todas las 
  - ``python3 -m venv venv``
  - ``source venv/bin/activate``
  - ``pip install -r requirements.txt``
+ - ``export FLASK_APP=src/main.py``
+ - ``export GOOGLE_APPLICATION_CREDENTIALS="../../../../../service-account.json"``
+ - ``coverage run -m unittest discover -s tests -v``
+ - ``coverage report -m``
 
 ## 2. Instrucciones de Ejecución de la Aplicacion con docker compose y localmente
 Esta sesion proporciona las instrucciones necesarias para desplegar y ejecutar los servicios tanto en Docker como localmente.
