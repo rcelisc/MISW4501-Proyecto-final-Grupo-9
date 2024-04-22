@@ -61,7 +61,7 @@ steps:
           -Dsonar.sources=. \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.python.coverage.reportPaths=coverage.xml
-    secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
+    secretEnv: ['_SONAR_TOKEN', '_SONAR_PROJECT_KEY', '_SONAR_ORG']
 
   # Build and push the Service Management service
   - name: 'gcr.io/cloud-builders/docker'
@@ -93,7 +93,7 @@ steps:
           -Dsonar.sources=. \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.python.coverage.reportPaths=coverage.xml
-    secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
+    secretEnv: ['_SONAR_TOKEN', '_SONAR_PROJECT_KEY', '_SONAR_ORG']
 
   # Build and push the Training Management Commands service
   - name: 'gcr.io/cloud-builders/docker'
@@ -125,7 +125,7 @@ steps:
           -Dsonar.sources=. \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.python.coverage.reportPaths=coverage.xml
-    secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
+    secretEnv: ['_SONAR_TOKEN', '_SONAR_PROJECT_KEY', '_SONAR_ORG']
 
   # Build and push the Training Management Queries service
   - name: 'gcr.io/cloud-builders/docker'
@@ -157,7 +157,7 @@ steps:
           -Dsonar.sources=. \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.python.coverage.reportPaths=coverage.xml
-    secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
+    secretEnv: ['_SONAR_TOKEN', '_SONAR_PROJECT_KEY', '_SONAR_ORG']
 
 availableSecrets:
   secretManager:
