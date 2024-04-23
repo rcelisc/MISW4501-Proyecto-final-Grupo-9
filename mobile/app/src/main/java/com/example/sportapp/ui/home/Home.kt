@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.sportapp.LoginScreen
 import com.example.sportapp.R
 import com.example.sportapp.ui.views.CalendarEvents
+import com.example.sportapp.ui.views.DashboardTraining
 import com.example.sportapp.ui.views.Notifications
 import com.example.sportapp.ui.views.StartTraining
 import com.example.sportapp.ui.views.StravaViewConnect
@@ -23,6 +24,8 @@ class Home : AppCompatActivity() {
         val btnExit1 = findViewById<TextView>(R.id.tvwCerrarSesion)
         val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
         val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
+        val btnDashboard = findViewById<ImageView>(R.id.ivClockW)
+
 
 
         //Redirige a la Actividad Strava.
@@ -57,6 +60,12 @@ class Home : AppCompatActivity() {
         btnNotifications.setOnClickListener{
             val notif = Intent(this, Notifications::class.java)
             startActivity(notif)
+        }
+
+
+        btnDashboard.setOnClickListener{
+            val dash = Intent(this, DashboardTraining::class.java)
+            startActivity(dash)
         }
 
     }

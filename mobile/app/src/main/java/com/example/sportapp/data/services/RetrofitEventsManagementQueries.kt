@@ -10,6 +10,7 @@ import com.example.sportapp.data.api.ReceiveSesionDataService
 import com.example.sportapp.data.api.StartTrainingService
 import com.example.sportapp.data.api.StopTrainingService
 import com.example.sportapp.data.api.TrainingPlansService
+import com.example.sportapp.data.api.TrainingSessionsService
 
 object RetrofitEventsManagementQueries {
 
@@ -106,5 +107,19 @@ object RetrofitEventSuggestionsService {
             .build()
 
         return retrofit.create(EventsSuggestionsService::class.java)
+    }
+}
+
+object RetrofitTrainingSesionsService {
+
+    private const val BASE_URL = Config.BASE_URL_Trainings.toString()
+
+    fun createApiService(): TrainingSessionsService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(TrainingSessionsService::class.java)
     }
 }
