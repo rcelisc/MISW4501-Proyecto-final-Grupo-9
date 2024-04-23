@@ -14,8 +14,13 @@ Es importante que siempre trabajes sobre un ambiente virtual y tengas todas las 
  - ``pip install -r requirements.txt``
  - ``export FLASK_APP=src/main.py``
  - ``export GOOGLE_APPLICATION_CREDENTIALS="../../../../../service-account.json"``
+
  - ``coverage run -m unittest discover -s tests -v``
  - ``coverage report -m``
+ - ``export STRAVA_CLIENT_SECRET=strava_client_secret``
+ - ``export STRAVA_CLIENT_ID=strava_client_id``
+ - ``export STRAVA_REDIRECT_URI=http://localhost:3004/strava_callback``
+ - ``export FLASK_SECRET_KEY=default_secret_key``
 
 ## 2. Instrucciones de Ejecución de la Aplicacion con docker compose y localmente
 Esta sesion proporciona las instrucciones necesarias para desplegar y ejecutar los servicios tanto en Docker como localmente.
