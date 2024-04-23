@@ -43,5 +43,5 @@
     <string name="dash_date">Date</string>
     <string name="dash_duration">Duration</string>
     <string name="dash_type">Type</string>
-    <string name="dash_calories">Calories</string>
+    <string name="dash_notes">Notes</string>
 </resources>

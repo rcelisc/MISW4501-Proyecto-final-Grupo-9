@@ -42,5 +42,5 @@
     <string name="dash_date">Fecha</string>
     <string name="dash_duration">Duración</string>
     <string name="dash_type">Tipo</string>
-    <string name="dash_calories">Calorias</string>
+    <string name="dash_notes">Notas</string>
 </resources>
