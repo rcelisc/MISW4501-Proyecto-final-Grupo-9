@@ -24,6 +24,26 @@ spec:
           value: postgresql://postgres:tmCommands@db-training-management-commands:5432/db_training_management_commands
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /secrets/service-account.json
+        - name: STRAVA_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: strava-secrets
+              key: client-id
+        - name: STRAVA_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: strava-secrets
+              key: client-secret
+        - name: STRAVA_REDIRECT_URI
+          valueFrom:
+            secretKeyRef:
+              name: strava-secrets
+              key: redirect-uri
+        - name: FLASK_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: strava-secrets
+              key: flask-secret-key
         volumeMounts:
         - mountPath: /secrets
           name: sa-key-volume
