@@ -93,7 +93,7 @@
                 android:id="@+id/tvwWelcome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="35dp"
                 android:layout_marginBottom="140dp"
                 android:fontFamily="@font/lato_bold_font"
                 android:text="@string/prompt_dashboard_tittle"
@@ -107,30 +107,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textViewTitulo" />
 
-
-
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="550dp"
-                android:background="@color/backcolorapp">
+                android:layout_marginTop="80dp"
+                android:background="@color/backcolorapp"
+                android:orientation="horizontal">
 
-                <!-- TextView debajo de la imagen -->
-                <TextView
-                    android:id="@+id/tvwCerrarSesion"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTrainings"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:fontFamily="@font/lato_bold_font"
-                    android:text="@string/home_close_sesion"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="0dp"
-                    android:textSize="25dp" />
-            </RelativeLayout>
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical" />
+
+            </LinearLayout>
+
 
         </FrameLayout>
 

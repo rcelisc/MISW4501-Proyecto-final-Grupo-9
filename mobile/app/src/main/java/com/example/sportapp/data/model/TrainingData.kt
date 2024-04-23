@@ -50,3 +50,12 @@ data class TrainingPlansResponse(
     val objectives: String,
     val profile_type: String
 )
+
+data class TrainingsSesionsResponse(
+    val duration: String,
+    val id: String,
+    val notes: String,
+    val training_type: String,
+    val user_id: Int
+)
+

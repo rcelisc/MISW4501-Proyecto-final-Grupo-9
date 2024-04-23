@@ -7,6 +7,7 @@ import com.example.sportapp.data.model.StartTrainingResponse
 import com.example.sportapp.data.model.StopTrainingResponse
 import com.example.sportapp.data.model.TrainingMetricsCalculatedResponse
 import com.example.sportapp.data.model.TrainingPlansResponse
+import com.example.sportapp.data.model.TrainingsSesionsResponse
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -48,6 +49,11 @@ interface TrainingPlansService {
 interface EventsSuggestionsService {
     @GET("/events/get")
     fun getEventsSuggestions(): Call<List<EventsSuggestionsResponse>>
+}
+
+interface TrainingSessionsService {
+    @GET("/training-sessions/user/{userId}")
+    fun getTrainingUserService(@Path("userId") userId: Int): Call<List<TrainingsSesionsResponse>>
 }
 
 //interface ApiService {

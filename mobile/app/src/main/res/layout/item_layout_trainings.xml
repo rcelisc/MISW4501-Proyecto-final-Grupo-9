@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="8dp"
-            android:text="@string/calendar_event_field"
+            android:text="@string/dash_type"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/white"/>
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="8dp"
-            android:text="@string/calendar_date_field"
+            android:text="@string/dash_duration"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"/>
@@ -35,20 +35,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="8dp"
-            android:text="@string/calendar_description_field"
+            android:text="@string/dash_notes"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"/>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:text="@string/calendar_description_field"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"/>
 
     </LinearLayout>
 
@@ -85,14 +76,6 @@
             android:textSize="16sp"
             android:textColor="@android:color/white"/>
 
-        <TextView
-            android:id="@+id/textViewColumn4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:textSize="16sp"
-            android:textColor="@android:color/white"/>
 
     </LinearLayout>
 
