@@ -1,29 +1,29 @@
 <div class="container">
-  <h2 class="title">Crear Servicio</h2>
+  <h2 i18n="@@createServiceTitle" class="title">Crear Servicio</h2>
   <form [formGroup]="createServiceForm" (ngSubmit)="onSubmit()">
     <div class="form-field">
       <mat-form-field appearance="fill">
-        <mat-label>Nombre</mat-label>
+        <mat-label i18n="@@createServiceName">Nombre</mat-label>
         <input matInput formControlName="name">
       </mat-form-field>
     </div>
 
     <div class="form-field">
       <mat-form-field appearance="fill">
-        <mat-label>Descripción</mat-label>
+        <mat-label i18n="@@createServiceDescription">Descripción</mat-label>
         <textarea matInput formControlName="description"></textarea>
       </mat-form-field>
     </div>
 
     <div class="form-field">
       <mat-form-field appearance="fill">
-        <mat-label>Costo</mat-label>
+        <mat-label i18n="@@createServiceRate">Costo</mat-label>
         <input matInput formControlName="rate" type="number">
       </mat-form-field>
     </div>
 
     <div class="button-container">
-      <button mat-button class="create-button" type="submit" >Crear</button>
+      <button mat-button class="create-button" type="submit" i18n="@@createServiceButton" >Crear</button>
     </div>
   </form>
 </div>
