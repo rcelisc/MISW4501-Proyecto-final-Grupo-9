@@ -16,10 +16,10 @@ export class CreateServiceService {
   }
 
   getServices(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any[]>(`${this.apiUrl}`);
   }
 
   publishService(serviceId: number): Observable<any> {
-    return this.http.put(`${this.apiUrl}/publish-service/${serviceId}`, {});
+    return this.http.post(`${this.apiUrl}/${serviceId}/publish`, {});
   }
 }

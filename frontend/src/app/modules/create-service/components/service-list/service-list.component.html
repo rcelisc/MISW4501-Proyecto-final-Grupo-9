@@ -1,10 +1,29 @@
-<div class="service-list">
-    <h2>Mis servicios</h2>
-    <div *ngFor="let service of services">
-      <div>{{ service.nombre }}</div>
-      <div>{{ service.descripcion }}</div>
-      <div>{{ service.costo }}</div>
-      <button (click)="onPublishService(service.id)">Publicar servicio</button>
-    </div>
-  </div>
-  
+<h2>Mis Servicios</h2>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef> Nombre </th>
+    <td mat-cell *matCellDef="let service"> {{ service.name }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="descripcion">
+    <th mat-header-cell *matHeaderCellDef> Descripción </th>
+    <td mat-cell *matCellDef="let service"> {{ service.description }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="costo">
+    <th mat-header-cell *matHeaderCellDef> Costo </th>
+    <td mat-cell *matCellDef="let service"> {{ service.rate }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="estado">
+    <th mat-header-cell *matHeaderCellDef> Estado </th>
+    <td mat-cell *matCellDef="let service">
+      <button mat-button (click)="onPublishService(service)" [disabled]="service.available">
+        {{ service.available ? 'Publicado' : 'Publicar servicio' }}
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
