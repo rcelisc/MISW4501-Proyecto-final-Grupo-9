@@ -1,3 +1,4 @@
+
 import { Routes } from '@angular/router';
 import { HomeComponent } from './modules/home/home.component';
 import { TipousuarioComponent } from './modules/tipousuario/tipousuario.component';
@@ -9,10 +10,12 @@ import { InicioOrganizadorComponent } from './modules/inicioOrganizador/inicioOr
 import { CrearPlanAlimentacionComponent } from './modules/crear-plan-alimentacion/crear-plan-alimentacion.component';
 import { InicioDeportistaComponent } from './modules/inicio-deportista/inicio-deportista.component';
 import { RegistrarUsuarioComponent } from './modules/registrar-usuario/registrar-usuario.component';
-import { CrearServicioComponent } from './modules/crear-servicio/crear-servicio.component';
 import { LoginComponent } from './modules/login/login.component';
 import { MiCuentaComponent } from './modules/mi-cuenta/mi-cuenta.component';
 import { ListarUsuariosProfesionalComponent } from './modules/listar-usuarios-profesional/listar-usuarios-profesional.component';
+import { ServiceListComponent } from './modules/create-service/components/service-list/service-list.component';
+import { ProfessionalProfileComponent } from './modules/professional-profile/professional-profile.component';
+import { CreateServiceComponent } from './modules/create-service/components/create-service/create-service.component';
 
 export const routes: Routes = [
   {path: '', component:HomeComponent},
@@ -26,9 +29,10 @@ export const routes: Routes = [
   {path: 'crearplanalimentacion', component: CrearPlanAlimentacionComponent},
   {path: 'iniciodeportista', component: InicioDeportistaComponent},
   {path: 'registrarusuario', component: RegistrarUsuarioComponent},
-  {path: 'crearservicio', component: CrearServicioComponent},
   {path: 'login', component: LoginComponent},
   {path: 'micuenta', component: MiCuentaComponent},
-  {path: 'listausuriosprofesional', component: ListarUsuariosProfesionalComponent}
-
+  {path: 'listausuriosprofesional', component: ListarUsuariosProfesionalComponent},
+  {path: 'servicelist', component: ServiceListComponent},
+  {path: 'create-service', component: CreateServiceComponent},
+  {path: 'professional-profile', component: ProfessionalProfileComponent},
 ];

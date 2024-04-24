@@ -1,0 +1,52 @@
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CreateServiceService } from '../../../../services/create-service.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MaterialModule } from '../../../../material.module';
+
+@Component({
+  selector: 'app-create-service',
+  standalone: true,
+  imports: [MaterialModule, ReactiveFormsModule],
+  templateUrl: './create-service.component.html',
+  styleUrl: './create-service.component.scss'
+})
+export class CreateServiceComponent {
+  createServiceForm: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private createServiceService: CreateServiceService,
+    private snackBar: MatSnackBar
+  ){
+    this.createServiceForm = this.fb.group({
+      nombre: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      costo: ['', [Validators.required, Validators.pattern(/^\d+$/)]]
+    });
+  }
+
+  onSubmit(): void {
+    // Trigger validation for all form fields
+    this.createServiceForm.markAllAsTouched();
+
+    if (!this.createServiceForm.valid) {
+      this.snackBar.open('Por favor, complete los campos requeridos.', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['snack-bar-error'] // Apply custom CSS for styling the error snackbar
+      });
+      return; // Return early if form is invalid
+    }
+
+    // Proceed with the form submission if the form is valid
+    this.createServiceService.createService(this.createServiceForm.value).subscribe({
+      next: (response) => {
+        this.snackBar.open('Servicio creado exitosamente', 'Cerrar', { duration: 3000 });
+        // Handle navigation to the services list or other actions as needed
+      },
+      error: (error) => {
+        this.snackBar.open('Error al crear el servicio', 'Cerrar', { duration: 3000 });
+      }
+    });
+  }
+}
