@@ -10,5 +10,5 @@
     <color name="backtittle">#00355F</color>
     <color name="backmenuppal">#006494</color>
     <color name="backcolorapp">#0582CA</color>
-
+    <color name="selected_background_color">#0582CA</color>
 </resources>

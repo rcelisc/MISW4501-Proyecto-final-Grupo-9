@@ -26,6 +26,16 @@ class RunTraining : AppCompatActivity() {
 
         val tvwTypeRun = findViewById<TextView>(R.id.tvwTypeRun)
         val btnHome = findViewById<ImageView>(R.id.ivHome)
+        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
+
+
+
+
+        //Redirige a la Actividad Device
+        btnDevice.setOnClickListener{
+            val device = Intent(this, ConnectDevice::class.java)
+            startActivity(device)
+        }
 
         btnHome.setOnClickListener{
             val home = Intent(this, Home::class.java)
