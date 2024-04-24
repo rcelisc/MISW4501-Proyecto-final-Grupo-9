@@ -20,17 +20,28 @@ h2 {
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  overflow-x: auto; // Ensures table is scrollable on small screens
+
+  th.mat-header-cell, td.mat-cell {
+    padding: 8px 16px; // Keep padding consistent for both header and cell
+  }
 
   th.mat-header-cell {
     font-family: 'Inter', sans-serif;
     color: #005792; // Dark blue for headers to add contrast
     font-size: 16px;
     font-weight: 500;
+    text-align: left; // Align headers to the left
+    padding: 8px 16px;
+    
   }
 
   td.mat-cell {
     font-family: 'Inter', sans-serif;
     font-size: 14px;
+    &:last-child {
+      text-align: center; // Center-align the last cell content (Estado)
+    }
   }
 
   button {
@@ -42,6 +53,7 @@ h2 {
     border: none;
     cursor: pointer;
 
+
     &:hover {
       background-color: #e6eff7;
     }
@@ -49,6 +61,15 @@ h2 {
     &[disabled] {
       color: gray;
       cursor: not-allowed;
+    }
+  }
+}
+
+.container {
+  @media (max-width: 768px) {
+    .mat-elevation-z8 {
+      width: 100%;
+      max-width: none;
     }
   }
 }
