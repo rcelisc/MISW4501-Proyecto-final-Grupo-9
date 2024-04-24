@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.sportapp.LoginScreen
 import com.example.sportapp.R
 import com.example.sportapp.ui.views.CalendarEvents
+import com.example.sportapp.ui.views.ConnectDevice
 import com.example.sportapp.ui.views.DashboardTraining
 import com.example.sportapp.ui.views.Notifications
 import com.example.sportapp.ui.views.StartTraining
@@ -25,8 +26,15 @@ class Home : AppCompatActivity() {
         val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
         val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
         val btnDashboard = findViewById<ImageView>(R.id.ivClockW)
+        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
 
 
+
+        //Redirige a la Actividad Device
+        btnDevice.setOnClickListener{
+            val device = Intent(this, ConnectDevice::class.java)
+            startActivity(device)
+        }
 
         //Redirige a la Actividad Strava.
         btnStrava.setOnClickListener{

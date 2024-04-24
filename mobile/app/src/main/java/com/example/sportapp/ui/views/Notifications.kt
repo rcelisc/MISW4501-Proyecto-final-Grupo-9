@@ -42,6 +42,16 @@ class Notifications : AppCompatActivity() {
         val ivHome = findViewById<ImageView>(R.id.ivHome)
         val ivRunExe = findViewById<ImageView>(R.id.ivRunExe)
         val ivCalendar = findViewById<ImageView>(R.id.ivCalendar)
+        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
+
+
+
+
+        //Redirige a la Actividad Device
+        btnDevice.setOnClickListener{
+            val device = Intent(this, ConnectDevice::class.java)
+            startActivity(device)
+        }
 
         ivHome.setOnClickListener{
             val home = Intent(this, Home::class.java)

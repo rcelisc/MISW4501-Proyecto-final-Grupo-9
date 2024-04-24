@@ -41,7 +41,16 @@ class StartTraining : AppCompatActivity() {
         val ivRunExe = findViewById<ImageView>(R.id.ivRunExe)
         val ivHome = findViewById<ImageView>(R.id.ivHome)
         val btnIniciar = findViewById<Button>(R.id.btnStartTraining)
+        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
 
+
+
+
+        //Redirige a la Actividad Device
+        btnDevice.setOnClickListener{
+            val device = Intent(this, ConnectDevice::class.java)
+            startActivity(device)
+        }
 
         btnIniciar.setOnClickListener{
             val runTra = Intent(this, RunTraining::class.java)
