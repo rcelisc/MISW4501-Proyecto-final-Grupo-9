@@ -42,6 +42,16 @@ class FinishTraining : AppCompatActivity() {
         val ivHome = findViewById<ImageView>(R.id.ivHome)
         val ivRunExe = findViewById<ImageView>(R.id.ivRunExe)
         val btnFTPVO2 = findViewById<Button>(R.id.btnStart)
+        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
+
+
+
+
+        //Redirige a la Actividad Device
+        btnDevice.setOnClickListener{
+            val device = Intent(this, ConnectDevice::class.java)
+            startActivity(device)
+        }
 
         //Variables de la vista
         val tvwTypeRun = findViewById<TextView>(R.id.tvwType)
@@ -136,8 +146,6 @@ class FinishTraining : AppCompatActivity() {
                             Log.d("DEBUG", errorMessage)
                         }
 
-
-
                     }
 
                     override fun onFailure(call: Call<ReceiveSesionDataResponse>, t: Throwable) {
@@ -146,9 +154,6 @@ class FinishTraining : AppCompatActivity() {
                         t.printStackTrace()
                     }
                 })
-
-
-
             }
 
             override fun onFailure(call: Call<StopTrainingResponse>, t: Throwable) {
