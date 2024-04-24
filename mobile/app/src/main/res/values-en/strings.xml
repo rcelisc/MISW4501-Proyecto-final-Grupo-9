@@ -44,4 +44,8 @@
     <string name="dash_duration">Duration</string>
     <string name="dash_type">Type</string>
     <string name="dash_notes">Notes</string>
+    <string name="promt_device_title">Start Measurement Device</string>
+    <string name="promt_device">Device:</string>
+    <string name="device">SmartWatch, GPS, Other</string>
+    <string name="start_device">Start Measurement</string>
 </resources>

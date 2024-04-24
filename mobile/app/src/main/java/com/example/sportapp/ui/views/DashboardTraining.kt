@@ -38,6 +38,16 @@ class DashboardTraining : AppCompatActivity() {
         //  val btnExit1 = findViewById<TextView>(R.id.tvwCerrarSesion)
         val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
         val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
+        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
+
+
+
+
+        //Redirige a la Actividad Device
+        btnDevice.setOnClickListener{
+            val device = Intent(this, ConnectDevice::class.java)
+            startActivity(device)
+        }
 
         //Redirige a la Actividad Iniciar Entrenamiento.
         btnRunExe.setOnClickListener{
