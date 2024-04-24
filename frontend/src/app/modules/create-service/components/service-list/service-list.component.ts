@@ -41,14 +41,14 @@ export class ServiceListComponent implements OnInit {
   }
 
   onPublishService(service: any): void {
-    if (service.available) {
+    if (service.status === 'published') {
       // Service is already published, do nothing
       return;
     }
     this.createServiceService.publishService(service.id).subscribe({
       next: () => {
         // Update the local service state to reflect the new status
-        service.available = false;
+        service.status = 'published';
       },
       error: (error) => {
         console.error('Failed to publish service', error);

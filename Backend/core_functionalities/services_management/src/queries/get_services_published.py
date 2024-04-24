@@ -9,6 +9,7 @@ def get_services_and_events_published():
             'name': service.name,
             'description': service.description,
             'available': service.available,
+            'status': service.status,
             'rate': service.rate
         } for service in services_data]
     events = fetch_events()  # Assuming external API call
