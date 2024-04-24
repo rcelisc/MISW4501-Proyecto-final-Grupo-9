@@ -1,0 +1,10 @@
+<div class="service-list">
+    <h2>Mis servicios</h2>
+    <div *ngFor="let service of services">
+      <div>{{ service.nombre }}</div>
+      <div>{{ service.descripcion }}</div>
+      <div>{{ service.costo }}</div>
+      <button (click)="onPublishService(service.id)">Publicar servicio</button>
+    </div>
+  </div>
+  
