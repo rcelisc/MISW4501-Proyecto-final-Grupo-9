@@ -94,6 +94,10 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:tmCommands@db_training_management_commands:5432/db_training_management_commands
       GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+      STRAVA_CLIENT_ID: "${STRAVA_CLIENT_ID}"
+      STRAVA_CLIENT_SECRET: "${STRAVA_CLIENT_SECRET}"
+      STRAVA_REDIRECT_URI: "${STRAVA_REDIRECT_URI}"
+      FLASK_SECRET_KEY: "${FLASK_SECRET_KEY}"
     volumes:
       - ../../../service-account.json:/secrets/service-account.json
     networks:
