@@ -3,11 +3,12 @@ import { Router } from '@angular/router';
 import { CreateServiceService } from '../../../../services/create-service.service'
 import { MaterialModule } from '../../../../material.module';
 import { MatTableDataSource } from '@angular/material/table';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-service-list',
   standalone: true,
-  imports: [MaterialModule],
+  imports: [MaterialModule, CommonModule],
   templateUrl: './service-list.component.html',
   styleUrl: './service-list.component.scss'
 })
