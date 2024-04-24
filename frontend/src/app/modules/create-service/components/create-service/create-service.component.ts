@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateServiceService } from '../../../../services/create-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,12 +18,13 @@ export class CreateServiceComponent {
   constructor(
     private fb: FormBuilder,
     private createServiceService: CreateServiceService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ){
     this.createServiceForm = this.fb.group({
-      nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
-      costo: ['', [Validators.required, Validators.pattern(/^\d+$/)]]
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      rate: ['', [Validators.required, Validators.pattern(/^\d+$/)]]
     });
   }
 
@@ -42,7 +44,7 @@ export class CreateServiceComponent {
     this.createServiceService.createService(this.createServiceForm.value).subscribe({
       next: (response) => {
         this.snackBar.open('Servicio creado exitosamente', 'Cerrar', { duration: 3000 });
-        // Handle navigation to the services list or other actions as needed
+        this.router.navigate(['/service-list']);
       },
       error: (error) => {
         this.snackBar.open('Error al crear el servicio', 'Cerrar', { duration: 3000 });

@@ -1,10 +1,11 @@
 from flask import Flask
 from .extensions import db, migrate
-
+from flask_cors import CORS
 from .api.services import service_blueprint
 from .api.nutrition_plan import nutrition_blueprint
 import os
 from .config import DevelopmentConfig, ProductionConfig, TestingConfig
+
 
 def create_app():
     app = Flask(__name__)
@@ -31,6 +32,7 @@ def create_app():
     app.register_blueprint(service_blueprint)
     app.register_blueprint(nutrition_blueprint)
 
+    CORS(app)
     return app
 
 if __name__ == "__main__":

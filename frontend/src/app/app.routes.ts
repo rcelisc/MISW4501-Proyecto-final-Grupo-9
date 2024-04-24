@@ -34,5 +34,6 @@ export const routes: Routes = [
   {path: 'listausuriosprofesional', component: ListarUsuariosProfesionalComponent},
   {path: 'servicelist', component: ServiceListComponent},
   {path: 'create-service', component: CreateServiceComponent},
+  {path: 'service-list', component: ServiceListComponent},
   {path: 'professional-profile', component: ProfessionalProfileComponent},
 ];
