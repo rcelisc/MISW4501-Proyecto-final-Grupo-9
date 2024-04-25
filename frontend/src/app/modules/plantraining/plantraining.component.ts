@@ -24,7 +24,8 @@ export class PlantrainingComponent implements OnInit {
       exercises: ['', Validators.required],
       duration: ['', Validators.required],
       frequency: ['', Validators.required],
-      objectives: ['', Validators.required]
+      objectives: ['', Validators.required],
+      profile_type: ['', Validators.required]
     });
   }
 

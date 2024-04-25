@@ -5,19 +5,22 @@ export class TrainingPlanRequest {
     exercises: string;
     frequency: string;
     duration: string;
+    profile_type: string;
   
     constructor(
       objectives: string,
       description: string,
       exercises: string,
       frequency: string,
-      duration: string
+      duration: string, 
+      profile_type: string
     ) {
       this.objectives = objectives;
       this.description = description;
       this.exercises = exercises;
       this.frequency = frequency;
       this.duration = duration;
+      this.profile_type = profile_type;
     }
   }
 
