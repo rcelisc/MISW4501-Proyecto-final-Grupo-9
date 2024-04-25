@@ -1,0 +1,73 @@
+@use '@angular/material' as mat;
+@use '../../../../custom-theme.scss' as theme;
+
+.welcome-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(to right, mat.get-color-from-palette(theme.$custom-primary, 100),  mat.get-color-from-palette(theme.$custom-primary, 50));
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+}
+
+.welcome-content {
+  max-width: 600px;
+
+  .title {
+    font-size: 2.8rem;
+    color: mat.get-color-from-palette(theme.$custom-primary, 700);
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+    color: mat.get-color-from-palette(theme.$custom-primary, 500);
+    margin-bottom: 2rem;
+  }
+
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+    }
+
+    button, a {
+      font-size: 1.2rem; // Larger font size
+      padding: 1.5rem; // Increased padding for larger touch targets
+      border-radius: 8px; // More pronounced rounded corners
+      background-color: mat.get-color-from-palette(theme.$custom-primary, 600); // More vibrant color
+      color: white; // Better contrast
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s ease; // Smooth transitions
+
+      &:hover, &:focus {
+        background-color: mat.get-color-from-palette(theme.$custom-primary, 700); // Darker on hover/focus
+        transform: scale(1.05); // Slightly enlarge on hover/focus
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2); // Enhanced shadow on hover/focus
+      }
+    }
+  }
+}
+
+
+.image-container {
+  flex-shrink: 0;
+  padding: 1rem;
+
+  .responsive-img {
+    max-width: 500px;
+    height: auto;
+    border-radius: 10px; // Rounded corners for images
+  }
+}

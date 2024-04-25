@@ -1,0 +1,88 @@
+<div class="container">
+    <h2 class="title" i18n="@@registerTitle">Regístrate</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <!-- Basic User Fields -->
+      <div class="form-field">
+        <mat-form-field appearance="fill">
+          <mat-label i18n="@@registerName">Nombre</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label i18n="@@registerSurname">Apellido</mat-label>
+          <input matInput formControlName="surname">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label i18n="@@registerIdType">ID Type</mat-label>
+            <mat-select formControlName="id_type">
+              <mat-option value="National ID">National ID</mat-option>
+              <mat-option value="Passport">Passport</mat-option>
+            </mat-select>
+          </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label i18n="@@registerIdNumber">Número de ID</mat-label>
+          <input matInput formControlName="id_number">
+        </mat-form-field>
+      </div>
+      <div class="form-field">
+        <mat-form-field appearance="fill">
+          <mat-label i18n="@@registerType">Tipo de Usuario</mat-label>
+          <mat-select formControlName="type">
+            <mat-option value="athlete" i18n="@@userTypeAthlete">Atleta</mat-option>
+            <mat-option value="complementary_services_professional" i18n="@@userTypeProfessional">Profesional</mat-option>
+            <mat-option value="event_organizer" i18n="@@userTypeOrganizer">Organizador</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Athlete Specific Fields -->
+      <ng-container *ngIf="registerForm.get('type')?.value === 'athlete'">
+        <div class="form-field">
+          <mat-form-field appearance="fill">
+                <mat-label i18n="@@registerEthnicity">Etnia</mat-label>
+                <input matInput formControlName="ethnicity">
+              </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label i18n="@@registerAge">Edad</mat-label>
+            <input matInput type="number" formControlName="age">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label i18n="@@registerGender">Género</mat-label>
+            <input matInput formControlName="gender">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label i18n="@@registerWeight">Peso</mat-label>
+            <input matInput type="number" formControlName="weight">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label i18n="@@registerHeight">Altura</mat-label>
+            <input matInput type="number" formControlName="height">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label i18n="@@registerCityOfBirth">Ciudad de Nacimiento</mat-label>
+            <input matInput formControlName="city_of_birth">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label i18n="@@registerCountryOfBirth">Pais de Nacimiento</mat-label>
+            <input matInput formControlName="country_of_birth">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label i18n="@@registerSports">Deportes</mat-label>
+            <input matInput formControlName="sports">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label i18n="@@registerProfileType">Tipo de perfil</mat-label>
+            <mat-select formControlName="profile_type">
+              <mat-option value="Beginner">Principiante</mat-option>
+              <mat-option value="Intermediate">Intermedio</mat-option>
+              <mat-option value="Advance">Avanzado</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </ng-container>
+      <!-- Fields for other user types can be added in similar ng-container blocks -->
+  
+      <div class="button-container">
+        <button mat-button class="action-button" type="submit" i18n="@@registerButton">Regístrate</button>
+      </div>
+    </form>
+  </div>
+  

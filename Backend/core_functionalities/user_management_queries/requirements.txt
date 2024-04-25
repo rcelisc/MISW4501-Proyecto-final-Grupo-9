@@ -16,3 +16,4 @@ Flask-Migrate
 google-cloud-pubsub
 Flask-Testing
 flask-socketio
+Flask-Cors

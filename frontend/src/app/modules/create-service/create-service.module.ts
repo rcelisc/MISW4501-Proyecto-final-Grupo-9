@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateServiceComponent } from './components/create-service/create-service.component';
 import { ServiceListComponent } from './components/service-list/service-list.component';
-import { MaterialModule } from '../../material.module';
+import { MaterialModule } from '../../shared/material.module';
 
 @NgModule({
   declarations: [
