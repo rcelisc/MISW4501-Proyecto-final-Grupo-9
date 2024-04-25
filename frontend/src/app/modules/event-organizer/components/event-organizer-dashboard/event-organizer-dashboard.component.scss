@@ -1,72 +1,78 @@
 @use '@angular/material' as mat;
 @use '../../../../../custom-theme.scss' as theme;
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Lato:wght@700&display=swap');
 
 :host {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; // Align to the top
-  min-height: 100vh; // Full viewport height
-  padding: 2vh 10vw; // Reduced top and bottom padding
-  background: mat.get-color-from-palette(theme.$custom-primary, 50);
-  box-sizing: border-box;
-}
-
-.container {
-  width: 100%; // Occupies 90% of the host element's width
-  max-width: 960px; // Increases the maximum width for larger screens
-  margin: 2vh auto; 
-  padding: 40px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); // A stronger shadow for better depth perception
-  box-sizing: border-box;
-
-  @media (min-width: 768px) {
-    margin: 40px auto; // Adds more vertical space on larger screens
-  }
-}
-
-.title {
-  font-family: 'Lato', sans-serif;
-  font-weight: bold;
-  color: #00355F;
-  margin-bottom: 24px;
-  text-align: center; // Center-align the title
-}
-
-.button-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px; // Space between buttons
-  margin-top: 20px;
-}
-
-.create-button {
-  font-family: 'Lato', sans-serif;
-  font-size: 1.125rem;
-  font-weight: bold;
-  background-color: mat.get-color-from-palette(theme.$custom-primary, 600);
-  color: white;
-  border: none;
-  padding: 15px 30px;
-  width: 100%; // Full width for better touch target
-  text-transform: uppercase; // Stylish uppercase text
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: mat.get-color-from-palette(theme.$custom-primary, 800);
-  }
-}
-
-@media (max-width: 768px) {
-  :host {
-    padding: 2vh 5vw;
+    display: block;
+    min-height: 100vh; // Full viewport height
+    padding: 2vh 10vw; // Reduced top and bottom padding
+    background: mat.get-color-from-palette(theme.$custom-primary, 50);
+    box-sizing: border-box;
+    overflow-y: auto; // Add scroll for the page if needed
   }
 
-  .container {
-    max-width: 90%;
-  }
+
+.dashboard-title {
+font-family: 'Lato', sans-serif;
+color: mat.get-color-from-palette(theme.$custom-primary, 800);
+text-align: center;
+margin-top: 40px;
+margin-bottom: 40px;
+font-size: 2.5rem;
 }
+
+.card-container {
+display: grid;
+grid-template-columns: repeat(4, 1fr); // Fixed 4 columns
+gap: 20px;
+max-width: 1200px;
+margin: 0 auto; // Center the container
+}
+
+.dashboard-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; // Distribute space between title and button
+    align-items: center; // Center-align the content
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 
+    0 8px 10px 1px rgba(0, 0, 0, 0.14), 
+    0 3px 14px 2px rgba(0, 0, 0, 0.12); 
+    padding: 20px;
+    transition: box-shadow 0.3s;
+  
+    &:hover {
+        box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 
+        0 16px 24px 2px rgba(0, 0, 0, 0.14), 
+        0 6px 30px 5px rgba(0, 0, 0, 0.12);
+    }
+  
+    mat-card-title {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  
+    mat-card-content {
+      flex-grow: 1; // Allow content to expand and push actions to the bottom
+      text-align: center; // Center-align the text
+    }
+  
+    mat-card-actions {
+      width: 100%; // Allow the button to take full width of the card actions
+      justify-content: center;
+    }
+  
+    button {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .card-container {
+      grid-template-columns: repeat(2, 1fr); // Reduce to 2 columns on smaller screens
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .card-container {
+      grid-template-columns: 1fr; // 1 column on very small screens
+    }
+  }
