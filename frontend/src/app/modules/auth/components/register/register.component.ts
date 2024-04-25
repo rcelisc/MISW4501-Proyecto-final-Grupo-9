@@ -6,6 +6,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../services/auth.service';
 
+type UserType = 'athlete' | 'complementary_services_professional' | 'event_organizer';
+
+// TypeScript type for route paths based on user types
+const routes: { [key in UserType]: string } = {
+  athlete: '/athlete-dashboard',
+  complementary_services_professional: '/professional-dashboard',
+  event_organizer: '/organizer-dashboard'
+};
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -44,10 +53,11 @@ export class RegisterComponent {
 
   onRegister() {
     if (this.registerForm.valid) {
-      let userData = { ...this.registerForm.value }; // Copy the form value
-  
-      // Check the user type and remove unnecessary fields
-      if (userData.type === 'complementary_services_professional' || userData.type === 'event_organizer') {
+      let userData = this.registerForm.value;
+      const userType = userData.type as UserType;
+
+      // Clear unrelated data for non-athlete types
+      if (userType !== 'athlete') {
         delete userData.age;
         delete userData.gender;
         delete userData.weight;
@@ -58,11 +68,11 @@ export class RegisterComponent {
         delete userData.profile_type;
         delete userData.ethnicity;
       }
-  
+
       this.authService.registerUser(userData).subscribe({
         next: (response) => {
           console.log('User registered successfully:', response);
-          this.router.navigate(['/iniciodeportista']);
+          this.navigateToDashboard(userType);
         },
         error: (error) => {
           console.error('Registration error:', error);
@@ -71,5 +81,9 @@ export class RegisterComponent {
     } else {
       console.error('Form is not valid');
     }
+  }
+
+  private navigateToDashboard(userType: UserType) {
+    this.router.navigate([routes[userType] || '/']);
   }
 }

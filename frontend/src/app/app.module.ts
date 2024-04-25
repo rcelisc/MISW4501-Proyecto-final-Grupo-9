@@ -7,7 +7,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TrainingPlanService } from './services/training-plan.service';
 import { CrearPlanAlimentacionComponent } from './modules/crear-plan-alimentacion/crear-plan-alimentacion.component';
-import { InicioDeportistaComponent } from './modules/inicio-deportista/inicio-deportista.component';
 import { CreateServiceModule } from './modules/create-service/create-service.module';
 import { MaterialModule } from './shared/material.module';
 import { RouterModule } from '@angular/router';
@@ -21,6 +20,9 @@ import { LocaleService } from './services/locale.service';
 import { CoreModule } from './core/core.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthService } from './services/auth.service';
+import { AthleteModule } from './modules/athlete/athlete.module';
+import { EventOrganizerModule } from './modules/event-organizer/event-organizer.module';
+import { ProfessionalServicesModule } from './modules/professional-services/professional-services.module';
 
 
 
@@ -28,7 +30,6 @@ import { AuthService } from './services/auth.service';
 @NgModule({
   declarations: [			
       CrearPlanAlimentacionComponent,
-      InicioDeportistaComponent
    ],
   imports: [
     CommonModule,
@@ -43,6 +44,9 @@ import { AuthService } from './services/auth.service';
     CreateEventModule,
     CoreModule,
     AuthModule,
+    AthleteModule,
+    EventOrganizerModule,
+    ProfessionalServicesModule,
     MaterialModule
   ],
   providers: [{ provide: MAT_DATE_LOCALE, useFactory: (localeService: LocaleService) => localeService.locale$, deps: [LocaleService] },
