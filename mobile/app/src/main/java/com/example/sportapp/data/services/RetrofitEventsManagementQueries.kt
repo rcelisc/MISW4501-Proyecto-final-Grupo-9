@@ -84,7 +84,7 @@ object RetrofitReceiveSesionDataService {
 
 object RetrofitTrainingPlansService {
 
-    private const val BASE_URL = Config.BASE_URL_Trainings.toString()
+    private const val BASE_URL = Config.BASE_URL_TrainingPlans.toString()
 
     fun createApiService(): TrainingPlansService {
         val retrofit = Retrofit.Builder()
@@ -112,7 +112,7 @@ object RetrofitEventSuggestionsService {
 
 object RetrofitTrainingSesionsService {
 
-    private const val BASE_URL = Config.BASE_URL_Trainings.toString()
+    private const val BASE_URL = Config.BASE_URL_TrainingsSesions.toString()
 
     fun createApiService(): TrainingSessionsService {
         val retrofit = Retrofit.Builder()

@@ -81,7 +81,7 @@ class Notifications : AppCompatActivity() {
         recyclerViewEvents.adapter = tableAdapterEvents
 
         //SportApp.profile
-        repository.getTrainingPlans("Beginner").enqueue(object : Callback<List<TrainingPlansResponse>> {
+        repository.getTrainingPlans(SportApp.profile).enqueue(object : Callback<List<TrainingPlansResponse>> {
             override fun onResponse(call: Call<List<TrainingPlansResponse>>, response: Response<List<TrainingPlansResponse>>) {
                 if (response.isSuccessful) {
                     val triningResponse = response.body()

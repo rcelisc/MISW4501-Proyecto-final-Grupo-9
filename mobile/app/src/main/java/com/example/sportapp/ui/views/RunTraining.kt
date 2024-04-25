@@ -1,16 +1,26 @@
 package com.example.sportapp.ui.views
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Chronometer
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sportapp.R
+import com.example.sportapp.SportApp
+import com.example.sportapp.data.model.StartTrainingResponse
+import com.example.sportapp.data.repository.StartTrainingRepository
+import com.example.sportapp.data.services.RetrofitStartTrainingService
 import com.example.sportapp.ui.home.Home
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RunTraining : AppCompatActivity() {
 
@@ -19,17 +29,16 @@ class RunTraining : AppCompatActivity() {
     private var isChronometerRunning: Boolean = false
     private var valorTraining: Int = 0
     private var typeTraining: String = ""
+    private val repository = StartTrainingRepository(RetrofitStartTrainingService.createApiService())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_run_training)
+        typeTraining = intent.getStringExtra("training").toString()
 
         val tvwTypeRun = findViewById<TextView>(R.id.tvwTypeRun)
         val btnHome = findViewById<ImageView>(R.id.ivHome)
         val btnDevice = findViewById<ImageView>(R.id.ivWatch)
-
-
-
 
         //Redirige a la Actividad Device
         btnDevice.setOnClickListener{
@@ -42,9 +51,30 @@ class RunTraining : AppCompatActivity() {
             startActivity(home)
         }
 
+        /**/
+        /*Conectar con servicio iniciar entrenamiento*/
+        repository.startTrainingService(SportApp.userCodeId, typeTraining, object :
+            Callback<StartTrainingResponse> {
+            override fun onResponse(call: Call<StartTrainingResponse>, response: Response<StartTrainingResponse>) {
+                if (response.isSuccessful) {
+                    val startTrainingResponse = response.body()
+                    SportApp.userSesionId = startTrainingResponse?.session_id.toString()
+                    showToast(this@RunTraining, getString(R.string.promt_start_training))
+                    Log.d("DEBUG", "Sesion Id : " + SportApp.userSesionId)
+                } else {
+                    val errorMessage = "La llamada al servicio no fue exitosa. Código de error: ${response.code()}"
+                    showToast(this@RunTraining, errorMessage)
+                    Log.d("DEBUG", errorMessage)
+                }
+            }
 
-        typeTraining = intent.getStringExtra("training").toString()
-
+            override fun onFailure(call: Call<StartTrainingResponse>, t: Throwable) {
+                // Manejar errores de red o de llamada al servicio
+                Log.d("DEBUG", "Error en la llamada al servicio: ${t.message}")
+                t.printStackTrace()
+            }
+        })
+        /**/
         tvwTypeRun.text = getString(R.string.type_training)  + " " + typeTraining
         chronometer1 = findViewById(R.id.chronometer1)
         startButton = findViewById(R.id.btnStart)
@@ -91,5 +121,9 @@ class RunTraining : AppCompatActivity() {
         finishTra.putExtra("timeTraining", min)
         finishTra.putExtra("typeTraining", typeTraining)
         startActivity(finishTra)
+    }
+
+    fun showToast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {
+        Toast.makeText(context, message, duration).show()
     }
 }
