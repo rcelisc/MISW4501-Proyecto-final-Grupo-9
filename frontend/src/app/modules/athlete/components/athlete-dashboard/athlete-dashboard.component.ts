@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './athlete-dashboard.component.html',
-  styleUrl: './athlete-dashboard.component.css'
+  styleUrl: './athlete-dashboard.component.scss'
 })
 export class AthleteDashboardComponent {
 

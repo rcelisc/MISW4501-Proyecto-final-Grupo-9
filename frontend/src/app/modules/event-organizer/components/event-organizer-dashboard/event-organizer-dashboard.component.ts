@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './event-organizer-dashboard.component.html',
-  styleUrl: './event-organizer-dashboard.component.css'
+  styleUrl: './event-organizer-dashboard.component.scss'
 })
 export class EventOrganizerDashboardComponent {
 
