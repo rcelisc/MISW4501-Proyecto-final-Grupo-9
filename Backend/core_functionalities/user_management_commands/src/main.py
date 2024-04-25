@@ -2,6 +2,7 @@ from flask import Flask
 from .extensions import db, migrate
 from .api.user import user_blueprint
 from .config import DevelopmentConfig, TestingConfig, ProductionConfig
+from flask_cors import CORS
 import os
 
 
@@ -19,6 +20,7 @@ def create_app(config_class=DevelopmentConfig):
     migrate.init_app(app, db)
 
     app.register_blueprint(user_blueprint)
+    CORS(app)
     return app
 
 if __name__ == "__main__":
