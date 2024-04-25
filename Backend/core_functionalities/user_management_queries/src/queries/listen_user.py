@@ -37,8 +37,8 @@ class EventUpdatesListener:
         user_type = message['data']['type']
         user_classes = {
             'athlete': Athlete,
-            'professional': ComplementaryServicesProfessional,
-            'organizer': EventOrganizer
+            'complementary_services_professional': ComplementaryServicesProfessional,
+            'event_organizer': EventOrganizer
         }
         user_class = user_classes.get(user_type, Athlete)
         try:
