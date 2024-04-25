@@ -31,7 +31,7 @@ import retrofit2.Response
 class StartTraining : AppCompatActivity() {
 
 
-    private val repository = StartTrainingRepository(RetrofitStartTrainingService.createApiService())
+    //private val repository = StartTrainingRepository(RetrofitStartTrainingService.createApiService())
     private lateinit var chronometer: Chronometer
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,27 +69,27 @@ class StartTraining : AppCompatActivity() {
         }
 
 
-        /*Conectar con servicio iniciar entrenamiento*/
-        repository.startTrainingService(1, "Cardio", object : Callback<StartTrainingResponse> {
-            override fun onResponse(call: Call<StartTrainingResponse>, response: Response<StartTrainingResponse>) {
-                if (response.isSuccessful) {
-                    val startTrainingResponse = response.body()
-                    SportApp.userSesionId = startTrainingResponse?.session_id.toString()
-                    showToast(this@StartTraining, getString(R.string.promt_start_training))
-                    Log.d("DEBUG", "Sesion Id : " + SportApp.userSesionId)
-                } else {
-                    val errorMessage = "La llamada al servicio no fue exitosa. Código de error: ${response.code()}"
-                    showToast(this@StartTraining, errorMessage)
-                    Log.d("DEBUG", errorMessage)
-                }
-            }
-
-            override fun onFailure(call: Call<StartTrainingResponse>, t: Throwable) {
-                // Manejar errores de red o de llamada al servicio
-                Log.d("DEBUG", "Error en la llamada al servicio: ${t.message}")
-                t.printStackTrace()
-            }
-        })
+//        /*Conectar con servicio iniciar entrenamiento*/
+//        repository.startTrainingService(SportApp.userCodeId, "Running", object : Callback<StartTrainingResponse> {
+//            override fun onResponse(call: Call<StartTrainingResponse>, response: Response<StartTrainingResponse>) {
+//                if (response.isSuccessful) {
+//                    val startTrainingResponse = response.body()
+//                    SportApp.userSesionId = startTrainingResponse?.session_id.toString()
+//                    showToast(this@StartTraining, getString(R.string.promt_start_training))
+//                    Log.d("DEBUG", "Sesion Id : " + SportApp.userSesionId)
+//                } else {
+//                    val errorMessage = "La llamada al servicio no fue exitosa. Código de error: ${response.code()}"
+//                    showToast(this@StartTraining, errorMessage)
+//                    Log.d("DEBUG", errorMessage)
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<StartTrainingResponse>, t: Throwable) {
+//                // Manejar errores de red o de llamada al servicio
+//                Log.d("DEBUG", "Error en la llamada al servicio: ${t.message}")
+//                t.printStackTrace()
+//            }
+//        })
 
         //Inicializa datos de entrenamiento.
         val dataList = listOf("Natacion", "Ciclismo", "Running") // Lista de datos

@@ -21,6 +21,8 @@ import com.example.sportapp.data.repository.StopTrainingRepository
 import com.example.sportapp.data.services.RetrofitCalculateFTPVO2max
 import com.example.sportapp.data.services.RetrofitReceiveSesionDataService
 import com.example.sportapp.data.services.RetrofitStopTrainingService
+import  com.example.sportapp.data.services.Calories
+import com.example.sportapp.data.services.FitnessSensor
 import com.example.sportapp.ui.home.Home
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,6 +36,7 @@ class FinishTraining : AppCompatActivity() {
     private val repositoryStop = StopTrainingRepository(RetrofitStopTrainingService.createApiService())
     private val repositoryReceiveData = ReceiveSesionDataRepository(RetrofitReceiveSesionDataService.createApiService())
     private val repository = FTPVO2Repository(RetrofitCalculateFTPVO2max.createApiService())
+    private val sensor = FitnessSensor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +63,7 @@ class FinishTraining : AppCompatActivity() {
         val tvwCalTraining = findViewById<TextView>(R.id.tvwCalTraining)
         val tvwFTP = findViewById<TextView>(R.id.tvwFTP)
         val tvwVO2 = findViewById<TextView>(R.id.tvwVO2)
+        sensor.start()
 
         ivHome.setOnClickListener{
             val home = Intent(this, Home::class.java)
@@ -72,22 +76,23 @@ class FinishTraining : AppCompatActivity() {
         }
 
         btnFTPVO2.setOnClickListener{
-            //val home = Intent(this, StartTraining::class.java)
-            //startActivity(home)
-            //FTP
+            tvwVO2.text = getString(R.string.prompt_vo2_training) //"FTP :"
+            tvwFTP.text = getString(R.string.prompt_ftp_training) //"VO2Max : "
             repository.postCalculateFTPVo2(SportApp.userSesionId, object : Callback<TrainingMetricsCalculatedResponse> {
                 override fun onResponse(call: Call<TrainingMetricsCalculatedResponse>, response: Response<TrainingMetricsCalculatedResponse>) {
                     if (response.isSuccessful) {
                         //val metricsResponse = response.body()
                         val metricsResponse = response.body()
 
-                        Log.d("DEBUG",  "Body > " + response.body().toString() + " Sesion -> " + SportApp.userSesionId)
+                        Log.d("DEBUG",  "Body > " + response.body().toString() + " Sesion -> " + SportApp.userSesionId + "Data ->> " + metricsResponse.toString())
 
-                        tvwFTP.text = tvwFTP.text.toString() + " " + metricsResponse?.ftp.toString() //"238 vatios"
-                        tvwVO2.text = tvwVO2.text.toString() + " " + metricsResponse?.vo2max.toString() //"60 ml/kg/min"
+                        val ftpFormatted = String.format("%.2f", metricsResponse?.FTP)
+                        val vo2Formatted = String.format("%.2f", metricsResponse?.VO2max)
+                        tvwFTP.text = tvwFTP.text.toString() + " " + ftpFormatted + " W"
+                        tvwVO2.text = tvwVO2.text.toString() + " " + vo2Formatted + " ml/kg/min"
 
                         showToast(this@FinishTraining, "Calculo FTp y VO2Max Exitoso!!")
-                        val Message = "Valores generados FTP : > " +  metricsResponse?.ftp.toString() + " Vo2 > " + metricsResponse?.vo2max.toString()
+                        val Message = "Valores generados FTP : > " +  metricsResponse?.FTP.toString() + " Vo2 > " + metricsResponse?.VO2max.toString()
                         Log.d("DEBUG", Message)
                         Log.d("DEBUG", metricsResponse.toString())
 
@@ -109,9 +114,9 @@ class FinishTraining : AppCompatActivity() {
 
         var timeTraining = intent.getIntExtra("timeTraining",0)
         val typeTraining = intent.getStringExtra("typeTraining")
-        val caloriesBurned = intent.getIntExtra("caloriesBurned", 0)
+        val caloriesBurned = Calories().calculateTotalCaloriesBurned(SportApp.age, SportApp.weight, SportApp.height, SportApp.isMale, typeTraining.toString(), timeTraining)
 
-        repositoryStop.stopTrainingService(SportApp.userSesionId, Date(), timeTraining.toInt(), caloriesBurned, "", object : Callback<StopTrainingResponse> {
+        repositoryStop.stopTrainingService(SportApp.userSesionId, Date(), timeTraining.toInt(), caloriesBurned.toInt(), "", object : Callback<StopTrainingResponse> {
             override fun onResponse(call: Call<StopTrainingResponse>, response: Response<StopTrainingResponse>) {
                 if (response.isSuccessful) {
                     //val stopTrainingResponse = response.body()
@@ -120,7 +125,7 @@ class FinishTraining : AppCompatActivity() {
                     tvwTypeRun.text = tvwTypeRun.text.toString() + " " +  typeTraining
                     tvwTimeTotal.text = tvwTimeTotal.text.toString() + " " + timeTraining.toString() + " " + getString(R.string.units_minutes)
                     tvwDateTraining.text = tvwDateTraining.text.toString() + " " + SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-                    tvwCalTraining.text = tvwCalTraining.text.toString() + " " + caloriesBurned
+                    tvwCalTraining.text = tvwCalTraining.text.toString() + " " + caloriesBurned.toInt().toString()
 
                     showToast(this@FinishTraining, getString(R.string.promt_finish_training))
                     Log.d("DEBUG", "Sesion Finalizada Correctamente : " + SportApp.userSesionId)
@@ -132,13 +137,15 @@ class FinishTraining : AppCompatActivity() {
                 }
 
                 //Receive
-                repositoryReceiveData.receiveSesionDataService(SportApp.userSesionId, SportApp.powerOutput, SportApp.maxHeartRate, SportApp.restingHeartRate, object : Callback<ReceiveSesionDataResponse> {
+                val measurements = sensor.generateManualMeasurements()
+                val (powerOutput, maxHeartRate, restingHeartRate) = measurements ?: Triple(0, 0, 0)
+                repositoryReceiveData.receiveSesionDataService(SportApp.userSesionId, powerOutput, maxHeartRate, restingHeartRate, object : Callback<ReceiveSesionDataResponse> {
                     override fun onResponse(call: Call<ReceiveSesionDataResponse>, response: Response<ReceiveSesionDataResponse>) {
                         if (response.isSuccessful) {
                             val receiveDataSesionResponse = response.body()
 
                             showToast(this@FinishTraining, getString(R.string.promt_data_sended))
-                            Log.d("DEBUG", "Receive data sesion exitosa : " + receiveDataSesionResponse?.message.toString())
+                            Log.d("DEBUG", "Receive data sesion exitosa : PO " +  powerOutput.toString() + " MH "  + maxHeartRate.toString() + " RH " + restingHeartRate.toString() + " Resp. Serv." + receiveDataSesionResponse?.message.toString())
 
                         } else {
                             val errorMessage = "Error al llamar servicio Receive Sesion Data . Código de error: ${response.code()}"
