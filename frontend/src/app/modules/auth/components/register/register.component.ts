@@ -47,7 +47,7 @@ export class RegisterComponent {
       let userData = { ...this.registerForm.value }; // Copy the form value
   
       // Check the user type and remove unnecessary fields
-      if (userData.type === 'professional' || userData.type === 'organizer') {
+      if (userData.type === 'complementary_services_professional' || userData.type === 'event_organizer') {
         delete userData.age;
         delete userData.gender;
         delete userData.weight;

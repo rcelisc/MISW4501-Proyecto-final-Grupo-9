@@ -10,34 +10,31 @@ class CreateUserCommandHandler:
     def handle(self, data, user_type):
         user_classes = {
             'athlete': Athlete,
-            'professional': ComplementaryServicesProfessional,
-            'organizer': EventOrganizer
+            'complementary_services_professional': ComplementaryServicesProfessional,
+            'event_organizer': EventOrganizer
         }
         user_class = user_classes.get(user_type, Athlete)  # Default to Athlete
         user = user_class(**data)
         db.session.add(user)
         db.session.commit()
 
-        event_data = {
-            "type": "UserCreated",
-            "data": {
-                "type": user_type,
-                "id": str(user.id),
-                "name": user.name,
-                "surname": user.surname,
-                "id_type": user.id_type,
-                "id_number": user.id_number,
-                "city_of_living": user.city_of_living,
-                "country_of_living": user.country_of_living,
-                "age": user.age,
-                "gender": user.gender,
-                "weight": user.weight,
-                "height": user.height,
-                "city_of_birth": user.city_of_birth,
-                "country_of_birth": user.country_of_birth,
-                "sports": user.sports,
-                "profile_type": user.profile_type
-            }
-        }
+        event_data = self.create_event_data(user, user_type)
         self.publisher.publish(self.topic_path, json.dumps(event_data).encode('utf-8'))
         return user.id
+    
+    def create_event_data(self, user, user_type):
+        # Define fields relevant to each user type
+        fields_by_type = {
+            'athlete': ['id', 'name', 'surname', 'id_type', 'id_number', 'city_of_living', 'country_of_living',
+                        'age', 'gender', 'weight', 'height', 'city_of_birth', 'country_of_birth', 'sports', 'profile_type'],
+            'complementary_services_professional': ['id', 'name', 'surname', 'id_type', 'id_number', 'city_of_living', 'country_of_living'],
+            'event_organizer': ['id', 'name', 'surname', 'id_type', 'id_number', 'city_of_living', 'country_of_living']
+        }
+
+        # Build the data dictionary based on the defined fields
+        event_data = {
+            "type": "UserCreated",
+            "data": {field: getattr(user, field) for field in fields_by_type.get(user_type, [])}
+        }
+        event_data['data']['type'] = user_type
+        return event_data
