@@ -35,29 +35,15 @@
   text-align: center; // Center-align the title
 }
 
-.form-field {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 24px;
-
-  .mat-form-field {
-    width: 100%;
-    input, textarea {
-      font-size: 1rem; // Adjusts font size for better readability
-    }
-  }
-}
 .button-container {
   display: flex;
-  justify-content: center; // This will center the button
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; // Space between buttons
   margin-top: 20px;
 }
-.snack-bar-error {
-  background-color: #d32f2f;
-  color: #fff;
-}
 
-button.create-button {
+.create-button {
   font-family: 'Lato', sans-serif;
   font-size: 1.125rem;
   font-weight: bold;
@@ -65,10 +51,10 @@ button.create-button {
   color: white;
   border: none;
   padding: 15px 30px;
-  margin-top: 20px;
+  width: 100%; // Full width for better touch target
+  text-transform: uppercase; // Stylish uppercase text
   cursor: pointer;
   transition: background-color 0.3s;
-  align-self: center; // Center the button in the container
 
   &:hover {
     background-color: mat.get-color-from-palette(theme.$custom-primary, 800);

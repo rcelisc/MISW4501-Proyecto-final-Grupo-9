@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+@use '../../../../../custom-theme.scss' as theme;
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Lato:wght@700&display=swap');
 
 :host {
@@ -6,7 +8,7 @@
   justify-content: flex-start; // Align to the top
   min-height: 100vh; // Full viewport height
   padding: 2vh 10vw; // Reduced top and bottom padding
-  background: #0077a2; // Adjusted the background color
+  background: mat.get-color-from-palette(theme.$custom-primary, 50);
   box-sizing: border-box;
 }
 
@@ -59,7 +61,7 @@ button.create-button {
   font-family: 'Lato', sans-serif;
   font-size: 1.125rem;
   font-weight: bold;
-  background-color: #006494;
+  background-color: mat.get-color-from-palette(theme.$custom-primary, 600);
   color: white;
   border: none;
   padding: 15px 30px;
@@ -69,7 +71,7 @@ button.create-button {
   align-self: center; // Center the button in the container
 
   &:hover {
-    background-color: darken(#006494, 10%);
+    background-color: mat.get-color-from-palette(theme.$custom-primary, 800);
   }
 }
 
