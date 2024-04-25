@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateServiceService } from '../../../../services/create-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MaterialModule } from '../../../../material.module';
+import { MaterialModule } from '../../../../shared/material.module';
 
 @Component({
   selector: 'app-create-service',

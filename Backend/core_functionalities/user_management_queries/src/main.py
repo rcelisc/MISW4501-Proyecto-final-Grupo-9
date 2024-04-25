@@ -9,6 +9,7 @@ from .queries.listen_demographic_data import start_listener_in_background as sta
 from .queries.listen_sports_habits import start_listener_in_background as start_sports_habits_listener
 from .queries.listen_update_user_plan import start_listener_in_background as start_update_user_plan_listener
 from .queries.socket_events import setup_socket_events
+from flask_cors import CORS
 import os
 
 socketio = SocketIO(cors_allowed_origins="http://localhost:4200")
@@ -34,6 +35,7 @@ def create_app(config_class=DevelopmentConfig):
     start_nutrition_plan_listener(app, socketio)
 
     socketio.init_app(app)
+    CORS(app)
     return app
 
 if __name__ == "__main__":
