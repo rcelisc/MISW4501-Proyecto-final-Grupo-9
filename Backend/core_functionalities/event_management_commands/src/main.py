@@ -1,6 +1,6 @@
 from flask import Flask
 from .extensions import db, migrate
-
+from flask_cors import CORS
 from .api.event import event_blueprint
 import os
 from .config import DevelopmentConfig, ProductionConfig, TestingConfig
@@ -28,7 +28,7 @@ def create_app():
             print(f"Error initializing database tables: {e}")
 
     app.register_blueprint(event_blueprint)
-
+    CORS(app)
     return app
 
 if __name__ == "__main__":

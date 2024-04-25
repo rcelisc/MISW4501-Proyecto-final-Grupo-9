@@ -5,7 +5,6 @@ import { TipousuarioComponent } from './modules/tipousuario/tipousuario.componen
 import { InicioProfesionalComponent } from './modules/inicioProfesional/inicioProfesional.component';
 import { PlantrainingComponent } from './modules/plantraining/plantraining.component';
 import { HistorialtrainingComponent } from './modules/historialtraining/historialtraining.component';
-import { CreareventoComponent } from './modules/crearevento/crearevento.component';
 import { InicioOrganizadorComponent } from './modules/inicioOrganizador/inicioOrganizador.component';
 import { CrearPlanAlimentacionComponent } from './modules/crear-plan-alimentacion/crear-plan-alimentacion.component';
 import { InicioDeportistaComponent } from './modules/inicio-deportista/inicio-deportista.component';
@@ -16,6 +15,8 @@ import { ListarUsuariosProfesionalComponent } from './modules/listar-usuarios-pr
 import { ServiceListComponent } from './modules/create-service/components/service-list/service-list.component';
 import { ProfessionalProfileComponent } from './modules/professional-profile/professional-profile.component';
 import { CreateServiceComponent } from './modules/create-service/components/create-service/create-service.component';
+import { CreateEventComponent } from './modules/create-event/components/create-event/create-event.component';
+import { EventListComponent } from './modules/create-event/components/event-list/event-list.component';
 
 export const routes: Routes = [
   {path: '', component:HomeComponent},
@@ -24,7 +25,6 @@ export const routes: Routes = [
   {path: 'inicioprofesional', component:InicioProfesionalComponent},
   {path: 'planentrenamiento', component: PlantrainingComponent},
   {path: 'historialentrenamiento', component: HistorialtrainingComponent},
-  {path: 'crearevento', component: CreareventoComponent},
   {path: 'inicioorganizador', component: InicioOrganizadorComponent},
   {path: 'crearplanalimentacion', component: CrearPlanAlimentacionComponent},
   {path: 'iniciodeportista', component: InicioDeportistaComponent},
@@ -32,8 +32,9 @@ export const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'micuenta', component: MiCuentaComponent},
   {path: 'listausuriosprofesional', component: ListarUsuariosProfesionalComponent},
-  {path: 'servicelist', component: ServiceListComponent},
   {path: 'create-service', component: CreateServiceComponent},
   {path: 'service-list', component: ServiceListComponent},
+  {path: 'create-event', component: CreateEventComponent},
+  {path: 'event-list', component: EventListComponent},
   {path: 'professional-profile', component: ProfessionalProfileComponent},
 ];
