@@ -1,6 +1,5 @@
 
 import { Routes } from '@angular/router';
-import { TipousuarioComponent } from './modules/tipousuario/tipousuario.component';
 import { PlantrainingComponent } from './modules/plantraining/plantraining.component';
 import { HistorialtrainingComponent } from './modules/historialtraining/historialtraining.component';
 import { CrearPlanAlimentacionComponent } from './modules/crear-plan-alimentacion/crear-plan-alimentacion.component';
@@ -19,7 +18,6 @@ import { EventOrganizerDashboardComponent } from './modules/event-organizer/comp
 
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
-  {path: 'tipousuario', component:TipousuarioComponent},
   {path: 'planentrenamiento', component: PlantrainingComponent},
   {path: 'historialentrenamiento', component: HistorialtrainingComponent},
   {path: 'crearplanalimentacion', component: CrearPlanAlimentacionComponent},
