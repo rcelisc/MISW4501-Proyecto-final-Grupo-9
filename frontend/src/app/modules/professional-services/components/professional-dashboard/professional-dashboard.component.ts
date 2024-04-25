@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './professional-dashboard.component.html',
-  styleUrl: './professional-dashboard.component.css'
+  styleUrl: './professional-dashboard.component.scss'
 })
 export class ProfessionalDashboardComponent {
 
