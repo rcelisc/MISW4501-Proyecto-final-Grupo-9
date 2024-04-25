@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CreateServiceComponent } from './components/create-service/create-service.component';
-import { ServiceListComponent } from './components/service-list/service-list.component';
+import { CreateEventComponent } from './components/create-event/create-event.component';
+import { EventListComponent } from './components/event-list/event-list.component';
 import { MaterialModule } from '../../material.module';
 
 @NgModule({
   declarations: [
-    CreateServiceComponent,
-    ServiceListComponent
+    CreateEventComponent,
+    EventListComponent
   ],
   imports: [
     CommonModule,
@@ -17,4 +17,4 @@ import { MaterialModule } from '../../material.module';
   ],
   providers: []
 })
-export class CreateServiceModule { }
+export class CreateEventModule { }

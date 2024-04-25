@@ -4,6 +4,7 @@ from .extensions import db, migrate
 from .api.event import event_blueprint
 import os
 from .config import DevelopmentConfig, ProductionConfig, TestingConfig
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
@@ -29,7 +30,7 @@ def create_app():
     
     app.register_blueprint(event_blueprint)
     start_listener_in_background(app)
-
+    CORS(app)
     return app
 
 if __name__ == "__main__":
