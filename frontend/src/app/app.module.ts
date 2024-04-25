@@ -14,6 +14,10 @@ import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { CreateServiceService } from './services/create-service.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { CreateEventModule } from './modules/create-event/create-event.module';
+import { CreateEventService } from './services/create-event.service';
+import { LocaleService } from './services/locale.service';
 
 
 
@@ -33,9 +37,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SocketIoModule.forRoot(config),
     RouterModule.forRoot(routes),
     CreateServiceModule,
+    CreateEventModule,
     MaterialModule
   ],
-  providers: [TrainingPlanService, CreateServiceService],
+  providers: [{ provide: MAT_DATE_LOCALE, useFactory: (localeService: LocaleService) => localeService.locale$, deps: [LocaleService] },TrainingPlanService, CreateServiceService, CreateEventService],
   bootstrap: []
 })
 export class AppModule { }
