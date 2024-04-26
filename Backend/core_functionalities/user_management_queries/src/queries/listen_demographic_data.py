@@ -41,8 +41,6 @@ class EventUpdatesListener:
 
         # Update the user with new demographic data
         user.ethnicity = message['data'].get('ethnicity')
-        #user.age = message['data'].get('age')
-        #user.gender = message['data'].get('gender')
         user.heart_rate = message['data'].get('heart_rate')
         user.vo2_max = message['data'].get('vo2_max')
         user.blood_pressure = message['data'].get('blood_pressure')
