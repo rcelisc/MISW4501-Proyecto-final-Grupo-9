@@ -21,6 +21,7 @@ import { ServicePublishedListComponent } from './modules/create-service/componen
 import { AthleteCalendarComponent } from './modules/athlete/components/athlete-calendar/athlete-calendar.component';
 import { TrainingPlanComponent } from './modules/professional-services/components/training-plan/training-plan.component';
 
+
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
   {path: 'training-plan', component: TrainingPlanComponent},
