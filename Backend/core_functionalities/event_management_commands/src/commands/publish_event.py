@@ -8,7 +8,7 @@ class PublishEventCommandHandler:
     def __init__(self):
         # Initialize Pub/Sub publisher
         self.publisher = pubsub_v1.PublisherClient()
-        self.topic_path = self.publisher.topic_path('miso-proyecto-de-grado-g09', 'event-events')
+        self.topic_path = self.publisher.topic_path('miso-proyecto-de-grado-g09', 'event-publish-events')
 
     def handle(self, event_id):
         event = Event.query.get(event_id)
