@@ -6,10 +6,12 @@ import { AthleteDashboardComponent } from './components/athlete-dashboard/athlet
 import { RouterModule } from '@angular/router';
 import { SelectPlanComponent } from './components/select-plan/select-plan.component';
 import { HttpClientModule } from '@angular/common/http';
+import { DemographicInfoComponent } from './components/demographic-info/demographic-info.component';
+import { SportInfoComponent } from './components/sport-info/sport-info.component';
 
 @NgModule({
   declarations: [
-    AthleteDashboardComponent, SelectPlanComponent],
+    AthleteDashboardComponent, SelectPlanComponent, DemographicInfoComponent, SportInfoComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
