@@ -41,6 +41,7 @@ export const routes: Routes = [
   {path: 'athlete-dashboard', component: AthleteDashboardComponent},
   {path: 'professional-dashboard', component: ProfessionalDashboardComponent},
   {path: 'organizer-dashboard', component: EventOrganizerDashboardComponent},
+  {path: 'plan-entrenamiento', component: PlanTrainingComponent},
   {path: 'select-plan', component: SelectPlanComponent},
   {path: 'sport-info', component: SportInfoComponent},
   {path: 'demographic-info', component: DemographicInfoComponent},
