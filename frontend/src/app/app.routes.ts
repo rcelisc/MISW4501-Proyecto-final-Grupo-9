@@ -1,6 +1,5 @@
 
 import { Routes } from '@angular/router';
-import { TipousuarioComponent } from './modules/tipousuario/tipousuario.component';
 import { PlantrainingComponent } from './modules/plantraining/plantraining.component';
 import { HistorialtrainingComponent } from './modules/historialtraining/historialtraining.component';
 import { CrearPlanAlimentacionComponent } from './modules/crear-plan-alimentacion/crear-plan-alimentacion.component';
@@ -16,10 +15,10 @@ import { WelcomePageComponent } from './core/components/welcome-page/welcome-pag
 import { AthleteDashboardComponent } from './modules/athlete/components/athlete-dashboard/athlete-dashboard.component';
 import { ProfessionalDashboardComponent } from './modules/professional-services/components/professional-dashboard/professional-dashboard.component';
 import { EventOrganizerDashboardComponent } from './modules/event-organizer/components/event-organizer-dashboard/event-organizer-dashboard.component';
+import { SelectPlanComponent } from './modules/athlete/components/select-plan/select-plan.component';
 
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
-  {path: 'tipousuario', component:TipousuarioComponent},
   {path: 'planentrenamiento', component: PlantrainingComponent},
   {path: 'historialentrenamiento', component: HistorialtrainingComponent},
   {path: 'crearplanalimentacion', component: CrearPlanAlimentacionComponent},
@@ -34,4 +33,5 @@ export const routes: Routes = [
   {path: 'athlete-dashboard', component: AthleteDashboardComponent},
   {path: 'professional-dashboard', component: ProfessionalDashboardComponent},
   {path: 'organizer-dashboard', component: EventOrganizerDashboardComponent},
+  {path: 'select-plan', component: SelectPlanComponent}
 ];
