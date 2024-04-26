@@ -47,7 +47,6 @@ export class RegisterComponent {
       country_of_birth: [''],
       sports: [''],
       profile_type: [''],
-      ethnicity: [''],
     });
   }
 
@@ -66,7 +65,6 @@ export class RegisterComponent {
         delete userData.country_of_birth;
         delete userData.sports;
         delete userData.profile_type;
-        delete userData.ethnicity;
       }
 
       this.authService.registerUser(userData).subscribe({
