@@ -16,11 +16,13 @@ import { WelcomePageComponent } from './core/components/welcome-page/welcome-pag
 import { AthleteDashboardComponent } from './modules/athlete/components/athlete-dashboard/athlete-dashboard.component';
 import { ProfessionalDashboardComponent } from './modules/professional-services/components/professional-dashboard/professional-dashboard.component';
 import { EventOrganizerDashboardComponent } from './modules/event-organizer/components/event-organizer-dashboard/event-organizer-dashboard.component';
+import { TrainingPlanRequest } from './models/plan-training.model';
+import { PlanTrainingComponent } from './plan-training/plan-training.component';
 
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
   {path: 'tipousuario', component:TipousuarioComponent},
-  {path: 'planentrenamiento', component: PlantrainingComponent},
+  //{path: 'planentrenamiento', component: PlantrainingComponent},
   {path: 'historialentrenamiento', component: HistorialtrainingComponent},
   {path: 'crearplanalimentacion', component: CrearPlanAlimentacionComponent},
   {path: 'micuenta', component: MiCuentaComponent},
@@ -34,4 +36,5 @@ export const routes: Routes = [
   {path: 'athlete-dashboard', component: AthleteDashboardComponent},
   {path: 'professional-dashboard', component: ProfessionalDashboardComponent},
   {path: 'organizer-dashboard', component: EventOrganizerDashboardComponent},
+  {path: 'plan-entrenamiento', component: PlanTrainingComponent}
 ];
