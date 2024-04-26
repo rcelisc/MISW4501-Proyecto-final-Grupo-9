@@ -8,10 +8,11 @@ import { SelectPlanComponent } from './components/select-plan/select-plan.compon
 import { HttpClientModule } from '@angular/common/http';
 import { DemographicInfoComponent } from './components/demographic-info/demographic-info.component';
 import { SportInfoComponent } from './components/sport-info/sport-info.component';
+import { AthleteCalendarComponent } from './components/athlete-calendar/athlete-calendar.component';
 
 @NgModule({
   declarations: [
-    AthleteDashboardComponent, SelectPlanComponent, DemographicInfoComponent, SportInfoComponent],
+    AthleteDashboardComponent, SelectPlanComponent, DemographicInfoComponent, SportInfoComponent, AthleteCalendarComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
