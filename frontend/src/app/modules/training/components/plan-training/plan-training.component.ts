@@ -3,8 +3,9 @@ import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { TrainingPlanService } from '../services/training-plan.service';
-import { MaterialModule } from '../shared/material.module';
+import { TrainingPlanService } from '../../../../services/training-plan.service';
+import { MaterialModule } from '../../../../shared/material.module';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-plan-training',
@@ -21,6 +22,7 @@ export class PlanTrainingComponent {
     constructor(
       private fb: FormBuilder, 
       private trainingPlanService: TrainingPlanService, // Servicio
+      private snackBar: MatSnackBar,
       private router: Router
     ){
         this.formulario = this.fb.group({
@@ -37,6 +39,17 @@ export class PlanTrainingComponent {
       }
 
       enviarFormulario() {
+
+        this.formulario.markAllAsTouched();
+
+        if (!this.formulario.valid) {
+          this.snackBar.open('Por favor, complete los campos requeridos.', 'Cerrar', {
+            duration: 3000,
+            panelClass: ['snack-bar-error'] // Apply custom CSS for styling the error snackbar
+          });
+          return; // Return early if form is invalid
+        }
+
         if (this.formulario.valid) {
           console.log(this.formulario);
           const formData = this.formulario.value;
@@ -44,6 +57,9 @@ export class PlanTrainingComponent {
           this.trainingPlanService.createPlan(formData).subscribe(
             (respuesta) => {
               console.log('Datos enviados correctamente:', respuesta);
+              this.snackBar.open('Datos enviados correctamente.', 'Cerrar', {
+                duration: 3000,
+                panelClass: ['snack-bar-error']});
               this.formulario.reset();
               this.mostrarAlerta = true; 
             },
