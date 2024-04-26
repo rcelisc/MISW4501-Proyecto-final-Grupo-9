@@ -26,6 +26,5 @@ export class LoginComponent {
     // After login, route based on user type
 
     this.router.navigate(['/professional-dashboard']); // Just an example path
-
   }
 }
