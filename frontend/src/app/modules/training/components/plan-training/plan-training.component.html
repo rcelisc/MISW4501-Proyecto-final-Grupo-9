@@ -32,12 +32,22 @@
               <input matInput formControlName="duration">
             </mat-form-field>
         </div>
-        <div class="form-field">
+        
+        <!-- <div class="form-field">
             <mat-form-field appearance="fill">
                 <mat-label i18n="@@trainingPlanProfile">Perfil</mat-label>
                 <input matInput formControlName="profile_type">
             </mat-form-field>
-        </div>
+        </div> -->
+
+        <mat-form-field appearance="fill">
+            <mat-label i18n="@@registerProfileType">Tipo de perfil</mat-label>
+            <mat-select formControlName="profile_type">
+              <mat-option value="Beginner">Principiante</mat-option>
+              <mat-option value="Intermediate">Intermedio</mat-option>
+              <mat-option value="Advance">Avanzado</mat-option>
+            </mat-select>
+          </mat-form-field>
 
         <div class="button-container">
             <button mat-button class="action-button" type="submit" i18n="@@createPlan">Crear Plan</button>
