@@ -21,6 +21,9 @@ import { ServicePublishedListComponent } from './modules/create-service/componen
 import { AthleteCalendarComponent } from './modules/athlete/components/athlete-calendar/athlete-calendar.component';
 import { TrainingPlanComponent } from './modules/professional-services/components/training-plan/training-plan.component';
 
+import { TrainingPlanRequest } from './models/plan-training.model';
+import { PlanTrainingComponent } from './modules/training/components/plan-training/plan-training.component';
+import { MealPlanComponent } from './modules/meal-plan/components/meal-plan/meal-plan.component';
 
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
@@ -38,9 +41,11 @@ export const routes: Routes = [
   {path: 'athlete-dashboard', component: AthleteDashboardComponent},
   {path: 'professional-dashboard', component: ProfessionalDashboardComponent},
   {path: 'organizer-dashboard', component: EventOrganizerDashboardComponent},
+  {path: 'plan-entrenamiento', component: PlanTrainingComponent},
   {path: 'select-plan', component: SelectPlanComponent},
   {path: 'sport-info', component: SportInfoComponent},
   {path: 'demographic-info', component: DemographicInfoComponent},
   {path: 'event-calendar', component: EventCalendarComponent},
   {path: 'athlete-calendar', component: AthleteCalendarComponent},
+  {path: 'meal-plan', component: MealPlanComponent}
 ];
