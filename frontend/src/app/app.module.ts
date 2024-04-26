@@ -29,6 +29,7 @@ import { DemographicInfoService } from './services/demographic-info.service';
 
 
 
+
 @NgModule({
   declarations: [			
       CrearPlanAlimentacionComponent,

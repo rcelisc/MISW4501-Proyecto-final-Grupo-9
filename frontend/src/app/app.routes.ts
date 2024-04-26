@@ -18,6 +18,7 @@ import { EventOrganizerDashboardComponent } from './modules/event-organizer/comp
 import { SelectPlanComponent } from './modules/athlete/components/select-plan/select-plan.component';
 import { SportInfoComponent } from './modules/athlete/components/sport-info/sport-info.component';
 import { DemographicInfoComponent } from './modules/athlete/components/demographic-info/demographic-info.component';
+import { EventCalendarComponent } from './modules/event-organizer/components/event-calendar/event-calendar.component';
 
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
@@ -37,5 +38,6 @@ export const routes: Routes = [
   {path: 'organizer-dashboard', component: EventOrganizerDashboardComponent},
   {path: 'select-plan', component: SelectPlanComponent},
   {path: 'sport-info', component: SportInfoComponent},
-  {path: 'demographic-info', component: DemographicInfoComponent}
+  {path: 'demographic-info', component: DemographicInfoComponent},
+  {path: 'event-calendar', component: EventCalendarComponent}
 ];
