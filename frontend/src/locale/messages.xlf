@@ -226,6 +226,56 @@
           <context context-type="linenumber">27,28</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="trainingPlanTittle" datatype="html">
+        <source>Create Training Plan</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trainingPlanObjetive" datatype="html">
+        <source>Objetives</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trainingPlanDescription" datatype="html">
+        <source>Description</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trainingPlanExcercises" datatype="html">
+        <source>Excercises</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trainingPlanFrecuency" datatype="html">
+        <source>Frecuency</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trainingPlanDuration" datatype="html">
+        <source>Duration</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+            <trans-unit id="trainingPlanProfile" datatype="html">
+        <source>Profile</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+            <trans-unit id="trainingPlanButton" datatype="html">
+        <source>Create Plan</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+
+
     </body>
   </file>
 </xliff>

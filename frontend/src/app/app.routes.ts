@@ -22,6 +22,7 @@ import { EventCalendarComponent } from './modules/event-organizer/components/eve
 import { ServicePublishedListComponent } from './modules/create-service/components/service-published-list/service-published-list.component';
 import { AthleteCalendarComponent } from './modules/athlete/components/athlete-calendar/athlete-calendar.component';
 
+
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
   {path: 'planentrenamiento', component: PlantrainingComponent},
