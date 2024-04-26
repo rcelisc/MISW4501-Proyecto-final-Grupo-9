@@ -25,5 +25,8 @@ export class LoginComponent {
     // Here goes the authentication logic
     // After login, route based on user type
     this.router.navigate(['/professional-dashboard']); // Just an example path
+
+    //this.router.navigate(['/plan-entrenamiento']); // Just an example path
+    //this.router.navigate(['/meal-plan']); // Just an example path
   }
 }
