@@ -19,7 +19,12 @@ export class CreateServiceService {
     return this.http.get<any[]>(`${this.apiUrl}`);
   }
 
+  getServicesPublished(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/published`);
+  }
+
   publishService(serviceId: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/${serviceId}/publish`, {});
   }
+
 }

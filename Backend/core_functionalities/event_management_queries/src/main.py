@@ -1,5 +1,7 @@
 from flask import Flask
 from .queries.events_update_listener import start_listener_in_background
+from .queries.publish_events_listener import start_listener_in_background as publish_listener
+from .queries.add_events_listener import start_listener_in_background as add_events_listener
 from .extensions import db, migrate
 from .api.event import event_blueprint
 import os
@@ -30,6 +32,8 @@ def create_app():
     
     app.register_blueprint(event_blueprint)
     start_listener_in_background(app)
+    publish_listener(app)
+    add_events_listener(app)
     CORS(app)
     return app
 

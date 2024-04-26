@@ -23,4 +23,9 @@ export class CreateEventService {
   publishEvent(eventId: number): Observable<any> {
     return this.http.post(`${this.apiUrlCommands}/${eventId}/publish`, {});
   }
+
+  enrollEvent(eventId: number, userId: number = 1): Observable<any> { // Default userId to 1
+    const payload = { user_id: userId };
+    return this.http.post(`${this.apiUrlCommands}/${eventId}/add`, payload);
+  }
 }

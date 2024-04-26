@@ -1,0 +1,125 @@
+@use '@angular/material' as mat;
+@use '../../../../../custom-theme.scss' as theme;
+
+:host {
+    display: block;
+    min-height: 100vh;
+    padding: 2vh 10vw;
+    background: mat.get-color-from-palette(theme.$custom-primary, 50);
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.calendar-container {
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: mat.get-color-from-palette(theme.$custom-primary, 100);
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-btn {
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    color: mat.get-color-from-palette(theme.$custom-primary, 900);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 0 10px;
+    padding: 5px 20px;
+    border-radius: 4px;
+    &:hover {
+      background-color: mat.get-color-from-palette(theme.$custom-primary, 300);
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .month-label {
+    font-family: 'Lato', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: mat.get-color-from-palette(theme.$custom-primary, 800);
+    margin: 0;
+  }
+
+  .calendar-title {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+    color: mat.get-color-from-palette(theme.$custom-primary, 800);
+  }
+}
+
+.event-list {
+    padding: 10px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: mat.get-color-from-palette(theme.$custom-primary, 50);
+  
+    h3 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      color: mat.get-color-from-palette(theme.$custom-primary, 900);
+    }
+  
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        cursor: pointer;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid mat.get-color-from-palette(theme.$custom-primary, 300);
+        border-radius: 4px;
+        &:hover {
+          background-color: mat.get-color-from-palette(theme.$custom-primary, 200);
+        }
+      }
+    }
+  }
+
+  .event-details {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: mat.get-color-from-palette(theme.$custom-primary, 100);
+    margin-top: 10px;
+    
+    h3 {
+      color: mat.get-color-from-palette(theme.$custom-primary, 900);
+    }
+
+    p {
+      margin: 5px 0;
+      color: mat.get-color-from-palette(theme.$custom-primary, 800);
+    }
+  }
+
+  .close-btn {
+    float: right;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 5px;
+    color: mat.get-color-from-palette(theme.$custom-primary, 800);
+    &:hover {
+      color: #ff0000;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
