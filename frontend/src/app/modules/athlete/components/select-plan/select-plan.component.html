@@ -1,0 +1,13 @@
+<div class="container">
+    <h2 class="dashboard-title">Seleccionar Plan</h2>
+    <div class="card-container">
+      <mat-card class="dashboard-card" *ngFor="let item of dashboardItems">
+        <mat-card-title>{{ item.title }}</mat-card-title>
+        <mat-card-content>{{ item.content }}</mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="primary" (click)="updatePlan(item.planType)">Seleccionar</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+  
