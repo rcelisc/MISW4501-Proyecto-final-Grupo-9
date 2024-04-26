@@ -37,10 +37,6 @@
       <ng-container *ngIf="registerForm.get('type')?.value === 'athlete'">
         <div class="form-field">
           <mat-form-field appearance="fill">
-                <mat-label i18n="@@registerEthnicity">Etnia</mat-label>
-                <input matInput formControlName="ethnicity">
-              </mat-form-field>
-          <mat-form-field appearance="fill">
             <mat-label i18n="@@registerAge">Edad</mat-label>
             <input matInput type="number" formControlName="age">
           </mat-form-field>

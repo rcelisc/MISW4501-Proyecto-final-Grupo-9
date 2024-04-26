@@ -23,6 +23,9 @@ import { AuthService } from './services/auth.service';
 import { AthleteModule } from './modules/athlete/athlete.module';
 import { EventOrganizerModule } from './modules/event-organizer/event-organizer.module';
 import { ProfessionalServicesModule } from './modules/professional-services/professional-services.module';
+import { SportInfoService } from './services/sport-info.service';
+import { DemographicInfoService } from './services/demographic-info.service';
+
 
 
 
@@ -50,7 +53,7 @@ import { ProfessionalServicesModule } from './modules/professional-services/prof
     MaterialModule
   ],
   providers: [{ provide: MAT_DATE_LOCALE, useFactory: (localeService: LocaleService) => localeService.locale$, deps: [LocaleService] },
-  TrainingPlanService, CreateServiceService, CreateEventService, AuthService],
+  TrainingPlanService, CreateServiceService, CreateEventService, AuthService, SportInfoService, DemographicInfoService],
   bootstrap: []
 })
 export class AppModule { }
