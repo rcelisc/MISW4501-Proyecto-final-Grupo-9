@@ -52,8 +52,5 @@ export const routes: Routes = [
   {path: 'demographic-info', component: DemographicInfoComponent},
   {path: 'event-calendar', component: EventCalendarComponent},
   {path: 'athlete-calendar', component: AthleteCalendarComponent},
-
-
   {path: 'meal-plan', component: MealPlanComponent}
-
 ];
