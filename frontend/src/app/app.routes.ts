@@ -42,11 +42,13 @@ export const routes: Routes = [
   {path: 'professional-dashboard', component: ProfessionalDashboardComponent},
   {path: 'organizer-dashboard', component: EventOrganizerDashboardComponent},
   {path: 'plan-entrenamiento', component: PlanTrainingComponent},
+  {path: 'select-plan', component: SelectPlanComponent},
   {path: 'sport-info', component: SportInfoComponent},
   {path: 'demographic-info', component: DemographicInfoComponent},
   {path: 'event-calendar', component: EventCalendarComponent},
   {path: 'athlete-calendar', component: AthleteCalendarComponent},
-  {path: 'meal-plan', component: MealPlanComponent},
-  {path: 'select-plan', component: SelectPlanComponent},
+
+
+  {path: 'meal-plan', component: MealPlanComponent}
 
 ];
