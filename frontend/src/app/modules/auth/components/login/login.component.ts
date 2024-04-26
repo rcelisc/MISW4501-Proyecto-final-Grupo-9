@@ -24,7 +24,6 @@ export class LoginComponent {
   onLogin() {
     // Here goes the authentication logic
     // After login, route based on user type
-
     this.router.navigate(['/professional-dashboard']); // Just an example path
   }
 }
