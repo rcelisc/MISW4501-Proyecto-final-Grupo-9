@@ -16,6 +16,8 @@ import { AthleteDashboardComponent } from './modules/athlete/components/athlete-
 import { ProfessionalDashboardComponent } from './modules/professional-services/components/professional-dashboard/professional-dashboard.component';
 import { EventOrganizerDashboardComponent } from './modules/event-organizer/components/event-organizer-dashboard/event-organizer-dashboard.component';
 import { SelectPlanComponent } from './modules/athlete/components/select-plan/select-plan.component';
+import { SportInfoComponent } from './modules/athlete/components/sport-info/sport-info.component';
+import { DemographicInfoComponent } from './modules/athlete/components/demographic-info/demographic-info.component';
 
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
@@ -33,5 +35,7 @@ export const routes: Routes = [
   {path: 'athlete-dashboard', component: AthleteDashboardComponent},
   {path: 'professional-dashboard', component: ProfessionalDashboardComponent},
   {path: 'organizer-dashboard', component: EventOrganizerDashboardComponent},
-  {path: 'select-plan', component: SelectPlanComponent}
+  {path: 'select-plan', component: SelectPlanComponent},
+  {path: 'sport-info', component: SportInfoComponent},
+  {path: 'demographic-info', component: DemographicInfoComponent}
 ];
