@@ -3,8 +3,6 @@ import { Routes } from '@angular/router';
 import { PlantrainingComponent } from './modules/plantraining/plantraining.component';
 import { HistorialtrainingComponent } from './modules/historialtraining/historialtraining.component';
 import { CrearPlanAlimentacionComponent } from './modules/crear-plan-alimentacion/crear-plan-alimentacion.component';
-import { MiCuentaComponent } from './modules/mi-cuenta/mi-cuenta.component';
-import { ListarUsuariosProfesionalComponent } from './modules/listar-usuarios-profesional/listar-usuarios-profesional.component';
 import { ServiceListComponent } from './modules/create-service/components/service-list/service-list.component';
 import { CreateServiceComponent } from './modules/create-service/components/create-service/create-service.component';
 import { CreateEventComponent } from './modules/create-event/components/create-event/create-event.component';
@@ -21,14 +19,14 @@ import { DemographicInfoComponent } from './modules/athlete/components/demograph
 import { EventCalendarComponent } from './modules/event-organizer/components/event-calendar/event-calendar.component';
 import { ServicePublishedListComponent } from './modules/create-service/components/service-published-list/service-published-list.component';
 import { AthleteCalendarComponent } from './modules/athlete/components/athlete-calendar/athlete-calendar.component';
+import { TrainingPlanComponent } from './modules/professional-services/components/training-plan/training-plan.component';
 
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
+  {path: 'training-plan', component: TrainingPlanComponent},
   {path: 'planentrenamiento', component: PlantrainingComponent},
   {path: 'historialentrenamiento', component: HistorialtrainingComponent},
   {path: 'crearplanalimentacion', component: CrearPlanAlimentacionComponent},
-  {path: 'micuenta', component: MiCuentaComponent},
-  {path: 'listausuriosprofesional', component: ListarUsuariosProfesionalComponent},
   {path: 'create-service', component: CreateServiceComponent},
   {path: 'service-list', component: ServiceListComponent},
   {path: 'service-published-list', component: ServicePublishedListComponent},
