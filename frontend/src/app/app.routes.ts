@@ -26,7 +26,7 @@ import { MealPlanComponent } from './modules/meal-plan/components/meal-plan/meal
 
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
-  {path: 'planentrenamiento', component: PlantrainingComponent},
+  //{path: 'planentrenamiento', component: PlantrainingComponent},
   {path: 'historialentrenamiento', component: HistorialtrainingComponent},
   {path: 'crearplanalimentacion', component: CrearPlanAlimentacionComponent},
   {path: 'micuenta', component: MiCuentaComponent},
@@ -52,8 +52,5 @@ export const routes: Routes = [
   {path: 'demographic-info', component: DemographicInfoComponent},
   {path: 'event-calendar', component: EventCalendarComponent},
   {path: 'athlete-calendar', component: AthleteCalendarComponent},
-
-
   {path: 'meal-plan', component: MealPlanComponent}
-
 ];
