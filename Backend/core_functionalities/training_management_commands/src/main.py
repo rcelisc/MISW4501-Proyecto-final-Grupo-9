@@ -6,6 +6,7 @@ from .api.training_session import training_session_blueprint
 from .api.training_metrics import training_metrics_blueprint
 from .api.strava_auth import strava_auth_blueprint
 import os
+from flask_cors import CORS
 
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
@@ -25,7 +26,7 @@ def create_app(config_class=DevelopmentConfig):
     app.register_blueprint(training_session_blueprint)
     app.register_blueprint(training_metrics_blueprint)
     app.register_blueprint(strava_auth_blueprint)
-
+    CORS(app)
     return app
 
 if __name__ == "__main__":
