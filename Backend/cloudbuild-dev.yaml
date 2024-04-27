@@ -12,7 +12,7 @@ steps:
     args:
       - '-c'
       - |
-        docker run --rm FLASK_ENV=testing gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage run --source=. -m unittest discover -s tests && \
+        docker run --rm -e FLASK_ENV=testing gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage run --source=. -m unittest discover -s tests && \
         docker run --rm gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage xml -o coverage.xml
 
   - name: 'gcr.io/cloud-builders/docker'
