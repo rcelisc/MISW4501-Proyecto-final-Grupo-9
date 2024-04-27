@@ -1,6 +1,5 @@
 
 import { Routes } from '@angular/router';
-import { HistorialtrainingComponent } from './modules/historialtraining/historialtraining.component';
 import { ServiceListComponent } from './modules/create-service/components/service-list/service-list.component';
 import { CreateServiceComponent } from './modules/create-service/components/create-service/create-service.component';
 import { CreateEventComponent } from './modules/create-event/components/create-event/create-event.component';
@@ -19,11 +18,12 @@ import { ServicePublishedListComponent } from './modules/create-service/componen
 import { AthleteCalendarComponent } from './modules/athlete/components/athlete-calendar/athlete-calendar.component';
 import { TrainingPlanComponent } from './modules/professional-services/components/training-plan/training-plan.component';
 import { MealPlanComponent } from './modules/professional-services/components/meal-plan/meal-plan.component';
+import { TrainingHistoryComponent } from './modules/athlete/components/training-history/training-history.component';
 
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
   {path: 'training-plan', component: TrainingPlanComponent},
-  {path: 'historialentrenamiento', component: HistorialtrainingComponent},
+  {path: 'training-history', component: TrainingHistoryComponent},
   {path: 'create-service', component: CreateServiceComponent},
   {path: 'service-list', component: ServiceListComponent},
   {path: 'service-published-list', component: ServicePublishedListComponent},

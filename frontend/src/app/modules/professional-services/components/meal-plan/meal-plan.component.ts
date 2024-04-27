@@ -17,7 +17,6 @@ import { SocketService } from '../../../../services/socket.service'
   styleUrl: './meal-plan.component.scss'
 })
 
-// implements OnInit, OnDestroy
 export class MealPlanComponent {
   formulario: FormGroup;
   socketSubscription!: Subscription;

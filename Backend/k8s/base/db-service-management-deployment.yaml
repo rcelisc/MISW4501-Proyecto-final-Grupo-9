@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: db-service-management
-        image: postgres:13  # Make sure to use the correct Docker image tag
+        image: postgres:13 
         env:
         - name: POSTGRES_DB
           value: db_service_management

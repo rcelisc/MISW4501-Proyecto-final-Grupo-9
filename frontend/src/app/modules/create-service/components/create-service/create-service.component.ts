@@ -35,12 +35,11 @@ export class CreateServiceComponent {
     if (!this.createServiceForm.valid) {
       this.snackBar.open('Por favor, complete los campos requeridos.', 'Cerrar', {
         duration: 3000,
-        panelClass: ['snack-bar-error'] // Apply custom CSS for styling the error snackbar
+        panelClass: ['snack-bar-error']
       });
       return; // Return early if form is invalid
     }
 
-    // Proceed with the form submission if the form is valid
     this.createServiceService.createService(this.createServiceForm.value).subscribe({
       next: (response) => {
         this.snackBar.open('Servicio creado exitosamente', 'Cerrar', { duration: 3000 });

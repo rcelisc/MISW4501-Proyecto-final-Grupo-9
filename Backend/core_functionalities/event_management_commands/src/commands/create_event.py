@@ -52,11 +52,11 @@ class CreateEventCommandHandler:
             db.session.add(event)
             db.session.commit()
 
-            # Before sending data to Kafka, ensuring event_date is a string
+            # Ensuring event_date is a string
             kafka_data = data.copy()
             kafka_data['event_date'] = kafka_data['event_date'].isoformat() if 'event_date' in kafka_data else None
 
-            # Publish an event to Kafka after successfully creating the event
+            # Publish an event to PubSub after successfully creating the event
             message = {
                 "type": "EventCreated",
                 "event_id": event.id,

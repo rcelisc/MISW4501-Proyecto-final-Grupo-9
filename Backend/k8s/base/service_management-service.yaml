@@ -8,4 +8,4 @@ spec:
       port: 3005
       targetPort: 3005
   selector:
-    app: service-management  # Adjusted to match the labels of the pods appropriately
+    app: service-management
