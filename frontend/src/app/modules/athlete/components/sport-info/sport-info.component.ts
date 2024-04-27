@@ -42,7 +42,6 @@ export class SportInfoComponent {
       return; 
     }
 
-    // Proceed with the form submission if the form is valid
     this.sportInfoService.createSportInfo(this.userId, this.sportInfoForm.value).subscribe({
       next: (response) => {
         this.snackBar.open('Informacion deportiva agregada exitosamente', 'Cerrar', { duration: 3000 });

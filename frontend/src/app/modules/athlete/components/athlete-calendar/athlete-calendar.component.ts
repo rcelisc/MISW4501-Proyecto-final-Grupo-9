@@ -54,9 +54,9 @@ export class AthleteCalendarComponent implements OnInit {
       }));
   
       const servicesMapped = response.services.map((service:any) => ({
-        start: new Date(), // No specific date given, using today as default or could be adjusted
+        start: new Date(), // Date is not relevant for services, so we set it to today
         end: new Date(),
-        allDay: true, // Consider services as all-day if no time specified
+        allDay: true, // Consider services as all-day as no time is specified
         title: service.name,
         color: {
           primary: '#ff9800', // orange for services

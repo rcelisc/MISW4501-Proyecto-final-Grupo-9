@@ -36,14 +36,12 @@ export class ServiceListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Failed to load services', error);
-        // Optionally, handle the error, e.g., show a snackbar message
       }
     });
   }
 
   onPublishService(service: any): void {
     if (service.status === 'published') {
-      // Service is already published, do nothing
       return;
     }
     this.createServiceService.publishService(service.id).subscribe({

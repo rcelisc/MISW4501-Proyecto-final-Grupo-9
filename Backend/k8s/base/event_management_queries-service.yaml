@@ -8,4 +8,4 @@ spec:
       port: 3002
       targetPort: 3002
   selector:
-    app: event-management-queries  # This should match labels of the pods
+    app: event-management-queries

@@ -68,7 +68,7 @@ button.create-button {
   margin-top: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
-  align-self: center; // Center the button in the container
+  align-self: center;
 
   &:hover {
     background-color: mat.get-color-from-palette(theme.$custom-primary, 800);

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: db-tm-commands
-        image: postgres:13  # Ensure the correct Docker image version
+        image: postgres:13 
         env:
         - name: POSTGRES_DB
           value: db_training_management_commands

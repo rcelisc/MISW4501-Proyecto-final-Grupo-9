@@ -34,6 +34,7 @@ class StopTrainingSessionCommandHandler:
                 "session_id": str(session.id),
                 "user_id": session.user_id,
                 "end_time": session.end_time.isoformat(),
+                "training_type": session.training_type,
                 "duration": session.duration,
                 "notes": data.get('notes', '')
             }
