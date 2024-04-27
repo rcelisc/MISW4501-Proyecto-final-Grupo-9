@@ -8,4 +8,4 @@ spec:
       port: 3004
       targetPort: 3004
   selector:
-    app: training-management-commands  # Adjusted to match the labels of the pods appropriately
+    app: training-management-commands

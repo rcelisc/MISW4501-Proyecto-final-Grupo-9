@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: db-tm-queries
-        image: postgres:13  # Confirm this is the correct image and tag
+        image: postgres:13 
         env:
         - name: POSTGRES_DB
           value: db_training_management_queries

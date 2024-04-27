@@ -18,5 +18,5 @@ ENV FLASK_ENV=development
 # Expose the port app runs on
 EXPOSE 3001
 
-# Use Gunicorn to serve the app. Adjust the number of workers as needed.
+# Use Gunicorn to serve the app.
 CMD ["gunicorn", "--workers=3", "--bind=0.0.0.0:3001","--timeout=120", "--log-level=debug", "--access-logfile",  "-", "--error-logfile", "-", "src.main:create_app()"]

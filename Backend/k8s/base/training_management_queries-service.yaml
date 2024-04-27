@@ -8,4 +8,4 @@ spec:
       port: 3003
       targetPort: 3003
   selector:
-    app: training-management-queries  # Adjusted to match the labels of the pods appropriately
+    app: training-management-queries 

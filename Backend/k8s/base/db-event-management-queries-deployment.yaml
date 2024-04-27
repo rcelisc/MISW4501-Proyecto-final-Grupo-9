@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: db-em-queries
-        image: postgres:13  # Ensure this is the correct version or use a specific version tag
+        image: postgres:13
         env:
         - name: POSTGRES_DB
           value: db_event_management_queries

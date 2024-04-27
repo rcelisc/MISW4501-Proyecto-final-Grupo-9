@@ -1,5 +1,6 @@
 export const environment = {
     //production: false,
-    baseUrlTraining: 'http://localhost:3004/',
+    baseUrlCommandsTraining: 'http://localhost:3004/',
+    baseUrlQueriesTraining: 'http://localhost:3003/',
     baseUrlNutrition: 'http://localhost:3005/'
   };

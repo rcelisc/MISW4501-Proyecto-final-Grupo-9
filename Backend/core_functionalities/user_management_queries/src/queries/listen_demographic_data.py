@@ -8,7 +8,6 @@ class EventUpdatesListener:
     def __init__(self, app):
         self.app = app
         self.subscriber = pubsub_v1.SubscriberClient()
-        # Adjust the subscription path as needed for demographic data events
         self.subscription_path = self.subscriber.subscription_path('miso-proyecto-de-grado-g09', 'demographic-data-events-sub')
     
     def callback(self, message):
