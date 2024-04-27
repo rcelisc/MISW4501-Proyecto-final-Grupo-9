@@ -1,8 +1,7 @@
 @use 'custom-theme' as theme;
 @use '@angular/material' as mat;
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
-//@import '~@angular/material/theming';
-//@include mat.all-component-themes(theme.$theme);
+
 html, body { height: 100%; }
 
 @import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap CSS
@@ -20,6 +19,5 @@ body {
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-//@include angular-material-theme($theme);
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

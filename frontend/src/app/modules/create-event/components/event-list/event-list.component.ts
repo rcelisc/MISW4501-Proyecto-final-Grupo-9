@@ -36,19 +36,16 @@ export class EventListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Failed to load events', error);
-        // Optionally, handle the error, e.g., show a snackbar message
       }
     });
   }
 
   onPublishEvent(event: any): void {
     if (event.status === 'published') {
-      // Service is already published, do nothing
       return;
     }
     this.createEventService.publishEvent(event.id).subscribe({
       next: () => {
-        // Update the local event state to reflect the new status
         event.status = 'published';
       },
       error: (error) => {

@@ -68,14 +68,6 @@ export class EventCalendarComponent implements OnInit {
     this.viewDate = new Date();
   }
 
-  // dayClicked(day: MonthViewDay<any>): void {
-  //   if (day.events.length > 0) {
-  //     this.selectedEvent = day.events[0];
-  //   } else {
-  //     this.selectedEvent = null;
-  //   }
-  // }
-
   dayClicked(day: MonthViewDay<any>): void {
     this.selectedEvents = day.events;
     this.selectedEvents = day.events; // Store all events of the clicked day

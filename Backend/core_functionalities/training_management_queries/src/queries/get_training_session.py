@@ -21,6 +21,7 @@ class GetTrainingSessionHandler:
                 'user_id': session.user_id,
                 'duration': session.duration,
                 'training_type': session.training_type,
+                'end_time': session.end_time,
                 'notes': session.notes,
             } for session in sessions]
             return session_data
@@ -31,6 +32,7 @@ class GetTrainingSessionHandler:
                 'user_id': session.user_id,
                 'duration': session.duration,
                 'training_type': session.training_type,
+                'end_time': session.end_time,
                 'notes': session.notes,
             } for session in sessions]
             return session_data

@@ -42,16 +42,16 @@ export class CreateEventComponent {
     if (!this.createEventForm.valid) {
       this.snackBar.open('Por favor, complete los campos requeridos.', 'Cerrar', {
         duration: 3000,
-        panelClass: ['snack-bar-error'] // Apply custom CSS for styling the error snackbar
+        panelClass: ['snack-bar-error']
       });
-      return; // Return early if form is invalid
+      return;
     }
 
     const eventDateControl = this.createEventForm.get('event_date');
     
     if (!eventDateControl) {
       this.snackBar.open('Error en la fecha del evento.', 'Cerrar', { duration: 3000 });
-      return; // Return if the event date control is somehow missing
+      return;
     }
 
     const eventDateValue = eventDateControl.value ? eventDateControl.value : new Date(); // Provide a default date if null
@@ -66,7 +66,6 @@ export class CreateEventComponent {
         event_date: formattedDate  // Use formatted date
       };
 
-    // Proceed with the form submission if the form is valid
     this.createEventService.createEvent(formData).subscribe({
       next: (response) => {
         this.snackBar.open('Evento creado exitosamente', 'Cerrar', { duration: 3000 });

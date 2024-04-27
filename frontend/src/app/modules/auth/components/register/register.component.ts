@@ -8,7 +8,6 @@ import { AuthService } from '../../../../services/auth.service';
 
 type UserType = 'athlete' | 'complementary_services_professional' | 'event_organizer';
 
-// TypeScript type for route paths based on user types
 const routes: { [key in UserType]: string } = {
   athlete: '/athlete-dashboard',
   complementary_services_professional: '/professional-dashboard',

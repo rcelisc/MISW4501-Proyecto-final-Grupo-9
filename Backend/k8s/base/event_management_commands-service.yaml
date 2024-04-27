@@ -8,4 +8,4 @@ spec:
       port: 3001
       targetPort: 3001
   selector:
-    app: event-management-commands  # This should match labels of the pods
+    app: event-management-commands

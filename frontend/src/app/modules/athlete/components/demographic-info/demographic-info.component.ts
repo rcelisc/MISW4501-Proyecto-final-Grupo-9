@@ -42,7 +42,6 @@ export class DemographicInfoComponent {
       return; 
     }
 
-    // Proceed with the form submission if the form is valid
     this.demographicInfoService.createDemographicInfo(this.userId, this.demographicInfoForm.value).subscribe({
       next: (response) => {
         this.snackBar.open('Informacion demografica agregada exitosamente', 'Cerrar', { duration: 3000 });

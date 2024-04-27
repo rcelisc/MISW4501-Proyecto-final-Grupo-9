@@ -10,21 +10,26 @@ import { environment } from '../../environments/environment';
 
 export class TrainingPlanService {
 
-  private baseUrl: string;
+  private baseCommandsUrl: string;
+  private baseQueriesUrl: string;
 
   constructor(private http: HttpClient) {
-    this.baseUrl = `${environment.baseUrlTraining}/training-plan`;
+    this.baseCommandsUrl = `${environment.baseUrlCommandsTraining}/training-plan`;
+    this.baseQueriesUrl = `${environment.baseUrlQueriesTraining}`;
   }
 
   createPlan(plan: TrainingPlanRequest): Observable<TrainingPlanResponse> {
-    return this.http.post<TrainingPlanResponse>(this.baseUrl, plan)
+    return this.http.post<TrainingPlanResponse>(this.baseCommandsUrl, plan)
       .pipe(
         catchError(this.handleError)
       );
   }
 
+  getTrainingSessions(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseQueriesUrl}/training-sessions`);
+  }
+
   private handleError(error: any) {
-    // Aquí puedes agregar código para manejar el error, como enviarlo a un servicio de registro de errores, mostrar un mensaje de error al usuario, etc.
     console.error('Error en la solicitud:', error);
     return throwError('Error en la solicitud. Por favor, inténtalo de nuevo más tarde.'); // O puedes lanzar un error personalizado
   }
