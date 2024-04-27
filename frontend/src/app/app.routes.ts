@@ -1,8 +1,6 @@
 
 import { Routes } from '@angular/router';
-import { PlantrainingComponent } from './modules/plantraining/plantraining.component';
 import { HistorialtrainingComponent } from './modules/historialtraining/historialtraining.component';
-import { CrearPlanAlimentacionComponent } from './modules/crear-plan-alimentacion/crear-plan-alimentacion.component';
 import { ServiceListComponent } from './modules/create-service/components/service-list/service-list.component';
 import { CreateServiceComponent } from './modules/create-service/components/create-service/create-service.component';
 import { CreateEventComponent } from './modules/create-event/components/create-event/create-event.component';
@@ -20,17 +18,12 @@ import { EventCalendarComponent } from './modules/event-organizer/components/eve
 import { ServicePublishedListComponent } from './modules/create-service/components/service-published-list/service-published-list.component';
 import { AthleteCalendarComponent } from './modules/athlete/components/athlete-calendar/athlete-calendar.component';
 import { TrainingPlanComponent } from './modules/professional-services/components/training-plan/training-plan.component';
-
-import { TrainingPlanRequest } from './models/plan-training.model';
-import { PlanTrainingComponent } from './modules/training/components/plan-training/plan-training.component';
-import { MealPlanComponent } from './modules/meal-plan/components/meal-plan/meal-plan.component';
+import { MealPlanComponent } from './modules/professional-services/components/meal-plan/meal-plan.component';
 
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
   {path: 'training-plan', component: TrainingPlanComponent},
-  {path: 'planentrenamiento', component: PlantrainingComponent},
   {path: 'historialentrenamiento', component: HistorialtrainingComponent},
-  {path: 'crearplanalimentacion', component: CrearPlanAlimentacionComponent},
   {path: 'create-service', component: CreateServiceComponent},
   {path: 'service-list', component: ServiceListComponent},
   {path: 'service-published-list', component: ServicePublishedListComponent},
@@ -41,12 +34,6 @@ export const routes: Routes = [
   {path: 'athlete-dashboard', component: AthleteDashboardComponent},
   {path: 'professional-dashboard', component: ProfessionalDashboardComponent},
   {path: 'organizer-dashboard', component: EventOrganizerDashboardComponent},
-  {path: 'plan-entrenamiento', component: PlanTrainingComponent},
-  {path: 'select-plan', component: SelectPlanComponent},
-  {path: 'sport-info', component: SportInfoComponent},
-  {path: 'demographic-info', component: DemographicInfoComponent},
-  {path: 'event-calendar', component: EventCalendarComponent},
-  {path: 'plan-entrenamiento', component: PlanTrainingComponent},
   {path: 'select-plan', component: SelectPlanComponent},
   {path: 'sport-info', component: SportInfoComponent},
   {path: 'demographic-info', component: DemographicInfoComponent},
