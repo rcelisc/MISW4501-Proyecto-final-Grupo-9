@@ -1,5 +1,4 @@
 steps:
-  - serviceAccount:   'sport-app@miso-proyecto-de-grado-g09.iam.gserviceaccount.com'
   # Build and push the Event Management Commands service
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA', '.']
