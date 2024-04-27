@@ -8,6 +8,7 @@ from .queries.listen_metrics import start_listener_in_background as start_listen
 from .queries.listen_plan import start_listener_in_background as start_listener_in_background_plan
 from .models.training_session import TrainingSession
 import os
+from flask_cors import CORS
 
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
@@ -32,11 +33,7 @@ def create_app(config_class=DevelopmentConfig):
     start_listener_in_background(app)
     start_listener_in_background_metrics(app)
     start_listener_in_background_plan(app)
-    # # Optional: Add a CLI command to insert default data
-    # @app.cli.command('insert-data')
-    # def insert_default_data():
-    #     insert_data_function()  # Define this function to insert data
-
+    CORS(app)
     return app
 
 # app = Flask(__name__)
