@@ -64,6 +64,88 @@ class TestUserUpdatesListener(unittest.TestCase):
 
         # Assert the message was acknowledged
         message.ack.assert_called_once()
+    
+    @patch('google.cloud.pubsub_v1.SubscriberClient')
+    def test_process_demographic_data_updated(self, mock_subscriber_client):
+        # Mock the subscriber client
+        mock_subscriber = mock_subscriber_client.return_value
+        mock_subscriber.subscription_path.return_value = 'projects/project-id/subscriptions/demographic-data-events-sub'
+
+        # Prepare the fake demographic update message
+        demographic_data = {
+            "type": "DemographicDataUpdated",
+            "data": {
+                "user_id": 1,
+                "ethnicity": "Hispanic",
+                "heart_rate": 72,
+                "vo2_max": 50,
+                "blood_pressure": "120/80",
+                "respiratory_rate": 15
+            }
+        }
+        message_data = json.dumps(demographic_data).encode('utf-8')
+
+        # Initialize the listener with a mocked subscriber client
+        from src.queries.listen_demographic_data import EventUpdatesListener
+        listener = EventUpdatesListener(self.app)
+        message = MagicMock(data=message_data)
+        message.ack = MagicMock()
+
+        # Call the callback function directly with the mocked message
+        listener.callback(message)
+
+        # Fetch the updated user from the database
+        updated_user = Athlete.query.get(1)
+        self.assertIsNotNone(updated_user)
+        self.assertEqual(updated_user.ethnicity, "Hispanic")
+        self.assertEqual(updated_user.heart_rate, 72)
+        self.assertEqual(updated_user.vo2_max, 50)
+        self.assertEqual(updated_user.blood_pressure, "120/80")
+        self.assertEqual(updated_user.respiratory_rate, 15)
+
+        # Assert the message was acknowledged
+        message.ack.assert_called_once()
+
+    @patch('google.cloud.pubsub_v1.SubscriberClient')
+    def test_process_sports_habit_updated(self, mock_subscriber_client):
+        # Mock the subscriber client
+        mock_subscriber = mock_subscriber_client.return_value
+        mock_subscriber.subscription_path.return_value = 'projects/project-id/subscriptions/sports-habit-events-sub'
+
+        # Prepare the fake sports habit update message
+        sports_habit_data = {
+            "type": "SportsHabitDataUpdated",
+            "data": {
+                "user_id": 1,
+                "training_frequency": "4",
+                "sports_practiced": "Running",
+                "average_session_duration": 60,
+                "recovery_time": 48,
+                "training_pace": "Moderate"
+            }
+        }
+        message_data = json.dumps(sports_habit_data).encode('utf-8')
+
+        # Initialize the listener with a mocked subscriber client
+        from src.queries.listen_sports_habits import EventUpdatesListener
+        listener = EventUpdatesListener(self.app)
+        message = MagicMock(data=message_data)
+        message.ack = MagicMock()
+
+        # Call the callback function directly with the mocked message
+        listener.callback(message)
+
+        # Fetch the updated user from the database
+        updated_user = Athlete.query.get(1)
+        self.assertIsNotNone(updated_user)
+        self.assertEqual(updated_user.training_frequency, "4")
+        self.assertEqual(updated_user.sports_practiced, "Running"),
+        self.assertEqual(updated_user.average_session_duration, 60)
+        self.assertEqual(updated_user.recovery_time, 48)
+        self.assertEqual(updated_user.training_pace, "Moderate")
+
+        # Assert the message was acknowledged
+        message.ack.assert_called_once()
 
 if __name__ == '__main__':
     unittest.main()

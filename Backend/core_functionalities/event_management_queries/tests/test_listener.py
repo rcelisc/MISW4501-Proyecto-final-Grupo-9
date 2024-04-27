@@ -23,7 +23,7 @@ class TestEventUpdatesListener(unittest.TestCase):
         self.app_context.pop()
 
     def add_sample_data(self):
-        event = Event(name="Sample Event",description="A event.",event_date=datetime.utcnow(), duration=2, location="Park", category="Public", fee=0)
+        event = Event(name="Sample Event",description="A event.",event_date=datetime.utcnow(), status='created', duration=2, location="Park", category="Public", fee=0)
         db.session.add(event)
         db.session.commit()
 
@@ -78,7 +78,7 @@ class TestEventUpdatesListener(unittest.TestCase):
         message_data = json.dumps(event_data).encode('utf-8')
 
         # Initialize the listener with a mocked subscriber client
-        from src.queries.events_update_listener import EventUpdatesListener
+        from src.queries.add_events_listener import EventUpdatesListener
         listener = EventUpdatesListener(self.app)
         message = MagicMock(data=message_data)
         message.ack = MagicMock()
@@ -90,6 +90,36 @@ class TestEventUpdatesListener(unittest.TestCase):
         event = Event.query.get(1)
         self.assertIsNotNone(event)
         self.assertIn(1, event.attendees["user_ids"])
+
+        # Assert the message was acknowledged
+        message.ack.assert_called_once()
+
+    @patch('google.cloud.pubsub_v1.SubscriberClient')
+    def test_process_event_published(self, mock_subscriber_client):
+        # Mock SubscriberClient and create message data
+        mock_subscriber = mock_subscriber_client.return_value
+        mock_subscriber.subscription_path.return_value = 'projects/project-id/subscriptions/subscription-id'
+
+        # Prepare message with the event that should be published
+        event_data = {
+            "type": "EventPublished",
+            "event_id": 1  # ID of the event added in add_sample_data
+        }
+        message_data = json.dumps(event_data).encode('utf-8')
+
+        # Initialize the listener
+        from src.queries.publish_events_listener import EventUpdatesListener
+        listener = EventUpdatesListener(self.app)
+        message = MagicMock(data=message_data)
+        message.ack = MagicMock()
+
+        # Invoke callback which should internally call process_event_published
+        listener.callback(message)
+
+        # Assert the database was updated correctly
+        updated_event = Event.query.get(1)
+        self.assertIsNotNone(updated_event)
+        self.assertEqual(updated_event.status, 'published')
 
         # Assert the message was acknowledged
         message.ack.assert_called_once()
