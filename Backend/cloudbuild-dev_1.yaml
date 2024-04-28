@@ -58,11 +58,9 @@ steps:
           -e SONAR_ORG=$$SONAR_ORG \
           -v $(pwd)/Backend/core_functionalities/event_management_commands:/usr/src \
           sonarsource/sonar-scanner-cli \
-          -v /workspace/.git:/usr/src/.git \
           -Dsonar.projectKey=$$SONAR_PROJECT_KEY \
           -Dsonar.organization=$$SONAR_ORG \
           -Dsonar.sources=. \
-          -Dsonar.scm.provider=git \
           -Dsonar.host.url="https://sonarcloud.io" \
           -Dsonar.python.coverage.reportPaths=/usr/src/coverage.xml \
           -Dsonar.exclusions=**/migrations/** \
