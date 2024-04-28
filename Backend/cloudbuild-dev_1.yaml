@@ -14,3 +14,7 @@ availableSecrets:
   secretManager:
     - versionName: 'projects/miso-proyecto-de-grado-g09/secrets/GOOGLE_APPLICATION_CREDENTIALS/versions/latest'
       env: 'SECRET_VALUE'
+
+options:
+  default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
+  substitution_option: ALLOW_LOOSE
