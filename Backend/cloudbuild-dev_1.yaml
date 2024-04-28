@@ -1,19 +1,29 @@
 steps:
-  # Build and push the Event Management Commands service
+  # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA', '.']
     dir: 'Backend/core_functionalities/event_management_commands'
 
+  # Push the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA']
 
+  # Run tests inside the Docker container
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        docker run --rm -e FLASK_ENV=testing gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage run --source=. -m unittest discover -s tests && \
-        docker run --rm gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage xml -o coverage.xml
+        # Export the secret to a file
+        echo $$SECRET_VALUE > /workspace/creds.json
+        
+        # Run the container with the credential file mounted and environment variable set
+        docker run --rm -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json -v /workspace/creds.json:/creds/creds.json \
+        -e FLASK_ENV=testing gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage run --source=. -m unittest discover -s tests && \
+        docker run --rm -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json -v /workspace/creds.json:/creds/creds.json \
+        gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage xml -o coverage.xml
+
+    # Set the environment variable from the secret
     secretEnv: ['SECRET_VALUE']
 
 # Define the secret available to this build
