@@ -30,7 +30,7 @@ services:
       DATABASE_URL: postgresql://postgres:emCommands@db_event_management_commands:5432/db_event_management_commands
       GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
     volumes:
-      - /workspace/service-account.json:/secrets/service-account.json
+      - ../../../service-account.json:/secrets/service-account.json
     networks:
       - em_net
 
