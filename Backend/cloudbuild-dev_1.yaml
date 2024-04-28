@@ -31,11 +31,14 @@ steps:
       - '-c'
       - |
         echo $$SECRET_VALUE > /workspace/creds.json
-        docker run --rm --network em-net -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json -v /workspace/creds.json:/creds/creds.json \
+        docker run --rm --network em-net \
+        -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json \
+        -v /workspace/creds.json:/creds/creds.json \
         -e DATABASE_URL=postgresql://postgres:emCommands@postgres-em-commands:5432/db_event_management_commands \
-        gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage run --source=. -m unittest discover -s tests -v && \
-        docker run --rm -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json -v /workspace/creds.json:/creds/creds.json \
-        gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage xml -o coverage.xml
+        gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA \
+        bash -c "python -m coverage run --source=. -m unittest discover -s tests -v && \
+                 python -m coverage xml -o coverage.xml && \
+                 python -m coverage report"
 
     # Set the environment variable from the secret
     secretEnv: ['SECRET_VALUE']
