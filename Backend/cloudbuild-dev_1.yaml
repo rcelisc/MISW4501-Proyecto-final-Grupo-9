@@ -35,7 +35,7 @@ steps:
         -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json \
         -v /workspace/creds.json:/creds/creds.json \
         -v /workspace/Backend/core_functionalities/event_management_commands:/usr/src \
-        -w /usr/src \ 
+        -w /usr/src \
         -e DATABASE_URL=postgresql://postgres:emCommands@postgres-em-commands:5432/db_event_management_commands \
         gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA \
         bash -c "python -m coverage run --source=. -m unittest discover -s tests -v && \
