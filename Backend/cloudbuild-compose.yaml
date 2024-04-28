@@ -49,11 +49,11 @@ timeout: '1200s'  # Adjust the timeout to your needs
 # Variables to manage Docker in Cloud Build
 options:
   env: ['_DOCKER_HOST=tcp://localhost:2375']
-  secretEnv: ['GOOGLE_APPLICATION_CREDENTIALS_SECRET']
+  #secretEnv: ['GOOGLE_APPLICATION_CREDENTIALS_SECRET']
   default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
   substitution_option: ALLOW_LOOSE
 
 availableSecrets:
   secretManager:
     - versionName: 'projects/$PROJECT_ID/secrets/service-account/versions/latest'
-      env: 'SECRET_VALUE'
+      env: 'GOOGLE_APPLICATION_CREDENTIALS_SECRET'
