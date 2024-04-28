@@ -50,6 +50,8 @@ timeout: '1200s'  # Adjust the timeout to your needs
 options:
   env: ['_DOCKER_HOST=tcp://localhost:2375']
   secretEnv: ['SECRET_VALUE']
+  default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
+  substitution_option: ALLOW_LOOSE
 
 availableSecrets:
   secretManager:
