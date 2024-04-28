@@ -7,7 +7,6 @@ steps:
         echo "Attempting to access secret..."
         echo "Secret content: $SECRET_VALUE"
         echo "If no secret is displayed above, there was an error accessing the secret."
-
     secretEnv: ['SECRET_VALUE']
 
 availableSecrets:
