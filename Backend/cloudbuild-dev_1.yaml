@@ -5,8 +5,12 @@ steps:
       - '-c'
       - |
         echo "Attempting to access secret..."
+        # Use the environment variable directly without the dollar sign in the echo command.
+        # This helps in avoiding confusion with substitutions.
         echo "Secret content: ${SECRET_VALUE}"
-        echo "If no secret is displayed above, there was an error accessing the secret."
+        if [ -z "${SECRET_VALUE}" ]; then
+          echo "No secret content available, access error."
+        fi
     secretEnv: ['SECRET_VALUE']
 
 availableSecrets:
