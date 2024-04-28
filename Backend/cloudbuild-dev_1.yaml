@@ -67,18 +67,6 @@ steps:
           -Dsonar.verbose=true
     secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
 
-  # Stop the PostgreSQL container
-  #- name: 'gcr.io/cloud-builders/docker'
-  #  args: ['stop', 'postgres-em-commands']
-
-  # Remove the PostgreSQL container
-  #- name: 'gcr.io/cloud-builders/docker'
-  #  args: ['rm', 'postgres-em-commands']
-
-  # Remove the network
-  #- name: 'gcr.io/cloud-builders/docker'
-  #  args: ['network', 'rm', 'em-net']
-
 # Define the secret available to this build
 availableSecrets:
   secretManager:
