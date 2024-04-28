@@ -1,5 +1,5 @@
 steps:
-  # Step 1: Prepare secrets
+  # Step 1: Prepare secret
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['secrets', 'versions', 'access', 'latest', '--secret=service-account', '--format=get(payload.data)', '--project=$PROJECT_ID']
     id: 'get_secret'
