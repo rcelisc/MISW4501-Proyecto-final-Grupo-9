@@ -51,9 +51,6 @@ steps:
     args:
       - '-c'
       - |
-        echo "Listing /usr/src directory contents to verify presence of coverage.xml..."
-        ls -al /usr/src
-        echo "Running SonarQube Scanner..."
         docker run --rm \
           -e SONAR_TOKEN=$$SONAR_TOKEN \
           -e SONAR_HOST_URL="https://sonarcloud.io" \
@@ -61,6 +58,7 @@ steps:
           -e SONAR_ORG=$$SONAR_ORG \
           -v $(pwd)/Backend/core_functionalities/event_management_commands:/usr/src \
           sonarsource/sonar-scanner-cli \
+          -v /workspace/.git:/usr/src/.git \
           -Dsonar.projectKey=$$SONAR_PROJECT_KEY \
           -Dsonar.organization=$$SONAR_ORG \
           -Dsonar.sources=. \
