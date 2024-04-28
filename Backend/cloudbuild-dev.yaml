@@ -14,7 +14,7 @@ steps:
       - |
         docker run --rm -e FLASK_ENV=testing gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage run --source=. -m unittest discover -s tests && \
         docker run --rm gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage xml -o coverage.xml
-    secretEnv: ['_GOOGLE_APPLICATION_CREDENTIALS']
+    secretEnv: ['SECRET_VALUE']
 
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
@@ -162,8 +162,8 @@ steps:
 
 availableSecrets:
   secretManager:
-    - versionName: projects/$PROJECT_ID/secrets/GOOGLE_APPLICATION_CREDENTIALS/versions/latest
-      env: '_GOOGLE_APPLICATION_CREDENTIALS'
+    - versionName: 'projects/miso-proyecto-de-grado-g09/secrets/GOOGLE_APPLICATION_CREDENTIALS/versions/latest'
+      env: 'SECRET_VALUE'
     - versionName: projects/$PROJECT_ID/secrets/SONAR_TOKEN/versions/latest
       env: '_SONAR_TOKEN'
     - versionName: projects/$PROJECT_ID/secrets/SONAR_PROJECT_KEY/versions/latest
