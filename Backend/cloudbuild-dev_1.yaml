@@ -8,8 +8,13 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA']
 
+  # Create a network
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['run', '--name', 'postgres-em-commands', '-e', 'POSTGRES_DB=db_event_management_commands', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=emCommands', '-d', 'postgres:13']
+    args: ['network', 'create', 'em-net']
+
+  # Start PostgreSQL container on the network
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['run', '--name', 'postgres-em-commands', '--network', 'em-net', '-e', 'POSTGRES_DB=db_event_management_commands', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=emCommands', '-d', 'postgres:13']
 
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
@@ -19,22 +24,25 @@ steps:
         while ! docker exec postgres-em-commands pg_isready -U postgres -d db_event_management_commands; do sleep 1; done
 
   # Run tests inside the Docker container
+ # Run tests inside the Docker container
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        # Export the secret to a file
         echo $$SECRET_VALUE > /workspace/creds.json
-        
-        # Run the container with the credential file mounted and environment variable set
-        docker run --rm -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json -v /workspace/creds.json:/creds/creds.json \
-        -e DATABASE_URL=postgresql://postgres:emCommands@db_event_management_commands:5432/db_event_management_commands gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage run --source=. -m unittest discover -s tests && \
+        docker run --rm --network em-net -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json -v /workspace/creds.json:/creds/creds.json \
+        -e DATABASE_URL=postgresql://postgres:emCommands@postgres-em-commands:5432/db_event_management_commands \
+        gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage run --source=. -m unittest discover -s tests && \
         docker run --rm -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json -v /workspace/creds.json:/creds/creds.json \
         gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage xml -o coverage.xml
 
     # Set the environment variable from the secret
     secretEnv: ['SECRET_VALUE']
+
+  # Cleanup network
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['network', 'rm', 'em-net']
 
 # Define the secret available to this build
 availableSecrets:
