@@ -1,13 +1,19 @@
 steps:
-  - name: 'ubuntu'
+  # Build and push the Event Management Commands service
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA', '.']
+    dir: 'Backend/core_functionalities/event_management_commands'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        echo "Attempting to access secret..."
-        # Use the secret directly; make sure there's no confusion with Cloud Build substitutions
-        echo "Secret content: $$SECRET_VALUE"
-    # Correct usage of secretEnv to map the secret to an environment variable
+        docker run --rm -e FLASK_ENV=testing gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage run --source=. -m unittest discover -s tests && \
+        docker run --rm gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage xml -o coverage.xml
     secretEnv: ['SECRET_VALUE']
 
 # Define the secret available to this build
