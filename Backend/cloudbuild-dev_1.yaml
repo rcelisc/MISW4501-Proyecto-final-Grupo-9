@@ -5,14 +5,12 @@ steps:
       - '-c'
       - |
         echo "Attempting to access secret..."
-        # Use the environment variable directly without the dollar sign in the echo command.
-        # This helps in avoiding confusion with substitutions.
-        echo "Secret content: ${SECRET_VALUE}"
-        if [ -z "${SECRET_VALUE}" ]; then
-          echo "No secret content available, access error."
-        fi
+        # Use the secret directly; make sure there's no confusion with Cloud Build substitutions
+        echo "Secret content: $$SECRET_VALUE"
+    # Correct usage of secretEnv to map the secret to an environment variable
     secretEnv: ['SECRET_VALUE']
 
+# Define the secret available to this build
 availableSecrets:
   secretManager:
     - versionName: 'projects/miso-proyecto-de-grado-g09/secrets/GOOGLE_APPLICATION_CREDENTIALS/versions/latest'
