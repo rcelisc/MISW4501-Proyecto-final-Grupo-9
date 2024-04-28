@@ -1,36 +1,69 @@
 steps:
-  # Build and push the Event Management Commands service
+  # Build Event Management Commands service
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA', '.']
     dir: 'Backend/core_functionalities/event_management_commands'
-
+  
+  # Push the Docker image Commands service
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA']
+
+  # Create a network
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['network', 'create', 'em-net']
+
+  # Start PostgreSQL container on the network
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['run', '--name', 'postgres-em-commands', '--network', 'em-net', '-e', 'POSTGRES_DB=db_event_management_commands', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=emCommands', '-d', 'postgres:13']
 
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        docker run --rm -e FLASK_ENV=testing gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage run --source=. -m unittest discover -s tests && \
-        docker run --rm gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA python -m coverage xml -o coverage.xml
+        while ! docker exec postgres-em-commands pg_isready -U postgres -d db_event_management_commands; do sleep 1; done
+
+  # Run tests inside the Docker container
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo $$SECRET_VALUE > /workspace/creds.json
+        docker run --rm --network em-net \
+        -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json \
+        -v /workspace/creds.json:/creds/creds.json \
+        -v /workspace/Backend/core_functionalities/event_management_commands:/usr/src \
+        -w /usr/src \
+        -e DATABASE_URL=postgresql://postgres:emCommands@postgres-em-commands:5432/db_event_management_commands \
+        gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA \
+        bash -c "python -m coverage run --source=. -m unittest discover -s tests -v && \
+                 python -m coverage xml -o coverage.xml && \
+                 python -m coverage report; \
+                 ls -al /usr/src"
     secretEnv: ['SECRET_VALUE']
 
+  # Run SonarCloud analysis
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
         docker run --rm \
-          -e SONAR_TOKEN=${_SONAR_TOKEN} \
-          -v $(pwd)/Backend/core_functionalities/event-management-commands:/usr/src \
+          -e SONAR_TOKEN=$$SONAR_TOKEN \
+          -e SONAR_HOST_URL="https://sonarcloud.io" \
+          -e SONAR_PROJECT_KEY=$$SONAR_PROJECT_KEY \
+          -e SONAR_ORG=$$SONAR_ORG \
+          -v $(pwd)/Backend/core_functionalities/event_management_commands:/usr/src \
           sonarsource/sonar-scanner-cli \
-          -Dsonar.projectKey=${_SONAR_PROJECT_KEY} \
-          -Dsonar.organization=${_SONAR_ORG} \
+          -Dsonar.projectKey=$$SONAR_PROJECT_KEY \
+          -Dsonar.organization=$$SONAR_ORG \
           -Dsonar.sources=. \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.python.coverage.reportPaths=coverage.xml
-    secretEnv: ['_SONAR_TOKEN', '_SONAR_PROJECT_KEY', '_SONAR_ORG']
+          -Dsonar.host.url="https://sonarcloud.io" \
+          -Dsonar.python.coverage.reportPaths=/usr/src/coverage.xml \
+          -Dsonar.exclusions=**/migrations/** \
+          -Dsonar.verbose=true
+    secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
 
   # Build and push the Event Management Queries service
   - name: 'gcr.io/cloud-builders/docker'
@@ -41,12 +74,33 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/event-management-queries:$SHORT_SHA']
 
   - name: 'gcr.io/cloud-builders/docker'
+    args: ['run', '--name', 'postgres-em-queries', '--network', 'em-net', '-e', 'POSTGRES_DB=db_event_management_queries', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=emQueries', '-d', 'postgres:13']
+
+  - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        docker run --rm gcr.io/$PROJECT_ID/event-management-queries:latest python -m coverage run --source=. -m unittest discover -s tests && \
-        docker run --rm gcr.io/$PROJECT_ID/event-management-queries:$SHORT_SHA python -m coverage xml -o coverage.xml
+        while ! docker exec postgres-em-queries pg_isready -U postgres -d db_event_management_queries; do sleep 1; done
+
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo $$SECRET_VALUE > /workspace/creds.json
+        docker run --rm --network em-net \
+        -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json \
+        -v /workspace/creds.json:/creds/creds.json \
+        -v /workspace/Backend/core_functionalities/event_management_queries:/usr/src \
+        -w /usr/src \
+        -e DATABASE_URL=postgresql://postgres:emQueries@postgres-em-queries:5432/db_event_management_queries \
+        gcr.io/$PROJECT_ID/event-management-queries:$SHORT_SHA \
+        bash -c "python -m coverage run --source=. -m unittest discover -s tests -v && \
+                 python -m coverage xml -o coverage.xml && \
+                 python -m coverage report; \
+                 ls -al /usr/src"
+    secretEnv: ['SECRET_VALUE']
 
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
@@ -54,15 +108,20 @@ steps:
       - '-c'
       - |
         docker run --rm \
-          -e SONAR_TOKEN=${_SONAR_TOKEN} \
-          -v $(pwd)/Backend/core_functionalities/event-management-queries:/usr/src \
+          -e SONAR_TOKEN=$$SONAR_TOKEN \
+          -e SONAR_HOST_URL="https://sonarcloud.io" \
+          -e SONAR_PROJECT_KEY=$$SONAR_PROJECT_KEY \
+          -e SONAR_ORG=$$SONAR_ORG \
+          -v $(pwd)/Backend/core_functionalities/event_management_queries:/usr/src \
           sonarsource/sonar-scanner-cli \
-          -Dsonar.projectKey=${_SONAR_PROJECT_KEY} \
-          -Dsonar.organization=${_SONAR_ORG} \
+          -Dsonar.projectKey=$$SONAR_PROJECT_KEY \
+          -Dsonar.organization=$$SONAR_ORG \
           -Dsonar.sources=. \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.python.coverage.reportPaths=coverage.xml
-    secretEnv: ['_SONAR_TOKEN', '_SONAR_PROJECT_KEY', '_SONAR_ORG']
+          -Dsonar.host.url="https://sonarcloud.io" \
+          -Dsonar.python.coverage.reportPaths=/usr/src/coverage.xml \
+          -Dsonar.exclusions=**/migrations/** \
+          -Dsonar.verbose=true
+    secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
 
   # Build and push the Service Management service
   - name: 'gcr.io/cloud-builders/docker'
@@ -73,12 +132,33 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/service-management:$SHORT_SHA']
 
   - name: 'gcr.io/cloud-builders/docker'
+    args: ['run', '--name', 'postgres-service-management', '--network', 'em-net', '-e', 'POSTGRES_DB=db_service_management', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=serviceManagement', '-d', 'postgres:13']
+
+  - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        docker run --rm gcr.io/$PROJECT_ID/service-management:latest python -m coverage run --source=. -m unittest discover -s tests && \
-        docker run --rm gcr.io/$PROJECT_ID/service-management:$SHORT_SHA python -m coverage xml -o coverage.xml
+        while ! docker exec postgres-service-management pg_isready -U postgres -d db_service_management; do sleep 1; done
+
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo $$SECRET_VALUE > /workspace/creds.json
+        docker run --rm --network em-net \
+        -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json \
+        -v /workspace/creds.json:/creds/creds.json \
+        -v /workspace/Backend/core_functionalities/service_management:/usr/src \
+        -w /usr/src \
+        -e DATABASE_URL=postgresql://postgres:serviceManagement@postgres-service-management:5432/db_service_management \
+        gcr.io/$PROJECT_ID/service-management:$SHORT_SHA \
+        bash -c "python -m coverage run --source=. -m unittest discover -s tests -v && \
+                 python -m coverage xml -o coverage.xml && \
+                 python -m coverage report; \
+                 ls -al /usr/src"
+    secretEnv: ['SECRET_VALUE']
 
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
@@ -86,17 +166,23 @@ steps:
       - '-c'
       - |
         docker run --rm \
-          -e SONAR_TOKEN=${_SONAR_TOKEN} \
-          -v $(pwd)/Backend/core_functionalities/service-management:/usr/src \
+          -e SONAR_TOKEN=$$SONAR_TOKEN \
+          -e SONAR_HOST_URL="https://sonarcloud.io" \
+          -e SONAR_PROJECT_KEY=$$SONAR_PROJECT_KEY \
+          -e SONAR_ORG=$$SONAR_ORG \
+          -v $(pwd)/Backend/core_functionalities/service_management:/usr/src \
           sonarsource/sonar-scanner-cli \
-          -Dsonar.projectKey=${_SONAR_PROJECT_KEY} \
-          -Dsonar.organization=${_SONAR_ORG} \
+          -Dsonar.projectKey=$$SONAR_PROJECT_KEY \
+          -Dsonar.organization=$$SONAR_ORG \
           -Dsonar.sources=. \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.python.coverage.reportPaths=coverage.xml
-    secretEnv: ['_SONAR_TOKEN', '_SONAR_PROJECT_KEY', '_SONAR_ORG']
-
+          -Dsonar.host.url="https://sonarcloud.io" \
+          -Dsonar.python.coverage.reportPaths=/usr/src/coverage.xml \
+          -Dsonar.exclusions=**/migrations/** \
+          -Dsonar.verbose=true
+    secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
+  
   # Build and push the Training Management Commands service
+
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/training-management-commands:$SHORT_SHA', '.']
     dir: 'Backend/core_functionalities/training_management_commands'
@@ -105,12 +191,33 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/training-management-commands:$SHORT_SHA']
 
   - name: 'gcr.io/cloud-builders/docker'
+    args: ['run', '--name', 'postgres-training-commands', '--network', 'em-net', '-e', 'POSTGRES_DB=db_training_management_commands', '-e', 'POSTGRESS_USER=postgres', '-e', 'POSTGRES_PASSWORD=trainingCommands', '-d', 'postgres:13']
+
+  - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        docker run --rm gcr.io/$PROJECT_ID/training-management-commands:latest python -m coverage run --source=. -m unittest discover -s tests && \
-        docker run --rm gcr.io/$PROJECT_ID/training-management-commands:$SHORT_SHA python -m coverage xml -o coverage.xml
+        while ! docker exec postgres-training-commands pg_isready -U postgres -d db_training_management_commands; do sleep 1; done
+
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo $$SECRET_VALUE > /workspace/creds.json
+        docker run --rm --network em-net \
+        -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json \
+        -v /workspace/creds.json:/creds/creds.json \
+        -v /workspace/Backend/core_functionalities/training_management_commands:/usr/src \
+        -w /usr/src \
+        -e DATABASE_URL=postgresql://postgres:trainingCommands@postgres-training-commands:5432/db_training_management_commands \
+        gcr.io/$PROJECT_ID/training-management-commands:$SHORT_SHA \
+        bash -c "python -m coverage run --source=. -m unittest discover -s tests -v && \
+                 python -m coverage xml -o coverage.xml && \
+                 python -m coverage report; \
+                 ls -al /usr/src"
+    secretEnv: ['SECRET_VALUE']
 
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
@@ -118,17 +225,23 @@ steps:
       - '-c'
       - |
         docker run --rm \
-          -e SONAR_TOKEN=${_SONAR_TOKEN} \
-          -v $(pwd)/Backend/core_functionalities/training-management-commands:/usr/src \
+          -e SONAR_TOKEN=$$SONAR_TOKEN \
+          -e SONAR_HOST_URL="https://sonarcloud.io" \
+          -e SONAR_PROJECT_KEY=$$SONAR_PROJECT_KEY \
+          -e SONAR_ORG=$$SONAR_ORG \
+          -v $(pwd)/Backend/core_functionalities/training_management_commands:/usr/src \
           sonarsource/sonar-scanner-cli \
-          -Dsonar.projectKey=${_SONAR_PROJECT_KEY} \
-          -Dsonar.organization=${_SONAR_ORG} \
+          -Dsonar.projectKey=$$SONAR_PROJECT_KEY \
+          -Dsonar.organization=$$SONAR_ORG \
           -Dsonar.sources=. \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.python.coverage.reportPaths=coverage.xml
-    secretEnv: ['_SONAR_TOKEN', '_SONAR_PROJECT_KEY', '_SONAR_ORG']
+          -Dsonar.host.url="https://sonarcloud.io" \
+          -Dsonar.python.coverage.reportPaths=/usr/src/coverage.xml \
+          -Dsonar.exclusions=**/migrations/** \
+          -Dsonar.verbose=true
+    secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
 
   # Build and push the Training Management Queries service
+
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/training-management-queries:$SHORT_SHA', '.']
     dir: 'Backend/core_functionalities/training_management_queries'
@@ -137,12 +250,33 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/training-management-queries:$SHORT_SHA']
 
   - name: 'gcr.io/cloud-builders/docker'
+    args: ['run', '--name', 'postgres-training-queries', '--network', 'em-net', '-e', 'POSTGRES_DB=db_training_management_queries', '-e', 'POSTGRESS_USER=postgres', '-e', 'POSTGRES_PASSWORD=trainingQueries', '-d', 'postgres:13']
+
+  - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        docker run --rm gcr.io/$PROJECT_ID/training-management-queries:latest python -m coverage run --source=. -m unittest discover -s tests && \
-        docker run --rm gcr.io/$PROJECT_ID/training-management-queries:$SHORT_SHA python -m coverage xml -o coverage.xml
+        while ! docker exec postgres-training-queries pg_isready -U postgres -d db_training_management_queries; do sleep 1; done
+
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo $$SECRET_VALUE > /workspace/creds.json
+        docker run --rm --network em-net \
+        -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json \
+        -v /workspace/creds.json:/creds/creds.json \
+        -v /workspace/Backend/core_functionalities/training_management_queries:/usr/src \
+        -w /usr/src \
+        -e DATABASE_URL=postgresql://postgres:trainingQueries@postgres-training-queries:5432/db_training_management_queries \
+        gcr.io/$PROJECT_ID/training-management-queries:$SHORT_SHA \
+        bash -c "python -m coverage run --source=. -m unittest discover -s tests -v && \
+                 python -m coverage xml -o coverage.xml && \
+                 python -m coverage report; \
+                 ls -al /usr/src"
+    secretEnv: ['SECRET_VALUE']
 
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
@@ -150,26 +284,150 @@ steps:
       - '-c'
       - |
         docker run --rm \
-          -e SONAR_TOKEN=${_SONAR_TOKEN} \
-          -v $(pwd)/Backend/core_functionalities/training-management-queries:/usr/src \
+          -e SONAR_TOKEN=$$SONAR_TOKEN \
+          -e SONAR_HOST_URL="https://sonarcloud.io" \
+          -e SONAR_PROJECT_KEY=$$SONAR_PROJECT_KEY \
+          -e SONAR_ORG=$$SONAR_ORG \
+          -v $(pwd)/Backend/core_functionalities/training_management_queries:/usr/src \
           sonarsource/sonar-scanner-cli \
-          -Dsonar.projectKey=${_SONAR_PROJECT_KEY} \
-          -Dsonar.organization=${_SONAR_ORG} \
+          -Dsonar.projectKey=$$SONAR_PROJECT_KEY \
+          -Dsonar.organization=$$SONAR_ORG \
           -Dsonar.sources=. \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.python.coverage.reportPaths=coverage.xml
-    secretEnv: ['_SONAR_TOKEN', '_SONAR_PROJECT_KEY', '_SONAR_ORG']
+          -Dsonar.host.url="https://sonarcloud.io" \
+          -Dsonar.python.coverage.reportPaths=/usr/src/coverage.xml \
+          -Dsonar.exclusions=**/migrations/** \
+          -Dsonar.verbose=true
+    secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
 
+  # Build and push the User Management Commands service
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/user-management-commands:$SHORT_SHA', '.']
+    dir: 'Backend/core_functionalities/user_management_commands'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/user-management-commands:$SHORT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['run', '--name', 'postgres-user-commands', '--network', 'em-net', '-e', 'POSTGRES_DB=db_user_management_commands', '-e', 'POSTGRESS_USER=postgres', '-e', 'POSTGRES_PASSWORD=userCommands', '-d', 'postgres:13']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        while ! docker exec postgres-user-commands pg_isready -U postgres -d db_user_management_commands; do sleep 1; done
+
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo $$SECRET_VALUE > /workspace/creds.json
+        docker run --rm --network em-net \
+        -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json \
+        -v /workspace/creds.json:/creds/creds.json \
+        -v /workspace/Backend/core_functionalities/user_management_commands:/usr/src \
+        -w /usr/src \
+        -e DATABASE_URL=postgresql://postgres:userCommands@postgres-user-commands:5432/db_user_management_commands \
+        gcr.io/$PROJECT_ID/user-management-commands:$SHORT_SHA \
+        bash -c "python -m coverage run --source=. -m unittest discover -s tests -v && \
+                 python -m coverage xml -o coverage.xml && \
+                 python -m coverage report; \
+                 ls -al /usr/src"
+    secretEnv: ['SECRET_VALUE']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        docker run --rm \
+          -e SONAR_TOKEN=$$SONAR_TOKEN \
+          -e SONAR_HOST_URL="https://sonarcloud.io" \
+          -e SONAR_PROJECT_KEY=$$SONAR_PROJECT_KEY \
+          -e SONAR_ORG=$$SONAR_ORG \
+          -v $(pwd)/Backend/core_functionalities/user_management_commands:/usr/src \
+          sonarsource/sonar-scanner-cli \
+          -Dsonar.projectKey=$$SONAR_PROJECT_KEY \
+          -Dsonar.organization=$$SONAR_ORG \
+          -Dsonar.sources=. \
+          -Dsonar.host.url="https://sonarcloud.io" \
+          -Dsonar.python.coverage.reportPaths=/usr/src/coverage.xml \
+          -Dsonar.exclusions=**/migrations/** \
+          -Dsonar.verbose=true
+    secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
+
+  # Build and push the User Management Queries service
+  
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/user-management-queries:$SHORT_SHA', '.']
+    dir: 'Backend/core_functionalities/user_management_queries'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/user-management-queries:$SHORT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['run', '--name', 'postgres-user-queries', '--network', 'em-net', '-e', 'POSTGRES_DB=db_user_management_queries', '-e', 'POSTGRESS_USER=postgres', '-e', 'POSTGRES_PASSWORD=userQueries', '-d', 'postgres:13']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        while ! docker exec postgres-user-queries pg_isready -U postgres -d db_user_management_queries; do sleep 1; done
+
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo $$SECRET_VALUE > /workspace/creds.json
+        docker run --rm --network em-net \
+        -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json \
+        -v /workspace/creds.json:/creds/creds.json \
+        -v /workspace/Backend/core_functionalities/user_management_queries:/usr/src \
+        -w /usr/src \
+        -e DATABASE_URL=postgresql://postgres:userQueries@postgres-user-queries:5432/db_user_management_queries \
+        gcr.io/$PROJECT_ID/user-management-queries:$SHORT_SHA \
+        bash -c "python -m coverage run --source=. -m unittest discover -s tests -v && \
+                 python -m coverage xml -o coverage.xml && \
+                 python -m coverage report; \
+                 ls -al /usr/src"
+    secretEnv: ['SECRET_VALUE']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        docker run --rm \
+          -e SONAR_TOKEN=$$SONAR_TOKEN \
+          -e SONAR_HOST_URL="https://sonarcloud.io" \
+          -e SONAR_PROJECT_KEY=$$SONAR_PROJECT_KEY \
+          -e SONAR_ORG=$$SONAR_ORG \
+          -v $(pwd)/Backend/core_functionalities/user_management_queries:/usr/src \
+          sonarsource/sonar-scanner-cli \
+          -Dsonar.projectKey=$$SONAR_PROJECT_KEY \
+          -Dsonar.organization=$$SONAR_ORG \
+          -Dsonar.sources=. \
+          -Dsonar.host.url="https://sonarcloud.io" \
+          -Dsonar.python.coverage.reportPaths=/usr/src/coverage.xml \
+          -Dsonar.exclusions=**/migrations/** \
+          -Dsonar.verbose=true
+    secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
+
+# Define the available secrets
 availableSecrets:
   secretManager:
     - versionName: 'projects/miso-proyecto-de-grado-g09/secrets/GOOGLE_APPLICATION_CREDENTIALS/versions/latest'
       env: 'SECRET_VALUE'
     - versionName: projects/$PROJECT_ID/secrets/SONAR_TOKEN/versions/latest
-      env: '_SONAR_TOKEN'
+      env: 'SONAR_TOKEN'
     - versionName: projects/$PROJECT_ID/secrets/SONAR_PROJECT_KEY/versions/latest
-      env: '_SONAR_PROJECT_KEY'
+      env: 'SONAR_PROJECT_KEY'
     - versionName: projects/$PROJECT_ID/secrets/SONAR_ORG/versions/latest
-      env: '_SONAR_ORG'
+      env: 'SONAR_ORG'
 
 options:
   default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
