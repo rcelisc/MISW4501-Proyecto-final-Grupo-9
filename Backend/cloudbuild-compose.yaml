@@ -11,8 +11,8 @@ steps:
     args:
       - '-c'
       - |
-        echo "$$GOOGLE_APPLICATION_CREDENTIALS_SECRET" | base64 --decode > /workspace/service-account.json
-    env: ['GOOGLE_APPLICATION_CREDENTIALS_SECRET=$$get_secret.output']
+        echo "$$SECRET" | base64 --decode > /workspace/service-account.json
+    env: ['SECRET=$$get_secret']
     id: 'setup_secret'
     waitFor: ['get_secret']
 
@@ -51,8 +51,3 @@ options:
   env: ['_DOCKER_HOST=tcp://localhost:2375']
   default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
   substitution_option: ALLOW_LOOSE
-
-availableSecrets:
-  secretManager:
-    - versionName: 'projects/$PROJECT_ID/secrets/service-account/versions/latest'
-      env: 'GOOGLE_APPLICATION_CREDENTIALS_SECRET'
