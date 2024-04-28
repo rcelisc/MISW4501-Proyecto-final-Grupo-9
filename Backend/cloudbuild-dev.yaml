@@ -126,7 +126,7 @@ steps:
   # Build and push the Service Management service
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/service-management:$SHORT_SHA', '.']
-    dir: 'Backend/core_functionalities/service_management'
+    dir: 'Backend/core_functionalities/services_management'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/service-management:$SHORT_SHA']
@@ -150,7 +150,7 @@ steps:
         docker run --rm --network em-net \
         -e GOOGLE_APPLICATION_CREDENTIALS=/creds/creds.json \
         -v /workspace/creds.json:/creds/creds.json \
-        -v /workspace/Backend/core_functionalities/service_management:/usr/src \
+        -v /workspace/Backend/core_functionalities/services_management:/usr/src \
         -w /usr/src \
         -e DATABASE_URL=postgresql://postgres:serviceManagement@postgres-service-management:5432/db_service_management \
         gcr.io/$PROJECT_ID/service-management:$SHORT_SHA \
@@ -170,7 +170,7 @@ steps:
           -e SONAR_HOST_URL="https://sonarcloud.io" \
           -e SONAR_PROJECT_KEY=$$SONAR_PROJECT_KEY \
           -e SONAR_ORG=$$SONAR_ORG \
-          -v $(pwd)/Backend/core_functionalities/service_management:/usr/src \
+          -v $(pwd)/Backend/core_functionalities/services_management:/usr/src \
           sonarsource/sonar-scanner-cli \
           -Dsonar.projectKey=$$SONAR_PROJECT_KEY \
           -Dsonar.organization=$$SONAR_ORG \
