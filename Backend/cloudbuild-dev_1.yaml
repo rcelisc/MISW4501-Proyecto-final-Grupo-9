@@ -43,9 +43,37 @@ steps:
     # Set the environment variable from the secret
     secretEnv: ['SECRET_VALUE']
 
-  # Cleanup network
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['network', 'rm', 'em-net']
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Running SonarQube Scanner..."
+        docker run --rm \
+          -e SONAR_TOKEN=$$SONAR_TOKEN \
+          -e SONAR_HOST_URL="https://sonarcloud.io" \
+          -e SONAR_PROJECT_KEY=$$SONAR_PROJECT_KEY \
+          -e SONAR_ORG=$$SONAR_ORG \
+          -v $(pwd)/Backend/core_functionalities/event_management_commands:/usr/src \
+          sonarsource/sonar-scanner-cli \
+          -Dsonar.projectKey=$$SONAR_PROJECT_KEY \
+          -Dsonar.organization=$$SONAR_ORG \
+          -Dsonar.sources=. \
+          -Dsonar.host.url="https://sonarcloud.io" \
+          -Dsonar.python.coverage.reportPaths=/usr/src/coverage.xml
+    secretEnv: ['SONAR_TOKEN', 'SONAR_PROJECT_KEY', 'SONAR_ORG']
+
+  # Stop the PostgreSQL container
+  #- name: 'gcr.io/cloud-builders/docker'
+  #  args: ['stop', 'postgres-em-commands']
+
+  # Remove the PostgreSQL container
+  #- name: 'gcr.io/cloud-builders/docker'
+  #  args: ['rm', 'postgres-em-commands']
+
+  # Remove the network
+  #- name: 'gcr.io/cloud-builders/docker'
+  #  args: ['network', 'rm', 'em-net']
 
 # Define the secret available to this build
 availableSecrets:
