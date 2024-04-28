@@ -36,7 +36,9 @@ steps:
         -v /workspace/creds.json:/creds/creds.json \
         -e DATABASE_URL=postgresql://postgres:emCommands@postgres-em-commands:5432/db_event_management_commands \
         gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA \
-        bash -c "python -m coverage run --source=. -m unittest discover -s tests -v && \
+        bash -c "ls -al /app; \
+                 ls -al /app/tests; \
+                 python -m coverage run --source=. -m unittest discover -s tests -v && \
                  python -m coverage xml -o coverage.xml && \
                  python -m coverage report"
 
@@ -48,6 +50,9 @@ steps:
     args:
       - '-c'
       - |
+        echo "Listing /usr/src directory contents to verify presence of coverage.xml..."
+        ls -al /usr/src
+        ls -al /app
         echo "Running SonarQube Scanner..."
         docker run --rm \
           -e SONAR_TOKEN=$$SONAR_TOKEN \
