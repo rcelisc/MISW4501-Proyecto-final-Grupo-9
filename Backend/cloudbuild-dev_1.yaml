@@ -1,0 +1,16 @@
+steps:
+  - name: 'ubuntu'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Attempting to access secret..."
+        echo "Secret content: $SECRET_VALUE"
+        echo "If no secret is displayed above, there was an error accessing the secret."
+
+    secretEnv: ['SECRET_VALUE']
+
+availableSecrets:
+  secretManager:
+    - versionName: 'projects/miso-proyecto-de-grado-g09/secrets/GOOGLE_APPLICATION_CREDENTIALS/versions/latest'
+      env: 'SECRET_VALUE'
