@@ -35,3 +35,14 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ng serve --configuration=es
 ng build --configuration=es
 ```
+
+## Despliegue del frontend
+
+1. Ensure the Firebase CLI is installed: `npm install -g firebase-tools`
+2. Login to Firebase: `firebase login`
+3. Initialize Firebase in your project directory: `firebase init` 
+4. Build your project: `npm run build` (adjust this command based on your project setup)
+5. Deploy to Firebase:
+```bash
+firebase deploy --only hosting
+```
