@@ -26,6 +26,8 @@ class LoginScreen : AppCompatActivity() {
         SportApp.powerOutput = 250
         SportApp.maxHeartRate= 180
         SportApp.restingHeartRate = 60
+        SportApp.profile = "Beginner"
+        SportApp.userSesionId = ""
 
     }
 }

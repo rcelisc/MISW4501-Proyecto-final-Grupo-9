@@ -12,5 +12,7 @@ pytest
 pytest-cov
 pytest-mock
 pytest-env
-kafka-python
 # bcrypt
+Flask-Testing
+google-cloud-pubsub
+Flask-Cors

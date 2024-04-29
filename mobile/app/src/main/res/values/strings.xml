@@ -28,4 +28,24 @@
     <string name="promt_data_sended">Datos Enviados!!!</string>
     <string name="units_minutes">min.</string>
     <string name="boton_finish">FTP Vo2Max</string>
+    <string name="tittle_suggestions">Sugerencias</string>
+    <string name="training_objectives">Objetives</string>
+    <string name="training_duration">Duration</string>
+    <string name="training_excercises">Exercises</string>
+    <string name="training_description">Plan</string>
+    <string name="table_training_plans_tittle">Planes Entrenamiento</string>
+    <string name="event_description">Evento</string>
+    <string name="event_name">Nombre</string>
+    <string name="event_date">Fecha</string>
+    <string name="event_fee">Costo</string>
+    <string name="prompt_dashboard_tittle">Mis Entrenamientos</string>
+    <string name="dash_date">Fecha</string>
+    <string name="dash_duration">Duración</string>
+    <string name="dash_type">Tipo</string>
+    <string name="dash_notes">Notas</string>
+    <string name="promt_device_title">Iniciar Dispositivo Medición</string>
+    <string name="promt_device">Dispositivo:</string>
+    <string name="device">Reloj Digital, GPS, Otro</string>
+    <string name="start_device">Iniciar Medición</string>
+
 </resources>

@@ -1,0 +1,28 @@
+<div class="container">
+    <h2 class="title" i18n="@@trainingHistoryTitle">Historial de entrenamientos</h2>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="tipo_entrenamiento">
+            <th mat-header-cell *matHeaderCellDef i18n="@@trainingHistoryTrainingType"> Tipo de Entrenamiento </th>
+            <td mat-cell *matCellDef="let training"> {{ training.training_type }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha" >
+            <th mat-header-cell *matHeaderCellDef i18n="@@trainingHistoryDate"> Fecha </th>
+            <td mat-cell *matCellDef="let training"> {{ training.end_time | date:'mediumDate' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="duracion">
+            <th mat-header-cell *matHeaderCellDef i18n="@@trainingHistoryDuration"> Duración </th>
+            <td mat-cell *matCellDef="let training"> {{ training.duration }} horas</td>
+        </ng-container>
+
+        <ng-container matColumnDef="notas">
+            <th mat-header-cell *matHeaderCellDef i18n="@@trainingHistoryNotes"> Notas </th>
+            <td mat-cell *matCellDef="let training"> {{ training.notes }} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>

@@ -12,6 +12,15 @@ Es importante que siempre trabajes sobre un ambiente virtual y tengas todas las 
  - ``python3 -m venv venv``
  - ``source venv/bin/activate``
  - ``pip install -r requirements.txt``
+ - ``export FLASK_APP=src/main.py``
+ - ``export GOOGLE_APPLICATION_CREDENTIALS="../../../../../service-account.json"``
+
+ - ``coverage run -m unittest discover -s tests -v``
+ - ``coverage report -m``
+ - ``export STRAVA_CLIENT_SECRET=strava_client_secret``
+ - ``export STRAVA_CLIENT_ID=strava_client_id``
+ - ``export STRAVA_REDIRECT_URI=http://localhost:3004/strava_callback``
+ - ``export FLASK_SECRET_KEY=default_secret_key``
 
 ## 2. Instrucciones de Ejecución de la Aplicacion con docker compose y localmente
 Esta sesion proporciona las instrucciones necesarias para desplegar y ejecutar los servicios tanto en Docker como localmente.
@@ -22,7 +31,7 @@ Para iniciar todos los servicios definidos en el archivo docker-compose.yml, eje
 
 ``docker-compose up --build``
 
-Este comando complila y levanta todos los contenedores necesarios para el funcionamiento de la aplicación, incluidos bases de datos, Kafka, Zookeeper y demás servicios.
+Este comando complila y levanta todos los contenedores necesarios para el funcionamiento de la aplicación, incluidos bases de datos y demás servicios.
 
 2. Ejecutar Migraciones
 Una vez que los servicios están corriendo, necesitas ejecutar las migraciones para configurar las bases de datos. Utiliza los siguientes comandos para aplicar migraciones en cada servicio:
@@ -40,21 +49,22 @@ docker-compose exec event_management_commands flask db upgrade
 ## Ejecución Local
 Para ejecutar los servicios localmente, sigue los siguientes pasos:
 
-1. Configuración de Kafka y Zookeeper
+1. Configuración de GCP
 
-Antes de levantar kafka asegurate de que tus servicios tengan la configuracion correcta, debes modificar los bootstrap_servers para que no apunte a kafka pero si a localhost, de la siguiente manera: 
-```python
-self.producer = KafkaProducer(bootstrap_servers=['kafka:9092'])
-```
-Para configurar Kafka y Zookeeper localmente, debes tener instalados ambos servicios. Puedes levantarlos mediante Docker con el siguiente comando:
+Necesitas tener descarga la llave de la cuenta de servicio para poder manipular los pub subs:
+- Go to the Google Cloud Console:
+  Navigate to the Google Cloud Console.
+- Access IAM & Admin:
+  On the left sidebar, select IAM & Admin > Service Accounts.
+- Select Your Service Account:
+  Find the service account you mentioned (sport-app@miso-proyecto-de-grado-g09.iam.gserviceaccount.com) from the list.
+- Create Key:
+  Click on the service account name to open the account details.
+  Click on the Keys tab.
+  Click on Add Key, then select Create new key.
+  Choose JSON as the key type, then click Create.
+  The key file will automatically download to your computer. Ensure to save it in a secure location immediately, as it contains sensitive information and cannot be downloaded again.
 
-``docker-compose up -d zookeeper kafka``
-Asegúrate de configurar KAFKA_ADVERTISED_LISTENERS en tu archivo docker-compose.yml para apuntar a localhost:
-
-```bash
-environment:
-  KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-```
 2. Crear Bases de Datos en Docker
 Puedes crear las bases de datos en contenedores Docker ejecutando comandos similares a los siguientes:
 

@@ -1,0 +1,23 @@
+@use 'custom-theme' as theme;
+@use '@angular/material' as mat;
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+html, body { height: 100%; }
+
+@import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap CSS
+
+@font-face {
+  font-family: 'Lato';
+  src: url('/assets/fonts/Lato-Regular.ttf') format('truetype');
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: map-get(theme.$custom-primary, 500); // Use a Material color variable for the background color
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

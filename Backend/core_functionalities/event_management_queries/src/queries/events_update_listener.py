@@ -1,55 +1,51 @@
+from google.cloud import pubsub_v1
 from flask import current_app
 from datetime import datetime
-from kafka import KafkaConsumer
+
+from ..logger import configure_logging
 from ..models.event import Event, db
 from sqlalchemy.orm.attributes import flag_modified
 import json
 import threading
 import time
-from kafka.errors import NoBrokersAvailable
-
-def json_deserializer(data):
-    try:
-        return json.loads(data.decode('utf-8'))
-    except json.JSONDecodeError:
-        print("Error decoding JSON")
-        return None
-    
-def create_kafka_consumer():
-    for _ in range(5):  # Retry up to 5 times
-        try:
-            consumer = KafkaConsumer(
-                'event-events',
-                #bootstrap_servers=['kafka:9092'],
-                bootstrap_servers=['kafka:9092'],
-                auto_offset_reset='earliest',
-                group_id='events-consumer',
-                value_deserializer=json_deserializer
-            )
-            return consumer
-        except NoBrokersAvailable:
-            print("Waiting for Kafka to become available...")
-            time.sleep(5)  # Wait 5 seconds before retrying
-    raise Exception("Failed to connect to Kafka after several attempts.")
-
+logger = configure_logging()
 class EventUpdatesListener:
-    def __init__(self,app):
+    def __init__(self, app):
         self.app = app
-        self.consumer = create_kafka_consumer()
+        self.subscriber = pubsub_v1.SubscriberClient()
+        self.subscription_path = self.subscriber.subscription_path('miso-proyecto-de-grado-g09', 'event-events-sub')
+
+    def callback(self, message):
+        try:
+            logger.info(f"Received message ID: {message.message_id} with data: {message.data}")
+            with self.app.app_context():  # Ensure app context is used within callback
+                logger.info(f"Received message: {message.data}")
+                message_data = json.loads(message.data.decode('utf-8'))
+                message.ack()
+
+                if message_data['type'] == 'EventCreated':
+                    self.process_event_created(message_data)
+                elif message_data['type'] == 'UserAddedToEvent':
+                    self.process_user_added(message_data)
+                elif message_data['type'] == 'EventPublished':
+                    self.process_event_published(message_data)
+        except Exception as e:
+            logger.info(f"Failed to process message {message.message_id}: {str(e)}")
     
     def start_listening(self):
-        # Use the stored app reference to push an application context
-        with self.app.app_context():
-            for message in self.consumer:
-                print(f"Received message: {message}")  # Ensuring messages are received
-                if message.value['type'] == 'UserAddedToEvent':
-                    self.process_user_added(message.value)
-                elif message.value['type'] == 'EventCreated':
-                    self.process_event_created(message.value)
+        streaming_pull_future = self.subscriber.subscribe(self.subscription_path, callback=self.callback)
+        logger.info("Listening for messages on {}".format(self.subscription_path))
+        # Wrap subscriber in a with-block to automatically call close() when done.
+        with self.subscriber:
+            try:
+                streaming_pull_future.result()  # Block indefinitely.
+            except TimeoutError:
+                streaming_pull_future.cancel()  # Trigger the shutdown.
+                streaming_pull_future.result()  # Block until the shutdown is complete.
 
     def process_user_added(self, message):
         # Logic to update the read model based on the received message
-        print(f"Processing message: {message}")
+        logger.info(f"Processing message: {message}")
         event_id = message['event_id']
         user_id = message['user_id']
         
@@ -68,6 +64,27 @@ class EventUpdatesListener:
             print(f"Added user {user_id} to event {event_id}.")
 
         print(f"Processing UserAddedToEvent: {message}")
+
+    def process_event_published(self, message):
+        print(f"Processing EventPublished: {message}")
+        event_id = message['event_id']
+        event = Event.query.get(event_id)
+        if not event:
+            print(f"Event {event_id} not found.")
+            return
+
+        if event.status != 'created':
+            print(f"Event {event_id} is not in a state that can be published.")
+            return
+
+        event.status = 'published'
+        flag_modified(event, "status")
+        try:
+            db.session.commit()
+            print(f"Event {event_id} published in query service.")
+        except Exception as e:
+            print(f"Failed to publish event in query service: {e}")
+            db.session.rollback()
     
     def process_event_created(self, message):
         print(f"Processing EventCreated: {message}")
@@ -86,9 +103,10 @@ class EventUpdatesListener:
         except Exception as e:
             print(f"Failed to create event in query service: {e}")
             db.session.rollback()
+            
 
 def start_listener_in_background(app):
     listener = EventUpdatesListener(app)
     thread = threading.Thread(target=listener.start_listening)
-    thread.daemon = True  # This ensures the thread doesn't prevent the app from exiting
+    thread.daemon = True 
     thread.start()

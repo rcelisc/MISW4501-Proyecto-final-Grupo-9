@@ -1,0 +1,78 @@
+@use '@angular/material' as mat;
+@use '../../../../../custom-theme.scss' as theme;
+
+:host {
+    display: block;
+    min-height: 100vh; // Full viewport height
+    padding: 2vh 10vw; // Reduced top and bottom padding
+    background: mat.get-color-from-palette(theme.$custom-primary, 50);
+    box-sizing: border-box;
+    overflow-y: auto; // Add scroll for the page if needed
+  }
+
+
+.dashboard-title {
+font-family: 'Lato', sans-serif;
+color: mat.get-color-from-palette(theme.$custom-primary, 800);
+text-align: center;
+margin-top: 40px;
+margin-bottom: 40px;
+font-size: 2.5rem;
+}
+
+.card-container {
+display: grid;
+grid-template-columns: repeat(4, 1fr); // Fixed 4 columns
+gap: 20px;
+max-width: 1200px;
+margin: 0 auto; // Center the container
+}
+
+.dashboard-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; // Distribute space between title and button
+    align-items: center; // Center-align the content
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 
+    0 8px 10px 1px rgba(0, 0, 0, 0.14), 
+    0 3px 14px 2px rgba(0, 0, 0, 0.12); 
+    padding: 20px;
+    transition: box-shadow 0.3s;
+  
+    &:hover {
+        box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 
+        0 16px 24px 2px rgba(0, 0, 0, 0.14), 
+        0 6px 30px 5px rgba(0, 0, 0, 0.12);
+    }
+  
+    mat-card-title {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  
+    mat-card-content {
+      flex-grow: 1; // Allow content to expand and push actions to the bottom
+      text-align: center; // Center-align the text
+    }
+  
+    mat-card-actions {
+      width: 100%; // Allow the button to take full width of the card actions
+      justify-content: center;
+    }
+  
+    button {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .card-container {
+      grid-template-columns: repeat(2, 1fr); // Reduce to 2 columns on smaller screens
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .card-container {
+      grid-template-columns: 1fr; // 1 column on very small screens
+    }
+  }

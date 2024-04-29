@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scale-down-services
+spec:
+  schedule: "0 0 * * *"  # This schedules the job to run at midnight UTC.
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: kubectl-container
+            image: bitnami/kubectl:latest
+            command:
+            - sh
+            - -c
+            - |
+              kubectl scale deployment/db-event-management-commands --replicas=0
+              kubectl scale deployment/db-event-management-queries --replicas=0
+              kubectl scale deployment/db-service-management --replicas=0
+              kubectl scale deployment/db-training-management-commands --replicas=0
+              kubectl scale deployment/db-training-management-queries --replicas=0
+              kubectl scale deployment/event-management-commands --replicas=0
+              kubectl scale deployment/event-management-queries --replicas=0
+              kubectl scale deployment/service-management --replicas=0
+              kubectl scale deployment/training-management-commands --replicas=0
+              kubectl scale deployment/training-management-queries --replicas=0
+          restartPolicy: OnFailure

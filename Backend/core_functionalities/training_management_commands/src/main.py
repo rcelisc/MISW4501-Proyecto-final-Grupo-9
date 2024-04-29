@@ -4,7 +4,9 @@ from .config import DevelopmentConfig, TestingConfig, ProductionConfig
 from .api.training_plan import training_plan_blueprint
 from .api.training_session import training_session_blueprint
 from .api.training_metrics import training_metrics_blueprint
+from .api.strava_auth import strava_auth_blueprint
 import os
+from flask_cors import CORS
 
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
@@ -16,13 +18,15 @@ def create_app(config_class=DevelopmentConfig):
     else:
         app.config.from_object(DevelopmentConfig)
     
+    app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'default_secret_key')
     db.init_app(app)
     migrate.init_app(app, db)
 
     app.register_blueprint(training_plan_blueprint)
     app.register_blueprint(training_session_blueprint)
     app.register_blueprint(training_metrics_blueprint)
-
+    app.register_blueprint(strava_auth_blueprint)
+    CORS(app)
     return app
 
 if __name__ == "__main__":

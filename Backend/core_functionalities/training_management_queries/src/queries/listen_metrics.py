@@ -1,52 +1,31 @@
-from kafka import KafkaConsumer
+from google.cloud import pubsub_v1
 import json
 from datetime import datetime
 from ..models.training_session import TrainingSession, db
-from kafka.errors import NoBrokersAvailable
 import time
 import threading
 from uuid import UUID
 
-def json_deserializer(data):
-    try:
-        return json.loads(data.decode('utf-8'))
-    except json.JSONDecodeError:
-        print("Error decoding JSON")
-        return None
-
-def create_kafka_consumer():
-    for _ in range(5):  # Retry up to 5 times
-        try:
-            consumer = KafkaConsumer(
-                'metrics-events',
-                bootstrap_servers=['kafka:9092'],
-                auto_offset_reset='earliest',
-                group_id='training-queries',
-                value_deserializer=json_deserializer
-            )
-            return consumer
-        except NoBrokersAvailable:
-            print("Waiting for Kafka to become available...")
-            time.sleep(5)  # Wait 5 seconds before retrying
-    raise Exception("Failed to connect to Kafka after several attempts.")
-
 class EventUpdatesListener():
     def __init__(self, app):
         self.app = app
-        self.consumer = create_kafka_consumer()
+        self.subscriber = pubsub_v1.SubscriberClient()
+        self.subscription_path = self.subscriber.subscription_path('miso-proyecto-de-grado-g09', 'metrics-events-sub')
 
-    def start_listening(self):
-        with self.app.app_context():            
-            for message in self.consumer:
-                if message.value and message.value['type'] == 'TrainingMetricsCalculated':
-                    self.update_training_session_metrics(message.value['data'])
-                    print(f"Received metrics for session {message.value['data']['session_id']}")
+    def callback(self, message):
+        with self.app.app_context():
+            print(f"Received message: {message.data}")
+            message_data = json.loads(message.data.decode('utf-8'))
+            message.ack()
+
+            if message_data['type'] == 'TrainingMetricsCalculated':
+                self.update_training_session_metrics(message_data['data'])
 
     def update_training_session_metrics(self, data):
         try:
             session_id = data['session_id']
             uuid_session_id = UUID(session_id)  # Ensuring the session_id is a valid UUID
-            session = TrainingSession.query.filter_by(session_id=uuid_session_id).first()  # Corrected line
+            session = TrainingSession.query.get(uuid_session_id)
             if session:
                 session.ftp = data['ftp']
                 session.vo2max = data['vo2max']
@@ -60,6 +39,17 @@ class EventUpdatesListener():
             print("Key error - check data keys")
         except Exception as e:
             print(f"Unexpected error: {e}")
+    
+    def start_listening(self):
+        streaming_pull_future = self.subscriber.subscribe(self.subscription_path, callback=self.callback)
+        print("Listening for messages on {}".format(self.subscription_path))
+
+        with self.subscriber:
+            try:
+                streaming_pull_future.result()  # Block indefinitely.
+            except TimeoutError:
+                streaming_pull_future.cancel()
+                streaming_pull_future.result()
 
 def start_listener_in_background(app):
     listener = EventUpdatesListener(app)

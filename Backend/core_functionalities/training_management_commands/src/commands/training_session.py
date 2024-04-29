@@ -1,14 +1,12 @@
+from google.cloud import pubsub_v1
 from datetime import datetime
 from ..models.training_session import TrainingSession, db
-from kafka import KafkaProducer
 import json
 
 class StartTrainingSessionCommandHandler:
     def __init__(self):
-        self.producer = KafkaProducer(
-            bootstrap_servers=['kafka:9092'],
-            value_serializer=lambda v: json.dumps(v, default=str).encode('utf-8')
-        )
+        self.publisher = pubsub_v1.PublisherClient()
+        self.topic_path = self.publisher.topic_path('miso-proyecto-de-grado-g09', 'training-events')
 
     def start(self, data):
         session = TrainingSession(user_id=data['user_id'], start_time=datetime.now(), training_type=data['training_type'])
@@ -18,10 +16,8 @@ class StartTrainingSessionCommandHandler:
 
 class StopTrainingSessionCommandHandler:
     def __init__(self):
-        self.producer = KafkaProducer(
-            bootstrap_servers=['kafka:9092'],
-            value_serializer=lambda v: json.dumps(v, default=str).encode('utf-8')
-        )
+        self.publisher = pubsub_v1.PublisherClient()
+        self.topic_path = self.publisher.topic_path('miso-proyecto-de-grado-g09', 'training-events')
 
     def stop(self, data):
         session = TrainingSession.query.get(data['session_id'])
@@ -38,13 +34,12 @@ class StopTrainingSessionCommandHandler:
                 "session_id": str(session.id),
                 "user_id": session.user_id,
                 "end_time": session.end_time.isoformat(),
+                "training_type": session.training_type,
                 "duration": session.duration,
                 "notes": data.get('notes', '')
             }
         }
-        # Publish event to Kafka
-        self.producer.send('training-events', value=event_data)
-        self.producer.flush()
+        self.publisher.publish(self.topic_path, json.dumps(event_data).encode('utf-8'))
         
         return session.id
     

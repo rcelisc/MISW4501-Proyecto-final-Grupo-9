@@ -1,14 +1,13 @@
+from google.cloud import pubsub_v1
 from datetime import datetime
 from ..models.training_session import TrainingSession, db
-from kafka import KafkaProducer
 import json
 
 class TrainingCalculationHandler:
     def __init__(self):
-        self.producer = KafkaProducer(
-            bootstrap_servers=['kafka:9092'],
-            value_serializer=lambda v: json.dumps(v, default=str).encode('utf-8')
-        )
+        self.publisher = pubsub_v1.PublisherClient()
+        self.topic_path = self.publisher.topic_path('miso-proyecto-de-grado-g09', 'metrics-events')
+
     def calculate_ftp_vo2max(self, session_id):
         # Fetch user training data
         print(session_id, "Value of session_id")
@@ -28,8 +27,7 @@ class TrainingCalculationHandler:
                 "timestamp": datetime.utcnow().isoformat()
             }
         }
-        self.producer.send('metrics-events', value=event_data)
-        self.producer.flush()
+        self.publisher.publish(self.topic_path, json.dumps(event_data).encode('utf-8'))
 
         return {"FTP": ftp, "VO2max": vo2max}
 
