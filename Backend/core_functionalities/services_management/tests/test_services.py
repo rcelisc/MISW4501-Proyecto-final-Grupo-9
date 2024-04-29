@@ -44,8 +44,8 @@ class TestServiceManagement(TestCase):
             response = self.client.get('/services')
             self.assert200(response)
             expected_services = [
-                {'id': 1, 'name': 'Service A', 'description': 'Test A', 'available': True, 'rate': 100},
-                {'id': 2, 'name': 'Service B', 'description': 'Test B', 'available': True, 'rate': 150}
+                {'id': 1, 'name': 'Service A', 'description': 'Test A', 'available': True, 'rate': 100.0, 'status': 'created'},
+                {'id': 2, 'name': 'Service B', 'description': 'Test B', 'available': True, 'rate': 150.0, 'status': 'created'}
             ]
             expected_events = {'events': [{'id': 1, 'name': 'Event 1'}]}
 
