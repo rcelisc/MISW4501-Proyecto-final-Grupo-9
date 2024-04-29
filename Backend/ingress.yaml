@@ -1,0 +1,131 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  ingressClassName: "nginx"
+  rules:
+  - http:
+      paths:
+      # Event Management Commands
+      - path: /events
+        pathType: Prefix
+        backend:
+          service:
+            name: event-management-commands
+            port:
+              number: 3001
+      - path: /events/<int:event_id>
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: event-management-commands
+            port:
+              number: 3001
+      - path: /events/<int:event_id>/add
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: event-management-commands
+            port:
+              number: 3001
+      # Event Management Queries
+      - path: /events/get
+        pathType: Prefix
+        backend:
+          service:
+            name: event-management-queries
+            port:
+              number: 3002
+      - path: /user/([0-9]+)/calendar
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: event-management-queries
+            port:
+              number: 3002
+      # Service Management
+      - path: /services
+        pathType: Prefix
+        backend:
+          service:
+            name: service-management
+            port:
+              number: 3005
+
+      # Training Management Commands
+      - path: /calculate-ftp-vo2max
+        pathType: Prefix
+        backend:
+          service:
+            name: training-management-commands
+            port:
+              number: 3004
+
+      - path: /training-plan
+        pathType: Prefix
+        backend:
+          service:
+            name: training-management-commands
+            port:
+              number: 3004
+
+      - path: /start-training
+        pathType: Prefix
+        backend:
+          service:
+            name: training-management-commands
+            port:
+              number: 3004
+
+      - path: /stop-training
+        pathType: Prefix
+        backend:
+          service:
+            name: training-management-commands
+            port:
+              number: 3004
+
+      - path: /receive_session-data
+        pathType: Prefix
+        backend:
+          service:
+            name: training-management-commands
+            port:
+              number: 3004
+
+      # Training Management Queries
+      - path: /api/training/history
+        pathType: Prefix
+        backend:
+          service:
+            name: training-management-queries
+            port:
+              number: 3003
+
+      - path: /training-plan/([0-9]+)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: training-management-queries
+            port:
+              number: 3003
+
+      - path: /training-sessions
+        pathType: Prefix
+        backend:
+          service:
+            name: training-management-queries
+            port:
+              number: 3003
+
+      - path: /training-sessions/([0-9]+)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: training-management-queries
+            port:
+              number: 3003

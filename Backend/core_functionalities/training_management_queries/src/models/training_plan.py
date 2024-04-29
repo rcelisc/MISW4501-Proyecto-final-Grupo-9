@@ -11,6 +11,7 @@ class TrainingPlan(db.Model):
     duration = Column(String(50), nullable=False)
     frequency = Column(String(50), nullable=False)
     objectives = Column(Text, nullable=False)
+    profile_type = Column(String(50), nullable=False)
     assigned_users = Column(Text, nullable=True) # This should be handle through events
 
 
@@ -21,6 +22,7 @@ class  TrainingPlanSchema(Schema):
     duration = fields.Str()
     frequency = fields.Str()
     objectives = fields.Str()
+    profile_type = fields.Str()
     assigned_users = fields.Str()
 
 

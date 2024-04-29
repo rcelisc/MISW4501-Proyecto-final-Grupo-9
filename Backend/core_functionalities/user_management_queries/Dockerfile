@@ -1,12 +1,22 @@
 # Usar una imagen base de Python
 FROM python:3.11
 
-WORKDIR /user_management
+WORKDIR /user_management_queries
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-COPY . /user_management
+# Install Gunicorn
+RUN pip install gunicorn
 
-# Comando para ejecutar la aplicación Flask
-CMD ["python", "-m", "src.main"]
+COPY . /user_management_queries
+
+# Set environment variables
+ENV FLASK_APP=src/main.py
+ENV FLASK_ENV=development
+
+# Expose the port app runs on
+EXPOSE 3007
+
+# Use Gunicorn to serve the app. Adjust the number of workers as needed.
+CMD ["gunicorn", "--workers=3", "--bind=0.0.0.0:3007","--timeout=120", "--log-level=debug", "src.main:create_app()"]

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="createEventTitle" datatype="html">
+        <source>Create Event</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/create-event/create-event.component.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createEventName" datatype="html">
+        <source>Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/create-event/create-event.component.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createEventDescription" datatype="html">
+        <source>Description</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/create-event/create-event.component.html</context>
+          <context context-type="linenumber">13,14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createEventDate" datatype="html">
+        <source>Event Date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/create-event/create-event.component.html</context>
+          <context context-type="linenumber">20,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createEventDuration" datatype="html">
+        <source>Duration (Hours)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/create-event/create-event.component.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createEventLocation" datatype="html">
+        <source>Location</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/create-event/create-event.component.html</context>
+          <context context-type="linenumber">36,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createEventCategory" datatype="html">
+        <source>Category</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/create-event/create-event.component.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createEventFee" datatype="html">
+        <source>Fee</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/create-event/create-event.component.html</context>
+          <context context-type="linenumber">50,51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createEventButton" datatype="html">
+        <source>Create</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/create-event/create-event.component.html</context>
+          <context context-type="linenumber">56,58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listEventTitle" datatype="html">
+        <source>My Events</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/event-list/event-list.component.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listEventsName" datatype="html">
+        <source> Name </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/event-list/event-list.component.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listEventsDescription" datatype="html">
+        <source> Description </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/event-list/event-list.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listEventsEventDate" datatype="html">
+        <source> Event Date </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/event-list/event-list.component.html</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listEventsDuration" datatype="html">
+        <source> Duration </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/event-list/event-list.component.html</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listEventsLocation" datatype="html">
+        <source> Location </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/event-list/event-list.component.html</context>
+          <context context-type="linenumber">26,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listEventsCategory" datatype="html">
+        <source> Category </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/event-list/event-list.component.html</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listEventsFee" datatype="html">
+        <source> Fee </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/event-list/event-list.component.html</context>
+          <context context-type="linenumber">36,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listEventsStatus" datatype="html">
+        <source> Status </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/event-list/event-list.component.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eventPublished" datatype="html">
+        <source>Published</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/event-list/event-list.component.html</context>
+          <context context-type="linenumber">45,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="publishEvent" datatype="html">
+        <source>Publish Event</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-event/components/event-list/event-list.component.html</context>
+          <context context-type="linenumber">48,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createServiceTitle" datatype="html">
+        <source>Create Service</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-service/components/create-service/create-service.component.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createServiceName" datatype="html">
+        <source>Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-service/components/create-service/create-service.component.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createServiceDescription" datatype="html">
+        <source>Description</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-service/components/create-service/create-service.component.html</context>
+          <context context-type="linenumber">13,14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createServiceRate" datatype="html">
+        <source>Rate</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-service/components/create-service/create-service.component.html</context>
+          <context context-type="linenumber">20,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createServiceButton" datatype="html">
+        <source>Create</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-service/components/create-service/create-service.component.html</context>
+          <context context-type="linenumber">26,29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listServicesTitle" datatype="html">
+        <source>My Services</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-service/components/service-list/service-list.component.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listServicesName" datatype="html">
+        <source> Name </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-service/components/service-list/service-list.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listServicesDescription" datatype="html">
+        <source> Description </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-service/components/service-list/service-list.component.html</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listServicesRate" datatype="html">
+        <source> Rate </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-service/components/service-list/service-list.component.html</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="listServicesStatus" datatype="html">
+        <source> Status </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-service/components/service-list/service-list.component.html</context>
+          <context context-type="linenumber">20,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="servicePublished" datatype="html">
+        <source>Published</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-service/components/service-list/service-list.component.html</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="publishService" datatype="html">
+        <source>Publish Service</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/create-service/components/service-list/service-list.component.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trainingPlanTittle" datatype="html">
+        <source>Create Training Plan</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trainingPlanObjetive" datatype="html">
+        <source>Objetives</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trainingPlanDescription" datatype="html">
+        <source>Description</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trainingPlanExcercises" datatype="html">
+        <source>Excercises</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trainingPlanFrecuency" datatype="html">
+        <source>Frecuency</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trainingPlanDuration" datatype="html">
+        <source>Duration</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+            <trans-unit id="trainingPlanProfile" datatype="html">
+        <source>Profile</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+            <trans-unit id="trainingPlanButton" datatype="html">
+        <source>Create Plan</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/plantraining/plantraining.component.html</context>
+        </context-group>
+      </trans-unit>
+
+
+    </body>
+  </file>
+</xliff>

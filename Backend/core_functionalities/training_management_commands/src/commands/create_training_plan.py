@@ -1,13 +1,11 @@
+from google.cloud import pubsub_v1
 from ..models.training_plan import TrainingPlan, db
-from kafka import KafkaProducer
 import json
 
 class CreateTrainingPlanCommandHandler:
     def __init__(self):
-        self.producer = KafkaProducer(
-            bootstrap_servers=['kafka:9092'],
-            value_serializer=lambda v: json.dumps(v, default=str).encode('utf-8')
-        )
+        self.publisher = pubsub_v1.PublisherClient()
+        self.topic_path = self.publisher.topic_path('miso-proyecto-de-grado-g09', 'training-plan-events')  
 
     def handle(self, data):
         plan = TrainingPlan(**data)
@@ -23,8 +21,8 @@ class CreateTrainingPlanCommandHandler:
                 "duration": plan.duration,
                 "frequency": plan.frequency,
                 "objectives": plan.objectives,
+                "profile_type": plan.profile_type,
             }
         }
-        self.producer.send('training-plan-events', value=event_data)
-        self.producer.flush()
+        self.publisher.publish(self.topic_path, json.dumps(event_data).encode('utf-8'))
         return plan.id

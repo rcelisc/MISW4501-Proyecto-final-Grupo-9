@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.sportapp.LoginScreen
 import com.example.sportapp.R
 import com.example.sportapp.ui.views.CalendarEvents
+import com.example.sportapp.ui.views.ConnectDevice
+import com.example.sportapp.ui.views.DashboardTraining
+import com.example.sportapp.ui.views.Notifications
 import com.example.sportapp.ui.views.StartTraining
 import com.example.sportapp.ui.views.StravaViewConnect
 
@@ -21,6 +24,17 @@ class Home : AppCompatActivity() {
         val btnExit = findViewById<ImageView>(R.id.ivHome)
         val btnExit1 = findViewById<TextView>(R.id.tvwCerrarSesion)
         val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
+        val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
+        val btnDashboard = findViewById<ImageView>(R.id.ivClockW)
+        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
+
+
+
+        //Redirige a la Actividad Device
+        btnDevice.setOnClickListener{
+            val device = Intent(this, ConnectDevice::class.java)
+            startActivity(device)
+        }
 
         //Redirige a la Actividad Strava.
         btnStrava.setOnClickListener{
@@ -49,6 +63,17 @@ class Home : AppCompatActivity() {
         btnCalendar.setOnClickListener{
             val calendar = Intent(this, CalendarEvents::class.java)
             startActivity(calendar)
+        }
+
+        btnNotifications.setOnClickListener{
+            val notif = Intent(this, Notifications::class.java)
+            startActivity(notif)
+        }
+
+
+        btnDashboard.setOnClickListener{
+            val dash = Intent(this, DashboardTraining::class.java)
+            startActivity(dash)
         }
 
     }

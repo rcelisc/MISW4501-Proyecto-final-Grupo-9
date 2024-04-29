@@ -14,5 +14,6 @@ pytest-mock
 pytest-env
 # bcrypt
 Flask-Testing
-kafka-python
 Flask-Migrate
+google-cloud-pubsub
+Flask-Cors

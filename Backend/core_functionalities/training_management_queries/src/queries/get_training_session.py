@@ -1,7 +1,7 @@
 from ..models.training_session import TrainingSession
 
 class GetTrainingSessionHandler:
-    def handle(self, session_id=None):
+    def handle(self, session_id=None, user_id=None):
         if session_id:
             session = TrainingSession.query.filter_by(session_id=session_id).first()
             if not session:
@@ -14,6 +14,17 @@ class GetTrainingSessionHandler:
                 'notes': session.notes,
             }
             return session_data
+        elif user_id is not None:
+            sessions = TrainingSession.query.filter_by(user_id=user_id).all()
+            session_data = [{
+                'id': session.id,
+                'user_id': session.user_id,
+                'duration': session.duration,
+                'training_type': session.training_type,
+                'end_time': session.end_time,
+                'notes': session.notes,
+            } for session in sessions]
+            return session_data
         else:
             sessions = TrainingSession.query.all()
             session_data = [{
@@ -21,6 +32,7 @@ class GetTrainingSessionHandler:
                 'user_id': session.user_id,
                 'duration': session.duration,
                 'training_type': session.training_type,
+                'end_time': session.end_time,
                 'notes': session.notes,
             } for session in sessions]
             return session_data

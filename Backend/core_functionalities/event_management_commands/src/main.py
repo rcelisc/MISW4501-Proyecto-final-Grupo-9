@@ -1,6 +1,6 @@
 from flask import Flask
 from .extensions import db, migrate
-
+from flask_cors import CORS
 from .api.event import event_blueprint
 import os
 from .config import DevelopmentConfig, ProductionConfig, TestingConfig
@@ -28,17 +28,7 @@ def create_app():
             print(f"Error initializing database tables: {e}")
 
     app.register_blueprint(event_blueprint)
-
-    # Function to register CLI commands
-    # def register_cli_commands(app):
-    #     @app.cli.command("init-db")
-    #     def init_db():
-    #         """Create database tables."""
-    #         db.create_all()
-    #         print("Database tables created.")
-    
-    # register_cli_commands(app)
-
+    CORS(app)
     return app
 
 if __name__ == "__main__":
