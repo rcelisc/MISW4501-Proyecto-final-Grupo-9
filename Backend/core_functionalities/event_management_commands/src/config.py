@@ -12,4 +12,4 @@ class TestingConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL', 'sqlite:///:memory:')
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('PROD_DATABASE_URL', 'postgresql://commands_user_prod:commands_pass_prod@localhost:5433/commands_db_prod')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('PROD_DATABASE_URL', 'postgresql://commands_user_prod:commands_pass_prod@localhost:5432/commands_db_prod')
