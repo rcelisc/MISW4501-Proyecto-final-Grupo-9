@@ -11,6 +11,7 @@
         (dayClicked)="dayClicked($event.day)">
     </mwl-calendar-month-view>
 </div>
+<app-notification-manager></app-notification-manager>
 <div *ngIf="selectedEvents.length > 0" class="event-list">
     <h3>Events and Services on {{ viewDate | date: 'longDate' }}</h3>
     <ul>

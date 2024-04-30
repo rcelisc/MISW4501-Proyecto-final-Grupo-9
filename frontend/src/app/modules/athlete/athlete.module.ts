@@ -18,7 +18,7 @@ import { TrainingHistoryComponent } from './components/training-history/training
     ReactiveFormsModule,
     MaterialModule,
     RouterModule,
-    HttpClientModule
+    HttpClientModule,
   ]
 })
 export class AthleteModule {}
