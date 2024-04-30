@@ -12,6 +12,14 @@ export class CreateEventService {
 
   constructor(private http: HttpClient) { }
 
+  getApiUrl(): string {
+    return this.apiUrlCommands;
+  }
+
+  getApiUrlQueries(): string {
+    return this.apiUrlQueries;
+  }
+
   createEvent(eventData: any): Observable<any> {
     return this.http.post(this.apiUrlCommands, eventData);
   }
