@@ -30,9 +30,8 @@ export class ServiceListComponent implements OnInit {
 
   loadServices(): void {
     this.createServiceService.getServices().subscribe({
-      next: (response:any) => {
-        // Assuming the response format is the one shown above
-        this.dataSource.data = response.services; // Accessing the 'services' array directly
+      next: (services: any[]) => {
+        this.dataSource.data = services;  // Now 'services' is directly the array
       },
       error: (error) => {
         console.error('Failed to load services', error);
