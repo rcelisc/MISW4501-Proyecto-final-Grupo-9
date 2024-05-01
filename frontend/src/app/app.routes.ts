@@ -19,6 +19,7 @@ import { AthleteCalendarComponent } from './modules/athlete/components/athlete-c
 import { TrainingPlanComponent } from './modules/professional-services/components/training-plan/training-plan.component';
 import { MealPlanComponent } from './modules/professional-services/components/meal-plan/meal-plan.component';
 import { TrainingHistoryComponent } from './modules/athlete/components/training-history/training-history.component';
+import { FoodInfoComponent } from './modules/athlete/components/food-info/food-info.component';
 
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
@@ -36,6 +37,7 @@ export const routes: Routes = [
   {path: 'organizer-dashboard', component: EventOrganizerDashboardComponent},
   {path: 'select-plan', component: SelectPlanComponent},
   {path: 'sport-info', component: SportInfoComponent},
+  {path: 'food-info', component: FoodInfoComponent},
   {path: 'demographic-info', component: DemographicInfoComponent},
   {path: 'event-calendar', component: EventCalendarComponent},
   {path: 'athlete-calendar', component: AthleteCalendarComponent},
