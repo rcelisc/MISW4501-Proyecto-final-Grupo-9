@@ -49,6 +49,11 @@ class Athlete(User):
     recovery_time = db.Column(db.Integer)  # in hours, typical recovery period
     training_pace = db.Column(db.String(50))  # e.g., '7 min/km'
     plan_type = db.Column(db.String(50), default='basic')
+    daily_calories = db.Column(db.Integer)  # kcal/day
+    daily_protein = db.Column(db.Integer)  # grams/day
+    daily_liquid = db.Column(db.Integer)  # ml/day
+    daily_carbs = db.Column(db.Integer)  # grams/day
+    meal_frequency = db.Column(db.String(50))  # e.g., '5 times a day'
 
     __mapper_args__ = {
         'polymorphic_identity': 'athlete',
@@ -75,7 +80,12 @@ class Athlete(User):
             "recovery_time": self.recovery_time,
             "training_pace": self.training_pace,
             "ethnicity": self.ethnicity,
-            "plan_type": self.plan_type
+            "plan_type": self.plan_type,
+            "daily_calories": self.daily_calories,
+            "daily_protein": self.daily_protein,
+            "daily_liquid": self.daily_liquid,
+            "daily_carbs": self.daily_carbs,
+            "meal_frequency": self.meal_frequency
         }
         return {**base_dict, **athlete_specific_dict}
 

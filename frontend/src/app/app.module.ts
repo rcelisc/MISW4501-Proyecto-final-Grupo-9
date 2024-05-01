@@ -26,6 +26,7 @@ import { SportInfoService } from './services/sport-info.service';
 import { DemographicInfoService } from './services/demographic-info.service';
 import { NutritionPlanService } from './services/nutrition-plan.service';
 import { NotificationService } from './services/notification.service';
+import { FoodInfoService } from './services/food-info.service';
 
 
 
@@ -52,7 +53,7 @@ import { NotificationService } from './services/notification.service';
     MaterialModule
   ],
   providers: [{ provide: MAT_DATE_LOCALE, useFactory: (localeService: LocaleService) => localeService.locale$, deps: [LocaleService] },
-  TrainingPlanService, CreateServiceService, CreateEventService, AuthService, SportInfoService, DemographicInfoService, NutritionPlanService, NotificationService],
+  TrainingPlanService, CreateServiceService, CreateEventService, AuthService, SportInfoService, DemographicInfoService, NutritionPlanService, NotificationService, FoodInfoService],
   bootstrap: []
 })
 export class AppModule { }
