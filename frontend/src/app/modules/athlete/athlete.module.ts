@@ -10,9 +10,10 @@ import { DemographicInfoComponent } from './components/demographic-info/demograp
 import { SportInfoComponent } from './components/sport-info/sport-info.component';
 import { AthleteCalendarComponent } from './components/athlete-calendar/athlete-calendar.component';
 import { TrainingHistoryComponent } from './components/training-history/training-history.component';
+import { FoodInfoComponent } from './components/food-info/food-info.component';
 @NgModule({
   declarations: [
-    AthleteDashboardComponent, SelectPlanComponent, DemographicInfoComponent, SportInfoComponent, AthleteCalendarComponent, TrainingHistoryComponent],
+    AthleteDashboardComponent, SelectPlanComponent, DemographicInfoComponent, SportInfoComponent, AthleteCalendarComponent, TrainingHistoryComponent, FoodInfoComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

@@ -3,6 +3,7 @@ from ..commands.create_user import CreateUserCommandHandler
 from ..commands.register_demographic_data import RegisterDemographicDataCommandHandler
 from ..commands.register_sports_habits import RegisterSportsHabitDataCommandHandler
 from ..commands.update_user_plan import UpdateUserPlanCommandHandler
+from ..commands.register_food_data import RegisterFoodDataCommandHandler
 
 user_blueprint = Blueprint('user', __name__)
 
@@ -21,6 +22,18 @@ def register_demographic_data(user_id):
     try:
         handler.handle(user_id, data)
         return jsonify({"message": "Demographic data updated successfully"}), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    
+@user_blueprint.route('/users/<int:user_id>/food_data', methods=['POST'])
+def register_food_data(user_id):
+    data = request.get_json()
+    handler = RegisterFoodDataCommandHandler()
+    try:
+        handler.handle(user_id, data)
+        return jsonify({"message": "Food data updated successfully"}), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 404
     except Exception as e:
