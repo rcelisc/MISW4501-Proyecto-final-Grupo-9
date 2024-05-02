@@ -23,4 +23,6 @@ spec:
         env:
         - name: DATABASE_URL
           value: postgresql://postgres:smServices@db-service-management:5432/db_service_management
+        - name: EVENTS_SERVICE_URL
+          value: http://event-management-queries.default.svc.cluster.local:3002
       restartPolicy: Always

@@ -104,7 +104,7 @@ kubectl apply -f k8s/base/
 2. Aplicar migraciones:
 ```bash 
 kubectl apply -f k8s/migrations/training-management-commands-job.yaml
-kubectl apply -f k8s/migrations/training-management-queries-job.yaml
+kubectl apply -f k8s/migrations/
 ```
 
 3. Aplicar ingress:
