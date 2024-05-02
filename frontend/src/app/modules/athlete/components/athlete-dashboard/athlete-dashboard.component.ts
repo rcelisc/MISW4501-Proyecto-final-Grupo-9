@@ -17,6 +17,7 @@ export class AthleteDashboardComponent {
     { title: 'Ver Historial de Entrenamiento', content: 'Consulta tu historial de las sesiones de entrenamiento realizadas', link: '/training-history' },
     { title: 'Seleccionar Plan', content: 'Cambia de plan: Basico, Intermedio o Premium', link: '/select-plan'},
     { title: 'Agregar informacion demografica', content: 'Agregar mayor informacion sobre tu salud e informacion demografica', link: '/demographic-info'},
+    { title: 'Agregar informacion alimenticia', content: 'Agrega mayor informacion acerca de tu alimentacion', link: '/food-info'},
     { title: 'Agregar informacion deportiva', content: 'Agrega mayoir informacion acerca de tus habitos deportivos', link: '/sport-info'},
   ];
 }

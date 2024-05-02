@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: 526ca084beef
+Revision ID: 09c032f5be2e
 Revises: 
-Create Date: 2024-04-22 13:51:45.861262
+Create Date: 2024-04-30 22:14:40.627577
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '526ca084beef'
+revision = '09c032f5be2e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -45,6 +45,12 @@ def upgrade():
     sa.Column('average_session_duration', sa.Integer(), nullable=True),
     sa.Column('recovery_time', sa.Integer(), nullable=True),
     sa.Column('training_pace', sa.String(length=50), nullable=True),
+    sa.Column('plan_type', sa.String(length=50), nullable=True),
+    sa.Column('daily_calories', sa.Integer(), nullable=True),
+    sa.Column('daily_protein', sa.Integer(), nullable=True),
+    sa.Column('daily_liquid', sa.Integer(), nullable=True),
+    sa.Column('daily_carbs', sa.Integer(), nullable=True),
+    sa.Column('meal_frequency', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

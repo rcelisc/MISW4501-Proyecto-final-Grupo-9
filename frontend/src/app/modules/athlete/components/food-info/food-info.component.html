@@ -1,0 +1,46 @@
+<div class="container">
+    <h2 i18n="@@foodInfoTitle" class="title">Agregar informacion de habitos alimenticios </h2>
+    <form [formGroup]="foodInfoForm" (ngSubmit)="onSubmit()">
+  
+      <div class="form-field">
+        <mat-form-field appearance="fill">
+          <mat-label i18n="@@foodInfoDailyCalories">Calorias diarias</mat-label>
+          <input matInput formControlName="daily_calories" type="number">
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <mat-form-field appearance="fill">
+          <mat-label i18n="@@foodInfoDailyProtein">Proteinas diarias</mat-label>
+          <input matInput formControlName="daily_protein" type="number">
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <mat-form-field appearance="fill">
+          <mat-label i18n="@@foodInfoDailyLiquid">Liquidos diarios</mat-label>
+          <input matInput formControlName="daily_liquid" type="number">
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <mat-form-field appearance="fill">
+          <mat-label i18n="@@foodInfoDailyCarbs">Carbohidratos diarios</mat-label>
+          <input matInput formControlName="daily_carbs" type="number">
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <mat-form-field appearance="fill">
+            <mat-label i18n="@@foodInfoMealFrecuency">Frecuencia alimentaria</mat-label>
+            <input matInput formControlName="meal_frequency" type="text">
+        </mat-form-field>
+      </div>
+  
+  
+      <div class="button-container">
+        <button mat-button class="create-button" type="submit" i18n="@@foodInfoButton" >Agregar</button>
+      </div>
+    </form>
+  </div>
+  
