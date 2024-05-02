@@ -1,12 +1,16 @@
 steps:
   # Build Event Management Commands service
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA', '.']
+    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA', '-t', 'gcr.io/$PROJECT_ID/event-management-commands:latest', '.']
     dir: 'Backend/core_functionalities/event_management_commands'
   
   # Push the Docker image Commands service
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/event-management-commands:$SHORT_SHA']
+
+  # Push the Docker image with latest tag
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/event-management-commands:latest']
 
   # Create a network
   - name: 'gcr.io/cloud-builders/docker'
@@ -67,11 +71,14 @@ steps:
 
   # Build and push the Event Management Queries service
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/event-management-queries:$SHORT_SHA', '.']
+    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/event-management-queries:$SHORT_SHA', '-t', 'gcr.io/$PROJECT_ID/event-management-queries:latest', '.']
     dir: 'Backend/core_functionalities/event_management_queries'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/event-management-queries:$SHORT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/event-management-queries:latest']
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['run', '--name', 'postgres-em-queries', '--network', 'em-net', '-e', 'POSTGRES_DB=db_event_management_queries', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=emQueries', '-d', 'postgres:13']
@@ -125,11 +132,14 @@ steps:
 
   # Build and push the Service Management service
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/service-management:$SHORT_SHA', '.']
+    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/service-management:$SHORT_SHA', '-t', 'gcr.io/$PROJECT_ID/service-management:latest', '.']
     dir: 'Backend/core_functionalities/services_management'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/service-management:$SHORT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/service-management:latest']
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['run', '--name', 'postgres-service-management', '--network', 'em-net', '-e', 'POSTGRES_DB=db_service_management', '-e', 'POSTGRES_USER=postgres', '-e', 'POSTGRES_PASSWORD=serviceManagement', '-d', 'postgres:13']
@@ -184,11 +194,14 @@ steps:
   # Build and push the Training Management Commands service
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/training-management-commands:$SHORT_SHA', '.']
+    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/training-management-commands:$SHORT_SHA', '-t', 'gcr.io/$PROJECT_ID/training-management-commands:latest', '.']
     dir: 'Backend/core_functionalities/training_management_commands'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/training-management-commands:$SHORT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/training-management-commands:latest']
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['run', '--name', 'postgres-training-commands', '--network', 'em-net', '-e', 'POSTGRES_DB=db_training_management_commands', '-e', 'POSTGRESS_USER=postgres', '-e', 'POSTGRES_PASSWORD=trainingCommands', '-d', 'postgres:13']
@@ -243,11 +256,14 @@ steps:
   # Build and push the Training Management Queries service
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/training-management-queries:$SHORT_SHA', '.']
+    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/training-management-queries:$SHORT_SHA', '-t', 'gcr.io/$PROJECT_ID/training-management-queries:latest', '.']
     dir: 'Backend/core_functionalities/training_management_queries'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/training-management-queries:$SHORT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/training-management-queries:latest']
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['run', '--name', 'postgres-training-queries', '--network', 'em-net', '-e', 'POSTGRES_DB=db_training_management_queries', '-e', 'POSTGRESS_USER=postgres', '-e', 'POSTGRES_PASSWORD=trainingQueries', '-d', 'postgres:13']
@@ -302,11 +318,14 @@ steps:
   # Build and push the User Management Commands service
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/user-management-commands:$SHORT_SHA', '.']
+    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/user-management-commands:$SHORT_SHA', '-t', 'gcr.io/$PROJECT_ID/user-management-commands:latest', '.']
     dir: 'Backend/core_functionalities/user_management_commands'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/user-management-commands:$SHORT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/user-management-commands:latest']
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['run', '--name', 'postgres-user-commands', '--network', 'em-net', '-e', 'POSTGRES_DB=db_user_management_commands', '-e', 'POSTGRESS_USER=postgres', '-e', 'POSTGRES_PASSWORD=userCommands', '-d', 'postgres:13']
@@ -361,11 +380,14 @@ steps:
   # Build and push the User Management Queries service
   
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/user-management-queries:$SHORT_SHA', '.']
+    args: ['build', '--platform', 'linux/amd64', '-t', 'gcr.io/$PROJECT_ID/user-management-queries:$SHORT_SHA', '-t', 'gcr.io/$PROJECT_ID/user-management-queries:latest', '.']
     dir: 'Backend/core_functionalities/user_management_queries'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/user-management-queries:$SHORT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/user-management-queries:latest']
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['run', '--name', 'postgres-user-queries', '--network', 'em-net', '-e', 'POSTGRES_DB=db_user_management_queries', '-e', 'POSTGRESS_USER=postgres', '-e', 'POSTGRES_PASSWORD=userQueries', '-d', 'postgres:13']

@@ -17,6 +17,7 @@ spec:
       containers:
       - name: training-management-queries-container
         image: gcr.io/miso-proyecto-de-grado-g09/training-management-queries:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3003
         env:

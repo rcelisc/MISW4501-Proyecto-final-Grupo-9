@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: training-management-commands
+  name: user-management-commands
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: training-management-commands
+      app: user-management-commands
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: training-management-commands
+        app: user-management-commands
     spec:
       containers:
-      - name: training-management-commands-container
-        image: gcr.io/miso-proyecto-de-grado-g09/training-management-commands:latest
+      - name: user-management-commands-container
+        image: gcr.io/miso-proyecto-de-grado-g09/user-management-commands:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 3004
+        - containerPort: 3006
         env:
         - name: DATABASE_URL
-          value: postgresql://postgres:tmCommands@db-training-management-commands:5432/db_training_management_commands
+          value: postgresql://postgres:umCommands@db-user-management-commands:5432/db_user_management_commands
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /secrets/service-account.json
         - name: STRAVA_CLIENT_ID

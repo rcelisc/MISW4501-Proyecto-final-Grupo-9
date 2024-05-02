@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: user-management-commands-migration
+spec:
+  template:
+    spec:
+      containers:
+      - name: migrate
+        image: gcr.io/miso-proyecto-de-grado-g09/user-management-commands:latest
+        command: ["flask", "db", "upgrade"]
+        env:
+        - name: DATABASE_URL
+          value: postgresql://postgres:umCommands@db-user-management-commands:5432/db_user_management_commands
+      restartPolicy: OnFailure
