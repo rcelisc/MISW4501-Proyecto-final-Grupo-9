@@ -18,21 +18,21 @@ spec:
             name: event-management-commands
             port:
               number: 3001
-      - path: /events/<int:event_id>/publish
+      - path: /events/([0-9]+)/publish
         pathType: ImplementationSpecific
         backend:
           service:
             name: event-management-commands
             port:
               number: 3001
-      - path: /events/<int:event_id>
+      - path: /events/([0-9]+)
         pathType: ImplementationSpecific
         backend:
           service:
             name: event-management-commands
             port:
               number: 3001
-      - path: /events/<int:event_id>/add
+      - path: /events/([0-9]+)/add
         pathType: ImplementationSpecific
         backend:
           service:
@@ -90,7 +90,7 @@ spec:
             name: service-management
             port:
               number: 3005
-      - path: /services/<int:service_id>/publish
+      - path: /services/([0-9]+)/publish
         pathType: ImplementationSpecific
         backend:
           service:
@@ -215,28 +215,28 @@ spec:
             name: user-management-commands
             port:
               number: 3006
-      - path: /users/<int:user_id>/demographic_data
+      - path: /users/([0-9]+)demographic_data
         pathType: ImplementationSpecific
         backend:
           service:
             name: user-management-commands
             port:
               number: 3006
-      - path: /users/<int:user_id>/food_data
+      - path: /users/([0-9]+)/food_data
         pathType: ImplementationSpecific
         backend:
           service:
             name: user-management-commands
             port:
               number: 3006
-      - path: /users/<int:user_id>/sports_habits
+      - path: /users/([0-9]+)/sports_habits
         pathType: ImplementationSpecific
         backend:
           service:
             name: user-management-commands
             port:
               number: 3006
-      - path: /users/<int:user_id>/plan
+      - path: /users/([0-9]+)/plan
         pathType: ImplementationSpecific
         backend:
           service:

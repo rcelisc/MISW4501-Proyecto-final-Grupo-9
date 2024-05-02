@@ -13,3 +13,4 @@ spec:
         - name: DATABASE_URL
           value: postgresql://postgres:umCommands@db-user-management-commands:5432/db_user_management_commands
       restartPolicy: OnFailure
+  ttlSecondsAfterFinished: 30
