@@ -95,8 +95,30 @@ flask run --port 3001
 ```
 Reemplaza 3001 con el puerto correspondiente para cada servicio.
 
+## 3. Despliegue con GCP
+1. Para desplegar:
+```bash 
+kubectl apply -f k8s/base/
+```
 
-## 3. Crear clúster en GCP.
+2. Aplicar migraciones:
+```bash 
+kubectl apply -f k8s/migrations/training-management-commands-job.yaml
+kubectl apply -f k8s/migrations/training-management-queries-job.yaml
+```
+
+3. Aplicar ingress:
+```bash 
+kubectl apply -f ingress.yaml
+```
+
+4. Para eliminar el despliegue:
+```bash 
+kubectl delete -f k8s/base/
+kubectl delete -f ingress.yaml
+```
+
+## 4. Crear clúster en GCP.
 
 Antes de crear el clúster en GCP debemos crea las redes que utilizaron el despliegue en general tanto para el clúster como para la base de datos, teniendo en cuenta los siguientes parámetros:
 
@@ -116,40 +138,7 @@ Imagen del cluster una vez a sido creado.
 ![image](https://github.com/MISW-4301-Desarrollo-Apps-en-la-Nube/s202314-proyecto-grupo24/assets/111831086/41c9a985-4e32-4701-a706-56cbcb3c0e07)
 
 
-## 4. Crear y subir imagenes de cada unos de los PODs a a GCP.
-
-Par el despliegue se debe contar con el **Container Registry** (activando la API del **Artifact Registry**) y dentro las imágenes de los microservicios que serán desplegado, para ello desde la carpeta del microservicio en el código creamos y subimos las imágenes a el **Container Registry** (siguiendo las intrucciónes del tutorial **Container Registry de la semana 3**). Para nuestro caso el container se llama dev-nativa-24-container y se presenta en la siguiente imagen:
-
-![image](https://github.com/MISW-4301-Desarrollo-Apps-en-la-Nube/s202314-proyecto-grupo24/assets/111831086/66ce8457-997e-4742-af19-b7807a116730)
-
-
-## 5. Crear base de datos Postgress.
-
-Crear la base de datos en GCP, para lo cual elegimos POSTGRESS, y realizamos la configuracion correspondiente.
-
-![image](https://github.com/MISW-4301-Desarrollo-Apps-en-la-Nube/s202314-proyecto-grupo24/assets/111831086/dc1c4ffa-da5f-4e84-8c0a-7cca643bd5c7)
-
-Instancia de base de datos en postgress.
-![image](https://github.com/MISW-4301-Desarrollo-Apps-en-la-Nube/s202314-proyecto-grupo24/assets/111831086/dd25e911-a4c7-4f67-8655-bf96c574589b)
-
-Desplegar con el siguiente comando el archivo **secrets.yaml** el cual lo encontrará en la raíz del proyecto. Este archivo contiene la información de conexión a la base de datos.
-
-* Ejecutar comando: `kubectl apply -f secrets.yaml` estando conectado al clúster creado.
-
-Asi se debe ver el secret en la seccion de **Kubernets > Secrets y ConfigMaps**
-
-![image](https://github.com/MISW-4301-Desarrollo-Apps-en-la-Nube/s202314-proyecto-grupo24/assets/111831086/9808297d-8736-4c15-a78e-66093bdad655)
-
-
-## 6. Configuracion del secret en los PODs que necesitan conexión con la base de datos.
-
-Para que los PODS se puedan conectar a la base de datos, es importante realizar la siguiente configuración de **secret** en el archivo de despliegue, 
-
-Ejemplo de como se razalizó la configuración a la base de datos y el nombre de la variable de entorno que se usa en la aplicación en este caso “**DATABASE_URL**”.
-
-![image](https://github.com/MISW-4301-Desarrollo-Apps-en-la-Nube/s202314-proyecto-grupo24/assets/111831086/dcea6218-dec0-4e87-9019-b12f42e6f0f0)
-
-## 7. Crear servicios, funciones e Ingress en GCP.
+## 5. Crear servicios, funciones e Ingress en GCP.
 
 En la carpeta  “**deployment**” dentro de la solución, se generan 3 archivos *.yaml los cuales contienen la configuración para la creación de los servicios y el **Ingress** de la siguiente manera: 
 
@@ -207,7 +196,7 @@ Al entrar al detalle de la funcion debe ver lo siguiente:
 ![image](https://github.com/MISW-4301-Desarrollo-Apps-en-la-Nube/s202314-proyecto-grupo24/assets/111831086/917b253b-e76c-4040-afe6-8a6245164d61)
 
 
-## 8. Tomar la IP pública de Ingress.
+## 6. Tomar la IP pública de Ingress.
 
 Una vez finalizado el despliegue del **Ingress**, se debe validar que el estado este en **OK**, lo cual nos indicara que **Ingress** a logrado hacer validación “**Healtcheck**” de todos los servicios expuestos, y nos indicara que el despliegue se ha realizado con éxito.
 
@@ -217,14 +206,14 @@ En la columna **Frontends** se pueden visualizar cada uno de los servicios expue
 ![image](https://github.com/MISW-4301-Desarrollo-Apps-en-la-Nube/s202314-proyecto-grupo24/assets/111831086/f448d361-7a75-4ab8-9d97-d1d3d1712930)
 
 
-## 9. Configurar en el archivo **config.yaml** la IP tomada de GCP Ingress. (Esto para correr el Pipeline de la entrega 3)
+## 7. Configurar en el archivo **config.yaml** la IP tomada de GCP Ingress. (Esto para correr el Pipeline de la entrega 3)
 
 Este paso se debe realizar para que el pipeline pueda correr las pruebas hacia el proyecto correcto y no vaya a generar errores.
 
 ![image](https://github.com/MISW-4301-Desarrollo-Apps-en-la-Nube/s202314-proyecto-grupo24/assets/111831086/399562bc-ea3a-4520-b6ba-d092eca6e7d1)
 
 
-## 9. Pruebas desde postman.
+## 8. Pruebas desde postman.
 
 * En su colección de Postman deben ingresar en la sección variables y allí deben colocar en la variable **"INGRESS_PATH"** la **IP** obtenida del **Ingress** en el **punto 7**.
 
