@@ -8,7 +8,7 @@ import { Observable, map } from 'rxjs';
 export class CreateServiceService {
 
   //private readonly apiUrl = 'http://localhost:3005/services';
-  private readonly apiUrl = 'http://35.232.6.198/services';
+  private readonly apiUrl = 'https://35.232.6.198/services';
 
   constructor(private http: HttpClient) { }
   

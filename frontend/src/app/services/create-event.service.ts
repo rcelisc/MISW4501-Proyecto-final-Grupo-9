@@ -9,8 +9,8 @@ export class CreateEventService {
 
   //private readonly apiUrlCommands = 'http://localhost:3001/events';
   //private readonly apiUrlQueries = 'http://localhost:3002/events/get';
-  private readonly apiUrlCommands = 'http://35.232.6.198/events';
-  private readonly apiUrlQueries = 'http://35.232.6.198/events/get';
+  private readonly apiUrlCommands = 'https://miso-proyecto-de-grado-g09.web.app/events';
+  private readonly apiUrlQueries = 'https://miso-proyecto-de-grado-g09.web.app/events/get';
 
   constructor(private http: HttpClient) { }
 

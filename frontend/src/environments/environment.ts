@@ -3,7 +3,7 @@ export const environment = {
     //baseUrlCommandsTraining: 'http://localhost:3004/',
     //baseUrlQueriesTraining: 'http://localhost:3003/',
     //baseUrlNutrition: 'http://localhost:3005/'
-    baseUrlCommandsTraining: 'http://35.232.6.198/',
-    baseUrlQueriesTraining: 'http://35.232.6.198/',
-    baseUrlNutrition: 'http://35.232.6.198/'
+    baseUrlCommandsTraining: 'https://35.232.6.198/',
+    baseUrlQueriesTraining: 'https://35.232.6.198/',
+    baseUrlNutrition: 'https://35.232.6.198/'
   };

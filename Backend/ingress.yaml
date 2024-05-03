@@ -5,8 +5,13 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
     kubernetes.io/ingress.class: "nginx"
+    networking.gke.io/managed-certificates: your-managed-cert
 spec:
   ingressClassName: "nginx"
+  tls:
+  - hosts:
+    - miso-proyecto-de-grado-g09.web.app
+    secretName: your-managed-cert-tls
   rules:
   - http:
       paths:
@@ -179,7 +184,7 @@ spec:
             name: training-management-queries
             port:
               number: 3003
-      - path: /training-plans/([0-9]+)
+      - path: /training-plans/([A-Za-z0-9-_]+)
         pathType: ImplementationSpecific
         backend:
           service:
@@ -215,7 +220,7 @@ spec:
             name: user-management-commands
             port:
               number: 3006
-      - path: /users/([0-9]+)demographic_data
+      - path: /users/([0-9]+)/demographic_data
         pathType: ImplementationSpecific
         backend:
           service:
