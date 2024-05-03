@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class SportInfoService {
 
   //private readonly baseUrl = 'http://localhost:3006/users';
-  private readonly baseUrl = 'http://35.232.6.198/users';
+  private readonly baseUrl = 'https://35.232.6.198/users';
 
   constructor(private http: HttpClient) { }
 

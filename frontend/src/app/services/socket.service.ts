@@ -3,7 +3,7 @@ import { Socket, SocketIoConfig } from 'ngx-socket-io';
 
 const config: SocketIoConfig = { 
  //url: 'http://localhost:3007', 
- url: 'http://35.232.6.198',
+ url: 'https://35.232.6.198',
  options: { transports: ['websocket', 'polling'] }
 };
 
