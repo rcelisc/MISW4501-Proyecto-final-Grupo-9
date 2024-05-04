@@ -20,9 +20,13 @@ spec:
               kubectl scale deployment/db-service-management --replicas=1
               kubectl scale deployment/db-training-management-commands --replicas=1
               kubectl scale deployment/db-training-management-queries --replicas=1
+              kubectl scale deployment/db-user-management-commands --replicas=1
+              kubectl scale deployment/db-user-management-queries --replicas=1
               kubectl scale deployment/event-management-commands --replicas=1
               kubectl scale deployment/event-management-queries --replicas=1
               kubectl scale deployment/service-management --replicas=1
               kubectl scale deployment/training-management-commands --replicas=1
               kubectl scale deployment/training-management-queries --replicas=1
+              kubectl scale deployment/user-management-commands --replicas=1
+              kubectl scale deployment/user-management-queries --replicas=1
           restartPolicy: OnFailure

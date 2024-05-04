@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: event-management-commands
+  name: user-management-queries
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: event-management-commands
+      app: user-management-queries
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: event-management-commands
+        app: user-management-queries
     spec:
       containers:
-      - name: event-management-commands-container
-        image: gcr.io/miso-proyecto-de-grado-g09/event-management-commands:latest
+      - name: user-management-queries-container
+        image: gcr.io/miso-proyecto-de-grado-g09/user-management-queries:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 3001
+        - containerPort: 3007
         env:
         - name: DATABASE_URL
-          value: postgresql://postgres:emCommands@db-event-management-commands:5432/db_event_management_commands
+          value: postgresql://postgres:umQueries@db-user-management-queries:5432/db_user_management_queries
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /secrets/service-account.json
         volumeMounts:
