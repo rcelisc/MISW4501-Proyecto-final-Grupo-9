@@ -34,7 +34,7 @@ def create_app():
     start_listener_in_background(app)
     publish_listener(app)
     add_events_listener(app)
-    CORS(app)
+    CORS(app, resources={r"/*": {"origins": "https://miso-proyecto-de-grado-g09.web.app"}})
     return app
 
 if __name__ == "__main__":

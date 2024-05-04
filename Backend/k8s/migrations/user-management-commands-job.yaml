@@ -1,16 +1,16 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: training-management-commands-migration
+  name: user-management-commands-migration
 spec:
   template:
     spec:
       containers:
       - name: migrate
-        image: gcr.io/miso-proyecto-de-grado-g09/training-management-commands:latest
+        image: gcr.io/miso-proyecto-de-grado-g09/user-management-commands:latest
         command: ["flask", "db", "upgrade"]
         env:
         - name: DATABASE_URL
-          value: postgresql://postgres:tmCommands@db-training-management-commands:5432/db_training_management_commands
+          value: postgresql://postgres:umCommands@db-user-management-commands:5432/db_user_management_commands
       restartPolicy: OnFailure
   ttlSecondsAfterFinished: 30
