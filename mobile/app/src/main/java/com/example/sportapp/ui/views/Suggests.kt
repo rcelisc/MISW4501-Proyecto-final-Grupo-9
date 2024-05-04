@@ -1,18 +1,16 @@
 package com.example.sportapp.ui.views
 
-
-import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sportapp.R
 import com.example.sportapp.UtilRedirect
-import com.example.sportapp.ui.home.Home
 
-class StravaViewConnect : AppCompatActivity() {
+class Suggests : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_strava)
+        setContentView(R.layout.activity_suggests)
         setUpNavigationButtons()
     }
 

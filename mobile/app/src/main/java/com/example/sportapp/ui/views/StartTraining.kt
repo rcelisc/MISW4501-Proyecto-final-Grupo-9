@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
+import com.example.sportapp.UtilRedirect
 import com.example.sportapp.data.model.StartTrainingResponse
 import com.example.sportapp.data.repository.StartTrainingRepository
 import com.example.sportapp.data.services.RetrofitStartTrainingService
@@ -37,60 +38,7 @@ class StartTraining : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start_training)
-
-        val ivRunExe = findViewById<ImageView>(R.id.ivRunExe)
-        val ivHome = findViewById<ImageView>(R.id.ivHome)
-        val btnIniciar = findViewById<Button>(R.id.btnStartTraining)
-        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
-
-
-
-
-        //Redirige a la Actividad Device
-        btnDevice.setOnClickListener{
-            val device = Intent(this, ConnectDevice::class.java)
-            startActivity(device)
-        }
-
-        btnIniciar.setOnClickListener{
-            val runTra = Intent(this, RunTraining::class.java)
-            runTra.putExtra("training", "Running")
-            startActivity(runTra)
-        }
-
-        ivHome.setOnClickListener{
-            val home = Intent(this, Home::class.java)
-            startActivity(home)
-        }
-
-        ivRunExe.setOnClickListener{
-            val startTra = Intent(this, StartTraining::class.java)
-            startActivity(startTra)
-        }
-
-
-//        /*Conectar con servicio iniciar entrenamiento*/
-//        repository.startTrainingService(SportApp.userCodeId, "Running", object : Callback<StartTrainingResponse> {
-//            override fun onResponse(call: Call<StartTrainingResponse>, response: Response<StartTrainingResponse>) {
-//                if (response.isSuccessful) {
-//                    val startTrainingResponse = response.body()
-//                    SportApp.userSesionId = startTrainingResponse?.session_id.toString()
-//                    showToast(this@StartTraining, getString(R.string.promt_start_training))
-//                    Log.d("DEBUG", "Sesion Id : " + SportApp.userSesionId)
-//                } else {
-//                    val errorMessage = "La llamada al servicio no fue exitosa. Código de error: ${response.code()}"
-//                    showToast(this@StartTraining, errorMessage)
-//                    Log.d("DEBUG", errorMessage)
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<StartTrainingResponse>, t: Throwable) {
-//                // Manejar errores de red o de llamada al servicio
-//                Log.d("DEBUG", "Error en la llamada al servicio: ${t.message}")
-//                t.printStackTrace()
-//            }
-//        })
-
+        setUpNavigationButtons()
         //Inicializa datos de entrenamiento.
         val dataList = listOf("Natacion", "Ciclismo", "Running") // Lista de datos
         val recyclerView = findViewById<RecyclerView>(R.id.rvTypeTraining)
@@ -100,6 +48,26 @@ class StartTraining : AppCompatActivity() {
 
     }
 
+
+    private fun setUpNavigationButtons() {
+        val btnRunExe = findViewById<ImageView>(R.id.ivRunExe)
+        val btnExit = findViewById<ImageView>(R.id.ivHome)
+        val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
+        val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
+        val btnDashboard = findViewById<ImageView>(R.id.ivClockW)
+        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
+        val btnSuggestRoutes = findViewById<ImageView>(R.id.ivRun)
+        val btnSuggest = findViewById<ImageView>(R.id.ivSugerencias)
+
+        btnDevice.setOnClickListener{ UtilRedirect().redirectToDeviceActivity(this)}
+        btnRunExe.setOnClickListener{ UtilRedirect().redirectToStartTrainingActivity(this)}
+        btnExit.setOnClickListener{ UtilRedirect().redirectToHomeActivity(this)}
+        btnCalendar.setOnClickListener{ UtilRedirect().redirectToCalendarEventsActivity(this)}
+        btnNotifications.setOnClickListener{ UtilRedirect().redirectToNotificationsActivity(this)}
+        btnDashboard.setOnClickListener{ UtilRedirect().redirectToDashboardTrainingActivity(this)}
+        btnSuggestRoutes.setOnClickListener{ UtilRedirect().redirectToSuggestRoutesActivity(this)}
+        btnSuggest.setOnClickListener{ UtilRedirect().redirectToSuggestsActivity(this)}
+    }
     private class MyAdapter(private val dataList: List<String>) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
