@@ -47,5 +47,7 @@
     <string name="promt_device">Dispositivo:</string>
     <string name="device">Reloj Digital, GPS, Otro</string>
     <string name="start_device">Iniciar Medición</string>
+    <string name="title_suggests">Sugerencias</string>
+    <string name="tittle_suggest_routes">Rutas Sugeridas</string>
 
 </resources>
