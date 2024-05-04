@@ -32,5 +32,6 @@ class SportApp : Application() {
         age = 40
         weight = 80
         height = 174
+        //sesionStrava:
     }
 }
