@@ -30,6 +30,4 @@ class ConnectDeviceTest {
         onView(withId(R.id.restingHeartRateTextView)).check(matches(not(withText(""))))
     }
 
-
-
 }

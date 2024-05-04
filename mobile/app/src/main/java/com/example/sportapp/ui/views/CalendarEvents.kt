@@ -14,6 +14,7 @@ import com.example.sportapp.ui.home.Home
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.example.sportapp.SportApp
+import com.example.sportapp.UtilRedirect
 import com.example.sportapp.data.repository.DataRepository
 import com.example.sportapp.data.services.RetrofitEventsManagementQueries
 import com.example.sportapp.data.model.CalendarEvent
@@ -29,35 +30,7 @@ class CalendarEvents : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar_events)
 
-        val ivHome = findViewById<ImageView>(R.id.ivHome)
-        val ivRunExe = findViewById<ImageView>(R.id.ivRunExe)
-        val ivNotif = findViewById<ImageView>(R.id.ivNotifications)
-        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
-
-
-
-
-        //Redirige a la Actividad Device
-        btnDevice.setOnClickListener{
-            val device = Intent(this, ConnectDevice::class.java)
-            startActivity(device)
-        }
-
-        ivHome.setOnClickListener{
-            val home = Intent(this, Home::class.java)
-            startActivity(home)
-        }
-
-        ivRunExe.setOnClickListener{
-            val home = Intent(this, StartTraining::class.java)
-            startActivity(home)
-        }
-
-        ivNotif.setOnClickListener{
-            val notif = Intent(this, Notifications::class.java)
-            startActivity(notif)
-        }
-
+        setUpNavigationButtons()
 
         //Tabla de eventos
         val recyclerView = findViewById<RecyclerView>(R.id.rvEvents)
@@ -93,6 +66,26 @@ class CalendarEvents : AppCompatActivity() {
         })
 
 
+    }
+
+    private fun setUpNavigationButtons() {
+        val btnRunExe = findViewById<ImageView>(R.id.ivRunExe)
+        val btnExit = findViewById<ImageView>(R.id.ivHome)
+        val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
+        val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
+        val btnDashboard = findViewById<ImageView>(R.id.ivClockW)
+        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
+        val btnSuggestRoutes = findViewById<ImageView>(R.id.ivRun)
+        val btnSuggest = findViewById<ImageView>(R.id.ivSugerencias)
+
+        btnDevice.setOnClickListener{ UtilRedirect().redirectToDeviceActivity(this)}
+        btnRunExe.setOnClickListener{ UtilRedirect().redirectToStartTrainingActivity(this)}
+        btnExit.setOnClickListener{ UtilRedirect().redirectToHomeActivity(this)}
+        btnCalendar.setOnClickListener{ UtilRedirect().redirectToCalendarEventsActivity(this)}
+        btnNotifications.setOnClickListener{ UtilRedirect().redirectToNotificationsActivity(this)}
+        btnDashboard.setOnClickListener{ UtilRedirect().redirectToDashboardTrainingActivity(this)}
+        btnSuggestRoutes.setOnClickListener{ UtilRedirect().redirectToSuggestRoutesActivity(this)}
+        btnSuggest.setOnClickListener{ UtilRedirect().redirectToSuggestsActivity(this)}
     }
 
     class TableAdapter : RecyclerView.Adapter<TableAdapter.ViewHolder>() {
