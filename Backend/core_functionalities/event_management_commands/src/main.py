@@ -28,7 +28,7 @@ def create_app():
             print(f"Error initializing database tables: {e}")
 
     app.register_blueprint(event_blueprint)
-    CORS(app, resources={r"/*": {"origins": "https://miso-proyecto-de-grado-g09.web.app"}})
+    CORS(app)
     return app
 
 if __name__ == "__main__":

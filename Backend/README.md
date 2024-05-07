@@ -33,7 +33,12 @@ Para iniciar todos los servicios definidos en el archivo docker-compose.yml, eje
 
 Este comando complila y levanta todos los contenedores necesarios para el funcionamiento de la aplicación, incluidos bases de datos y demás servicios.
 
-2. Ejecutar Migraciones
+2. Bajar todos los servicios definidos en el archivo docker-compose.yml y los volumenes creados:
+
+``docker-compose down -v``
+
+
+3. Ejecutar Migraciones
 Una vez que los servicios están corriendo, necesitas ejecutar las migraciones para configurar las bases de datos. Utiliza los siguientes comandos para aplicar migraciones en cada servicio:
 
 ``docker-compose exec <nombre_del_servicio> flask db upgrade``

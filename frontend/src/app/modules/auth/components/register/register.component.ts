@@ -34,6 +34,7 @@ export class RegisterComponent {
       surname: ['', Validators.required],
       id_type: ['', Validators.required],
       id_number: ['', Validators.required],
+      password: ['', Validators.required],
       city_of_living: [''],
       country_of_living: [''],
       type: ['', Validators.required],

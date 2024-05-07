@@ -4,10 +4,12 @@ from ..commands.add_user_to_event import AddUserToEventCommand
 from ..commands.update_event import UpdateEventCommandHandler
 from ..commands.create_event import CreateEventCommandHandler
 from ..commands.publish_event import PublishEventCommandHandler
+from ..middlewares.auth import token_required
 
 event_blueprint = Blueprint('event', __name__)
 
 @event_blueprint.route('/events', methods=['POST'])
+@token_required('event_organizer')
 def create_event():
     data = request.json
     handler = CreateEventCommandHandler()
