@@ -16,3 +16,4 @@ Flask-Migrate
 Flask-Testing
 google-cloud-pubsub
 Flask-Cors
+pyjwt

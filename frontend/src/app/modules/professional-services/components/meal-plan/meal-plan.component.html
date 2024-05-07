@@ -5,9 +5,7 @@
         <mat-form-field appearance="fill">
             <mat-label i18n="@@mealPlanUser">Usuario</mat-label>
             <mat-select formControlName="user_id">
-              <mat-option value="1">Usuario 1</mat-option>
-              <mat-option value="2">Usuario 2</mat-option>
-              <mat-option value="3">Usuario 3</mat-option>
+              <mat-option *ngFor="let user of users" [value]="user.id">{{ user.name + ' ' + user.surname }}</mat-option>
             </mat-select>
         </mat-form-field>
 

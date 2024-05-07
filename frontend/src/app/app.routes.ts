@@ -20,26 +20,48 @@ import { TrainingPlanComponent } from './modules/professional-services/component
 import { MealPlanComponent } from './modules/professional-services/components/meal-plan/meal-plan.component';
 import { TrainingHistoryComponent } from './modules/athlete/components/training-history/training-history.component';
 import { FoodInfoComponent } from './modules/athlete/components/food-info/food-info.component';
+import { UnauthorizedComponent } from './core/components/unauthorized/unauthorized.component';
+import { Injectable } from '@angular/core';
+import { CanActivate, ActivatedRouteSnapshot, Router } from '@angular/router';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RoleGuard implements CanActivate {
+  constructor(private router: Router) {}
+
+  canActivate(route: ActivatedRouteSnapshot): boolean {
+    const requiredRoles = route.data['roles'] as Array<string>; // Define required roles in route data
+    const userRole = localStorage.getItem('userRole');
+
+    if (!userRole || (requiredRoles && !requiredRoles.includes(userRole))) {
+      this.router.navigate(['/unauthorized']);
+      return false;
+    }
+    return true;
+  }
+}
 
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
-  {path: 'training-plan', component: TrainingPlanComponent},
-  {path: 'training-history', component: TrainingHistoryComponent},
-  {path: 'create-service', component: CreateServiceComponent},
-  {path: 'service-list', component: ServiceListComponent},
-  {path: 'service-published-list', component: ServicePublishedListComponent},
-  {path: 'create-event', component: CreateEventComponent},
-  {path: 'event-list', component: EventListComponent},
+  {path: 'unauthorized', component: UnauthorizedComponent},
+  {path: 'training-plan', component: TrainingPlanComponent, canActivate: [RoleGuard], data: {roles: ['complementary_services_professional']}},
+  {path: 'training-history', component: TrainingHistoryComponent, canActivate: [RoleGuard], data: {roles: ['athlete']}},
+  {path: 'create-service', component: CreateServiceComponent, canActivate: [RoleGuard], data: {roles: ['complementary_services_professional']}},
+  {path: 'service-list', component: ServiceListComponent, canActivate: [RoleGuard], data: {roles: ['complementary_services_professional']}},
+  {path: 'service-published-list', component: ServicePublishedListComponent, canActivate: [RoleGuard], data: {roles: ['athlete']}},
+  {path: 'create-event', component: CreateEventComponent, canActivate: [RoleGuard], data: {roles: ['event_organizer']}},
+  {path: 'event-list', component: EventListComponent, canActivate: [RoleGuard], data: {roles: ['event_organizer']}},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'athlete-dashboard', component: AthleteDashboardComponent},
-  {path: 'professional-dashboard', component: ProfessionalDashboardComponent},
-  {path: 'organizer-dashboard', component: EventOrganizerDashboardComponent},
-  {path: 'select-plan', component: SelectPlanComponent},
-  {path: 'sport-info', component: SportInfoComponent},
-  {path: 'food-info', component: FoodInfoComponent},
-  {path: 'demographic-info', component: DemographicInfoComponent},
-  {path: 'event-calendar', component: EventCalendarComponent},
-  {path: 'athlete-calendar', component: AthleteCalendarComponent},
-  {path: 'meal-plan', component: MealPlanComponent}
+  {path: 'athlete-dashboard', component: AthleteDashboardComponent, canActivate: [RoleGuard], data: {roles: ['athlete']}},
+  {path: 'professional-dashboard', component: ProfessionalDashboardComponent, canActivate: [RoleGuard], data: {roles: ['complementary_services_professional']}},
+  {path: 'organizer-dashboard', component: EventOrganizerDashboardComponent, canActivate: [RoleGuard], data: {roles: ['event_organizer']}},
+  {path: 'select-plan', component: SelectPlanComponent, canActivate: [RoleGuard], data: {roles: ['athlete']}},
+  {path: 'sport-info', component: SportInfoComponent, canActivate: [RoleGuard], data: {roles: ['athlete']}},
+  {path: 'food-info', component: FoodInfoComponent, canActivate: [RoleGuard], data: {roles: ['athlete']}},
+  {path: 'demographic-info', component: DemographicInfoComponent, canActivate: [RoleGuard], data: {roles: ['athlete']}},
+  {path: 'event-calendar', component: EventCalendarComponent, canActivate: [RoleGuard], data: {roles: ['event_organizer']}},
+  {path: 'athlete-calendar', component: AthleteCalendarComponent, canActivate: [RoleGuard], data: {roles: ['athlete']}},
+  {path: 'meal-plan', component: MealPlanComponent, canActivate: [RoleGuard], data: {roles: ['complementary_services_professional']}}
 ];
