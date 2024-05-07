@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 type UserType = 'athlete' | 'complementary_services_professional' | 'event_organizer';
 
@@ -26,7 +27,8 @@ export class RegisterComponent {
 
   constructor(
     private fb: FormBuilder, 
-    private authService: AuthService, 
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
     private router: Router
   ){
     this.registerForm = this.fb.group({
@@ -34,6 +36,7 @@ export class RegisterComponent {
       surname: ['', Validators.required],
       id_type: ['', Validators.required],
       id_number: ['', Validators.required],
+      password: ['', Validators.required],
       city_of_living: [''],
       country_of_living: [''],
       type: ['', Validators.required],
@@ -56,31 +59,23 @@ export class RegisterComponent {
 
       // Clear unrelated data for non-athlete types
       if (userType !== 'athlete') {
-        delete userData.age;
-        delete userData.gender;
-        delete userData.weight;
-        delete userData.height;
-        delete userData.city_of_birth;
-        delete userData.country_of_birth;
-        delete userData.sports;
-        delete userData.profile_type;
+        const fieldsToRemove = ['age', 'gender', 'weight', 'height', 'city_of_birth', 'country_of_birth', 'sports', 'profile_type'];
+        fieldsToRemove.forEach(field => delete userData[field]);
       }
 
       this.authService.registerUser(userData).subscribe({
         next: (response) => {
           console.log('User registered successfully:', response);
-          this.navigateToDashboard(userType);
+          this.router.navigate(['/login']);
         },
         error: (error) => {
           console.error('Registration error:', error);
+          this.snackBar.open('Error al crear el evento', 'Cerrar', { duration: 3000 });
         }
       });
     } else {
       console.error('Form is not valid');
+      this.snackBar.open('Por favor, complete los campos requeridos.', 'Cerrar', { duration: 3000 });
     }
-  }
-
-  private navigateToDashboard(userType: UserType) {
-    this.router.navigate([routes[userType] || '/']);
   }
 }

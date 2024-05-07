@@ -1,5 +1,6 @@
 from google.cloud import pubsub_v1
-from ..models.user import Athlete, ComplementaryServicesProfessional, EventOrganizer, db
+from ..models.user import Athlete, ComplementaryServicesProfessional, EventOrganizer, db, User
+from werkzeug.security import generate_password_hash
 import json
 
 class CreateUserCommandHandler:
@@ -13,7 +14,16 @@ class CreateUserCommandHandler:
             'complementary_services_professional': ComplementaryServicesProfessional,
             'event_organizer': EventOrganizer
         }
+        existing_user = User.query.filter_by(id_number=data['id_number']).first()
+        if existing_user:
+            return {'status': False, 'message': 'ID number already registered'}
+        
         user_class = user_classes.get(user_type, Athlete)  # Default to Athlete
+
+        # Hash the password before storing it
+        if 'password' in data:
+            data['password_hash'] = generate_password_hash(data.pop('password'))
+        
         user = user_class(**data)
         db.session.add(user)
         db.session.commit()
