@@ -20,9 +20,11 @@ import { TrainingPlanComponent } from './modules/professional-services/component
 import { MealPlanComponent } from './modules/professional-services/components/meal-plan/meal-plan.component';
 import { TrainingHistoryComponent } from './modules/athlete/components/training-history/training-history.component';
 import { FoodInfoComponent } from './modules/athlete/components/food-info/food-info.component';
+import { UnauthorizedComponent } from './core/components/unauthorized/unauthorized.component';
 
 export const routes: Routes = [
   {path: '', component:WelcomePageComponent},
+  {path: 'unauthorized', component: UnauthorizedComponent},
   {path: 'training-plan', component: TrainingPlanComponent},
   {path: 'training-history', component: TrainingHistoryComponent},
   {path: 'create-service', component: CreateServiceComponent},
