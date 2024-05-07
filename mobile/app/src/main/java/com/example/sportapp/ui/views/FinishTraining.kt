@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
+import com.example.sportapp.UtilRedirect
 import com.example.sportapp.data.model.ReceiveSesionDataResponse
 import com.example.sportapp.data.model.StopTrainingResponse
 import com.example.sportapp.data.model.TrainingMetricsCalculatedResponse
@@ -41,22 +42,8 @@ class FinishTraining : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_finish_training)
-
-        val ivHome = findViewById<ImageView>(R.id.ivHome)
-        val ivRunExe = findViewById<ImageView>(R.id.ivRunExe)
+        setUpNavigationButtons()
         val btnFTPVO2 = findViewById<Button>(R.id.btnStart)
-        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
-
-
-
-
-        //Redirige a la Actividad Device
-        btnDevice.setOnClickListener{
-            val device = Intent(this, ConnectDevice::class.java)
-            startActivity(device)
-        }
-
-        //Variables de la vista
         val tvwTypeRun = findViewById<TextView>(R.id.tvwType)
         val tvwTimeTotal = findViewById<TextView>(R.id.tvwTimeTotal)
         val tvwDateTraining = findViewById<TextView>(R.id.tvwDateTraining)
@@ -64,16 +51,6 @@ class FinishTraining : AppCompatActivity() {
         val tvwFTP = findViewById<TextView>(R.id.tvwFTP)
         val tvwVO2 = findViewById<TextView>(R.id.tvwVO2)
         sensor.start()
-
-        ivHome.setOnClickListener{
-            val home = Intent(this, Home::class.java)
-            startActivity(home)
-        }
-
-        ivRunExe.setOnClickListener{
-            val home = Intent(this, StartTraining::class.java)
-            startActivity(home)
-        }
 
         btnFTPVO2.setOnClickListener{
             tvwVO2.text = getString(R.string.prompt_vo2_training) //"FTP :"
@@ -170,6 +147,26 @@ class FinishTraining : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun setUpNavigationButtons() {
+        val btnRunExe = findViewById<ImageView>(R.id.ivRunExe)
+        val btnExit = findViewById<ImageView>(R.id.ivHome)
+        val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
+        val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
+        val btnDashboard = findViewById<ImageView>(R.id.ivClockW)
+        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
+        val btnSuggestRoutes = findViewById<ImageView>(R.id.ivRun)
+        val btnSuggest = findViewById<ImageView>(R.id.ivSugerencias)
+
+        btnDevice.setOnClickListener{ UtilRedirect().redirectToDeviceActivity(this)}
+        btnRunExe.setOnClickListener{ UtilRedirect().redirectToStartTrainingActivity(this)}
+        btnExit.setOnClickListener{ UtilRedirect().redirectToHomeActivity(this)}
+        btnCalendar.setOnClickListener{ UtilRedirect().redirectToCalendarEventsActivity(this)}
+        btnNotifications.setOnClickListener{ UtilRedirect().redirectToNotificationsActivity(this)}
+        btnDashboard.setOnClickListener{ UtilRedirect().redirectToDashboardTrainingActivity(this)}
+        btnSuggestRoutes.setOnClickListener{ UtilRedirect().redirectToSuggestRoutesActivity(this)}
+        btnSuggest.setOnClickListener{ UtilRedirect().redirectToSuggestsActivity(this)}
     }
 
     fun showToast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {
