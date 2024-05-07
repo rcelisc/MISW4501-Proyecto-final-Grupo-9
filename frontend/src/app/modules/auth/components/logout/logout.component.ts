@@ -1,26 +1,16 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../../../services/auth.service';
 import { Router } from '@angular/router';
-import { AuthService } from './services/auth.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-logout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterModule],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  imports: [],
+  templateUrl: './logout.component.html',
+  styleUrl: './logout.component.scss'
 })
-export class AppComponent {
-  title = 'SportApp';showLogoutButton: boolean = false;
-
-  constructor(private router: Router, private authService: AuthService) {
-    // Listen to routing changes
-    this.router.events.subscribe(() => {
-      // Determine if the logout button should be displayed
-      this.showLogoutButton = !['/', '/login', '/register'].includes(this.router.url);
-    });
-  }
+export class LogoutComponent {
+  constructor(private authService: AuthService, private router: Router) {}
 
   logout() {
     const token = localStorage.getItem('token');
@@ -47,4 +37,5 @@ export class AppComponent {
     localStorage.removeItem('userRole');
     localStorage.clear();
   }
+
 }

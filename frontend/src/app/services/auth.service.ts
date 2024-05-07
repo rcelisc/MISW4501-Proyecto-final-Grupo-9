@@ -34,8 +34,20 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/login`, userData);
   }
 
+  logoutUser(userId: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}/logout`, {user_id: userId}, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    });
+  }
+
   getUserById(userId: number) {
     return this.http.get<any>(`${this.baseUrlQueries}users/${userId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    });
+  }
+
+  getUsers(userType: string): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrlQueries}users/get?type=${userType}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     });
   }

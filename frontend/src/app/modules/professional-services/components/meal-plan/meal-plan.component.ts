@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { NutritionPlanService } from '../../../../services/nutrition-plan.service';
+import { AuthService } from '../../../../services/auth.service';
 import { MaterialModule } from '../../../../shared/material.module';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
@@ -17,13 +18,15 @@ import { SocketService } from '../../../../services/socket.service'
   styleUrl: './meal-plan.component.scss'
 })
 
-export class MealPlanComponent {
+export class MealPlanComponent implements OnInit{
   formulario: FormGroup;
+  users: any[] = [];
   socketSubscription!: Subscription;
 
   constructor(
     private fb: FormBuilder, 
     private nutritionPlanService: NutritionPlanService,
+    private authService: AuthService,
     private snackBar: MatSnackBar,
     private router: Router,
     private socketService: SocketService
@@ -38,6 +41,7 @@ export class MealPlanComponent {
     }
 
     ngOnInit() {
+      this.loadUsers('athlete');
       this.socketSubscription = this.socketService.fromEvent<any>('nutrition_plan_notification').subscribe({
         next: (data) => {
           console.log('Notification Received:', data);
@@ -54,6 +58,21 @@ export class MealPlanComponent {
       if (this.socketSubscription) {
         this.socketSubscription.unsubscribe();
       }
+    }
+
+    loadUsers(userType: string = 'athlete') {
+      this.authService.getUsers(userType).subscribe({
+        next: (response) => {
+          this.users = response;
+        },
+        error: (error) => {
+          console.error('Error while fetching users:', error);
+          this.snackBar.open('Error while fetching users. Please try again later.', 'Close', {
+            duration: 3000,
+            panelClass: ['snack-bar-error']
+          });
+        }
+      });
     }
 
     crearPlanAlimentacion() {

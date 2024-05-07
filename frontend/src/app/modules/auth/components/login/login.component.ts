@@ -38,7 +38,7 @@ export class LoginComponent {
           this.router.navigate(['/athlete-dashboard']);
         } else if (decoded.role === 'event_organizer') {
           this.router.navigate(['/organizer-dashboard']);
-        } else if (decoded.role === 'professional_services') {
+        } else if (decoded.role === 'complementary_services_professional') {
           this.router.navigate(['/professional-dashboard']);
         } else {
           this.router.navigate(['/login']); // Redirect if the role is not recognized

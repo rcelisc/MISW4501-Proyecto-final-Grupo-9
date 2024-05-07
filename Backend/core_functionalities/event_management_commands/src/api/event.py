@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 
 from ..commands.add_user_to_event import AddUserToEventCommand
 from ..commands.update_event import UpdateEventCommandHandler
@@ -20,6 +20,7 @@ def create_event():
         return jsonify({"error": str(e)}), 400
 
 @event_blueprint.route('/events/<int:event_id>/publish', methods=['POST'])
+@token_required('event_organizer')
 def publish_event(event_id):
     handler = PublishEventCommandHandler()
     try:
@@ -29,6 +30,7 @@ def publish_event(event_id):
         return jsonify({"error": str(e)}), 400
 
 @event_blueprint.route('/events/<int:event_id>', methods=['PUT'])
+@token_required('event_organizer')
 def update_event(event_id):
     data = request.json
     handler = UpdateEventCommandHandler()
@@ -40,8 +42,9 @@ def update_event(event_id):
         return jsonify({"error": str(e)}), 400
     
 @event_blueprint.route('/events/<int:event_id>/add', methods=['POST'])
+@token_required('athlete')
 def add_user(event_id):
-    user_id = request.json.get('user_id')
+    user_id = g.current_user_id
     try:
         command = AddUserToEventCommand(user_id=user_id, event_id=event_id)
         command.execute()
