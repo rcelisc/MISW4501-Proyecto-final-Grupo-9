@@ -1,6 +1,7 @@
 from flask import Blueprint, request, redirect, session, url_for, jsonify
 import requests
 import os
+from ..middlewares.auth import token_required
 
 strava_auth_blueprint = Blueprint('strava_auth', __name__)
 
@@ -9,6 +10,7 @@ CLIENT_SECRET = os.getenv('STRAVA_CLIENT_SECRET')
 REDIRECT_URI = os.getenv('STRAVA_REDIRECT_URI')
 
 @strava_auth_blueprint.route('/authorize_strava')
+@token_required( 'athlete')
 def authorize_strava():
     strava_auth_url = f"https://www.strava.com/oauth/authorize?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&approval_prompt=force&scope=read,activity:read"
     return redirect(strava_auth_url)

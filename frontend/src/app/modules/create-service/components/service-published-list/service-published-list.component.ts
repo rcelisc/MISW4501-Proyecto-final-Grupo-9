@@ -49,8 +49,7 @@ export class ServicePublishedListComponent {
   }
 
   enrollEvent(eventId: number): void {
-    const userId = 3; // Hardcoded user ID for now
-    this.createEventService.enrollEvent(eventId, userId).subscribe({
+    this.createEventService.enrollEvent(eventId).subscribe({
       next: (response) => {
         console.log('Enrollment successful');
         const event = this.eventsDataSource.data.find((e: any) => e.id === eventId);
