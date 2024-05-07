@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sportapp.ui.home.Home
+import com.example.sportapp.UtilRedirect
 
 class LoginScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,11 +15,8 @@ class LoginScreen : AppCompatActivity() {
 
         val btnLoginE = findViewById<Button>(R.id.btnLogin)
 
-
-        //Redirige a la Actividad Home.
         btnLoginE.setOnClickListener {
-            val home = Intent(this, Home::class.java)
-            startActivity(home)
+            UtilRedirect().redirectToHomeActivity(this@LoginScreen)
         }
 
         // Ponemos VALORES por defecto usuario en 1. mientras se hace HU Login.

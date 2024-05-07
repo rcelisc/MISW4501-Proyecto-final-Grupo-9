@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sportapp.LoginScreen
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
+import com.example.sportapp.UtilRedirect
 import com.example.sportapp.data.services.FitnessSensor
 import com.example.sportapp.data.services.FitnessSensorListener
 
@@ -36,55 +37,11 @@ class ConnectDevice : AppCompatActivity() , FitnessSensorListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connect_device)
-        val btnRunExe = findViewById<ImageView>(R.id.ivRunExe)
-        val btnExit = findViewById<ImageView>(R.id.ivHome)
-        val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
-        val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
-        val btnDashboard = findViewById<ImageView>(R.id.ivClockW)
-        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
         val btnStartDevice = findViewById<Button>(R.id.btnStartDevice)
 
-        //Redirige a la Actividad Device
-        btnDevice.setOnClickListener{
-            val device = Intent(this, ConnectDevice::class.java)
-            startActivity(device)
-        }
-
-        //Redirige a la Actividad Iniciar Entrenamiento.
-        btnRunExe.setOnClickListener{
-            val startTraining = Intent(this, StartTraining::class.java)
-            startActivity(startTraining)
-        }
-
-        //Cerrar Sesion.
-        btnExit.setOnClickListener{
-            val exitApp = Intent(this, LoginScreen::class.java)
-            startActivity(exitApp)
-        }
-
-        //Redirige a la Actividad Calendario de Eventos.
-        btnCalendar.setOnClickListener{
-            val calendar = Intent(this, CalendarEvents::class.java)
-            startActivity(calendar)
-        }
-
-        btnNotifications.setOnClickListener{
-            val notif = Intent(this, Notifications::class.java)
-            startActivity(notif)
-        }
-
-
-        btnDashboard.setOnClickListener{
-            val dash = Intent(this, DashboardTraining::class.java)
-            startActivity(dash)
-        }
-
+        setUpNavigationButtons()
         btnStartDevice.setOnClickListener{
-            //val startDevice = Intent(this, DashboardTraining::class.java)
-            //startActivity(startDevice)
             SportApp.startDevice = true
-
-
             sensor.setListener(this@ConnectDevice) // Pasa una instancia de ConnectDevice como oyente
             sensor.start()
 
@@ -116,6 +73,26 @@ class ConnectDevice : AppCompatActivity() , FitnessSensorListener {
         }, 0) // inicializa selectedItemIndex en 0 para el primer elemento
 
         recyclerView.adapter = adapter
+    }
+
+    private fun setUpNavigationButtons() {
+        val btnRunExe = findViewById<ImageView>(R.id.ivRunExe)
+        val btnExit = findViewById<ImageView>(R.id.ivHome)
+        val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
+        val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
+        val btnDashboard = findViewById<ImageView>(R.id.ivClockW)
+        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
+        val btnSuggestRoutes = findViewById<ImageView>(R.id.ivRun)
+        val btnSuggest = findViewById<ImageView>(R.id.ivSugerencias)
+
+        btnDevice.setOnClickListener{ UtilRedirect().redirectToDeviceActivity(this)}
+        btnRunExe.setOnClickListener{ UtilRedirect().redirectToStartTrainingActivity(this)}
+        btnExit.setOnClickListener{ UtilRedirect().redirectToHomeActivity(this)}
+        btnCalendar.setOnClickListener{ UtilRedirect().redirectToCalendarEventsActivity(this)}
+        btnNotifications.setOnClickListener{ UtilRedirect().redirectToNotificationsActivity(this)}
+        btnDashboard.setOnClickListener{ UtilRedirect().redirectToDashboardTrainingActivity(this)}
+        btnSuggestRoutes.setOnClickListener{ UtilRedirect().redirectToSuggestRoutesActivity(this)}
+        btnSuggest.setOnClickListener{ UtilRedirect().redirectToSuggestsActivity(this)}
     }
 
     private inner class Adapter(private val dataList: List<String>, private val listener: OnItemClickListener, private var selectedItemIndex: Int) : RecyclerView.Adapter<Adapter.ViewHolder>() {

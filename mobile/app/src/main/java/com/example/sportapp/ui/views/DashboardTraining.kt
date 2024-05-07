@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sportapp.LoginScreen
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
+import com.example.sportapp.UtilRedirect
 import com.example.sportapp.data.model.CalendarEvent
 import com.example.sportapp.data.model.TrainingsSesionsResponse
 import com.example.sportapp.data.repository.DataRepository
@@ -33,51 +34,8 @@ class DashboardTraining : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard_training)
-        val btnRunExe = findViewById<ImageView>(R.id.ivRunExe)
-        val btnExit = findViewById<ImageView>(R.id.ivHome)
-        //  val btnExit1 = findViewById<TextView>(R.id.tvwCerrarSesion)
-        val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
-        val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
-        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
+        setUpNavigationButtons()
 
-
-
-
-        //Redirige a la Actividad Device
-        btnDevice.setOnClickListener{
-            val device = Intent(this, ConnectDevice::class.java)
-            startActivity(device)
-        }
-
-        //Redirige a la Actividad Iniciar Entrenamiento.
-        btnRunExe.setOnClickListener{
-            val startTraining = Intent(this, StartTraining::class.java)
-            startActivity(startTraining)
-        }
-
-        //Cerrar Sesion.
-        btnExit.setOnClickListener{
-            val exitApp = Intent(this, LoginScreen::class.java)
-            startActivity(exitApp)
-        }
-
-//        btnExit1.setOnClickListener{
-//            val exitApp = Intent(this, LoginScreen::class.java)
-//            startActivity(exitApp)
-//        }
-
-        //Redirige a la Actividad Calendario de Eventos.
-        btnCalendar.setOnClickListener{
-            val calendar = Intent(this, CalendarEvents::class.java)
-            startActivity(calendar)
-        }
-
-        btnNotifications.setOnClickListener{
-            val notif = Intent(this, Notifications::class.java)
-            startActivity(notif)
-        }
-
-        /**/
         //Tabla de eventos
         val recyclerView = findViewById<RecyclerView>(R.id.rvTrainings)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -110,6 +68,26 @@ class DashboardTraining : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun setUpNavigationButtons() {
+        val btnRunExe = findViewById<ImageView>(R.id.ivRunExe)
+        val btnExit = findViewById<ImageView>(R.id.ivHome)
+        val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
+        val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
+        val btnDashboard = findViewById<ImageView>(R.id.ivClockW)
+        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
+        val btnSuggestRoutes = findViewById<ImageView>(R.id.ivRun)
+        val btnSuggest = findViewById<ImageView>(R.id.ivSugerencias)
+
+        btnDevice.setOnClickListener{ UtilRedirect().redirectToDeviceActivity(this)}
+        btnRunExe.setOnClickListener{ UtilRedirect().redirectToStartTrainingActivity(this)}
+        btnExit.setOnClickListener{ UtilRedirect().redirectToHomeActivity(this)}
+        btnCalendar.setOnClickListener{ UtilRedirect().redirectToCalendarEventsActivity(this)}
+        btnNotifications.setOnClickListener{ UtilRedirect().redirectToNotificationsActivity(this)}
+        btnDashboard.setOnClickListener{ UtilRedirect().redirectToDashboardTrainingActivity(this)}
+        btnSuggestRoutes.setOnClickListener{ UtilRedirect().redirectToSuggestRoutesActivity(this)}
+        btnSuggest.setOnClickListener{ UtilRedirect().redirectToSuggestsActivity(this)}
     }
 
 
