@@ -5,7 +5,8 @@ from src.main import create_app
 from src.extensions import db
 from src.models.user import Athlete, ComplementaryServicesProfessional, EventOrganizer
 import json
-
+from datetime import datetime, timedelta
+import jwt
 class TestUserManagement(TestCase):
     def create_app(self):
         # Set up your Flask application with testing configuration
@@ -14,13 +15,23 @@ class TestUserManagement(TestCase):
         return app
 
     def setUp(self):
+        super(TestUserManagement, self).setUp()
         # Create the database tables if not already present
         db.create_all()
+        self.valid_token = self.generate_fake_token('athlete')
 
     def tearDown(self):
         # Drop all data after tests run
         db.session.remove()
         db.drop_all()
+    
+    def generate_fake_token(self,role):
+        payload = {
+            'user_id': 1,
+            'role': role,
+            'exp': datetime.utcnow() + timedelta(days=1)
+        }
+        return jwt.encode(payload, 'login_key', algorithm='HS256')
 
     def test_create_user_athlete(self):
         # Data for creating a new user
@@ -98,7 +109,8 @@ class TestUserManagement(TestCase):
             mock_publisher.publish.return_value = None
 
             # Simulate POST request to the demographic data update endpoint
-            response = self.client.post(f'/users/{user.id}/demographic_data', json=demographic_data)
+            headers = {'Authorization': 'Bearer ' + self.valid_token}
+            response = self.client.post(f'/users/{user.id}/demographic_data', json=demographic_data, headers=headers)
             self.assertStatus(response, 200)
 
             # Check the publish method was called correctly
@@ -143,7 +155,8 @@ class TestUserManagement(TestCase):
             mock_publisher.publish.return_value = None
 
             # Simulate POST request to the sports habit update endpoint
-            response = self.client.post(f'/users/{user.id}/sports_habits', json=sports_habit_data)
+            headers = {'Authorization': 'Bearer ' + self.valid_token}
+            response = self.client.post(f'/users/{user.id}/sports_habits', json=sports_habit_data, headers=headers)
             self.assertStatus(response, 200)
 
             # Check the publish method was called correctly
@@ -152,6 +165,51 @@ class TestUserManagement(TestCase):
                 "data": sports_habit_data
             }).encode('utf-8')
             mock_publisher.publish.assert_called_with('projects/dummy/topics/sports-habit-events', expected_event_data)
+
+    def test_handle_food_data(self):
+        # Add a user to the database to update
+        user_data = {
+            "name": "John",
+            "surname": "Doe",
+            "id_type": "passport",
+            "id_number": "1234567890",
+            "city_of_living": "New York",
+            "country_of_living": "USA",
+            "weight": 70,
+            "height": 175
+        }
+        user = Athlete(**user_data)
+        db.session.add(user)
+        db.session.commit()
+
+        # Food data to be updated
+        food_data = {
+            "user_id": "1",
+            "daily_calories": 2500,
+            "daily_protein": 100,
+            "daily_liquid": 70,
+            "daily_carbs": 300,
+            "meal_frequency": "1 x 3 meals, 2 x 2 snacks"
+        }
+
+        # Patch the database commit and the pubsub client
+        with patch('src.models.user.db.session.commit'), \
+             patch('google.cloud.pubsub_v1.PublisherClient') as mock_pubsub:
+            mock_publisher = mock_pubsub.return_value
+            mock_publisher.topic_path.return_value = 'projects/dummy/topics/food-events'
+            mock_publisher.publish.return_value = None
+
+            # Simulate POST request to the food data update endpoint
+            headers = {'Authorization': 'Bearer ' + self.valid_token}
+            response = self.client.post(f'/users/{user.id}/food_data', json=food_data, headers=headers)
+            self.assertStatus(response, 200)
+
+            # Check the publish method was called correctly
+            expected_event_data = json.dumps({
+                "type": "FoodDataUpdated",
+                "data": food_data
+            }).encode('utf-8')
+            mock_publisher.publish.assert_called_with('projects/dummy/topics/food-events', expected_event_data)
 
 if __name__ == '__main__':
     unittest.main()

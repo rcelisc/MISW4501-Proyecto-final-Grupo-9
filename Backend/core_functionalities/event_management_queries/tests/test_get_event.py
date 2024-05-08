@@ -6,7 +6,8 @@ from datetime import datetime
 from src.main import create_app
 from src.extensions import db
 from src.models.event import Event
-
+from datetime import datetime, timedelta
+import jwt
 class TestEventQueries(TestCase):
 
     def create_app(self):
@@ -15,12 +16,22 @@ class TestEventQueries(TestCase):
         return app
 
     def setUp(self):
+        super(TestEventQueries, self).setUp()
         db.create_all()
         self.create_initial_events()
+        self.valid_token = self.generate_fake_token('event_organizer')
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+    
+    def generate_fake_token(self,role):
+        payload = {
+            'user_id': 1,
+            'role': role,
+            'exp': datetime.utcnow() + timedelta(days=1)
+        }
+        return jwt.encode(payload, 'login_key', algorithm='HS256')
 
     def create_initial_events(self):
         event1 = Event(
@@ -52,22 +63,30 @@ class TestEventQueries(TestCase):
         db.session.commit()
 
     def test_get_events(self):
-        response = self.client.get('/events/get')
+        self.valid_token = self.generate_fake_token('event_organizer')
+        headers = {'Authorization': f'Bearer {self.valid_token}'}
+        response = self.client.get('/events/get', headers=headers)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json), 2)  # Expecting two events
 
     def test_get_event(self):
-        response = self.client.get('/events/1')
+        self.valid_token = self.generate_fake_token('event_organizer')
+        headers = {'Authorization': f'Bearer {self.valid_token}'}
+        response = self.client.get('/events/1', headers=headers)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Public Event', response.json['name'])
 
     def test_get_nonexistent_event(self):
-        response = self.client.get('/events/999')
+        self.valid_token = self.generate_fake_token('event_organizer')
+        headers = {'Authorization': f'Bearer {self.valid_token}'}
+        response = self.client.get('/events/999', headers=headers)
         self.assertEqual(response.status_code, 404)
         self.assertIn('Event not found', response.json['error'])
 
     def test_get_published_events(self):
-        response = self.client.get('/events/published')
+        self.valid_token = self.generate_fake_token('event_organizer')
+        headers = {'Authorization': f'Bearer {self.valid_token}'}
+        response = self.client.get('/events/published', headers=headers)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json), 1)  # Only one published event
         self.assertIn('Public Event', response.json[0]['name'])
@@ -75,7 +94,9 @@ class TestEventQueries(TestCase):
     def test_get_user_calendar(self):
         with patch('src.queries.get_user_calendar.GetUserCalendarQueryHandler.execute') as mock_execute:
             mock_execute.return_value = [{'event_id': 1, 'name': 'User Event'}]
-            response = self.client.get('/user/123/calendar')
+            self.valid_token = self.generate_fake_token('athlete')
+            headers = {'Authorization': f'Bearer {self.valid_token}'}
+            response = self.client.get('/user/123/calendar', headers=headers)
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.json[0]['name'], 'User Event')
 
