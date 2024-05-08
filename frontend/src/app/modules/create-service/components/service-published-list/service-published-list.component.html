@@ -19,8 +19,8 @@
         <ng-container matColumnDef="disponibilidad">
             <th mat-header-cell *matHeaderCellDef> Disponibilidad </th>
             <td mat-cell *matCellDef="let service">
-            <button *ngIf="!service.purchased" (click)="purchaseService(service)">Comprar</button>
-            <span *ngIf="service.purchased">Comprado</span>
+                <button *ngIf="!service.purchased" (click)="purchaseService(service.id)">Comprar</button>
+                <span *ngIf="service.purchased">Comprado</span>
             </td>
         </ng-container>
     
@@ -53,8 +53,8 @@
               <ng-container matColumnDef="disponibilidad">
                 <th mat-header-cell *matHeaderCellDef> Disponibilidad </th>
                 <td mat-cell *matCellDef="let event">
-                <button *ngIf="!event.enrolled" (click)="enrollEvent(event.id)">Inscribir</button>
-                <span *ngIf="event.enrolled">Inscrito</span>
+                    <button *ngIf="!event.enrolled" (click)="enrollEvent(event.id)">Inscribir</button>
+                    <span *ngIf="event.enrolled">Inscrito</span>
                 </td>
             </ng-container>
           <tr mat-header-row *matHeaderRowDef="eventsDisplayedColumns"></tr>
