@@ -30,7 +30,7 @@ def get_published_events():
     events_data = handler.handle(status='published')
     return jsonify(events_data), 200
 
-@event_blueprint.route('/user/<int:user_id>/calendar', methods=['GET'])
+@event_blueprint.route('/events/user/<int:user_id>', methods=['GET'])
 @token_required('athlete')
 def get_user_calendar(user_id):
     query = GetUserCalendarQueryHandler(user_id=user_id)
