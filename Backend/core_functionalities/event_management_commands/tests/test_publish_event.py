@@ -4,6 +4,8 @@ from flask_testing import TestCase
 from src.main import create_app
 from src.extensions import db
 from src.models.event import Event
+from datetime import datetime, timedelta
+import jwt
 
 class TestPublishEvent(TestCase):
 
@@ -13,12 +15,22 @@ class TestPublishEvent(TestCase):
         return app
 
     def setUp(self):
+        super(TestPublishEvent, self).setUp()
         db.create_all()
         self.create_initial_events()
+        self.valid_token = self.generate_fake_token()
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+    
+    def generate_fake_token(self):
+        payload = {
+            'user_id': 1,
+            'role': 'event_organizer',
+            'exp': datetime.utcnow() + timedelta(days=1)
+        }
+        return jwt.encode(payload, 'login_key', algorithm='HS256')
 
     def create_initial_events(self):
         event = Event(
@@ -39,7 +51,8 @@ class TestPublishEvent(TestCase):
     @patch('src.commands.publish_event.PublishEventCommandHandler.handle')
     def test_publish_event_successfully(self, mock_handle):
         with self.client:
-            response = self.client.post('/events/1/publish')
+            headers = {'Authorization': f'Bearer {self.valid_token}'}
+            response = self.client.post('/events/1/publish', headers=headers)
             self.assertEqual(response.status_code, 200)
             self.assertIn("Event published successfully", response.json['message'])
 
@@ -47,7 +60,8 @@ class TestPublishEvent(TestCase):
     def test_publish_non_existent_event(self, mock_handle):
         mock_handle.side_effect = ValueError("Event not found")
         with self.client:
-            response = self.client.post('/events/999/publish')
+            headers = {'Authorization': f'Bearer {self.valid_token}'}
+            response = self.client.post('/events/999/publish', headers=headers)
             self.assertEqual(response.status_code, 400)
             self.assertIn("Event not found", response.json['error'])
 
@@ -55,7 +69,8 @@ class TestPublishEvent(TestCase):
     def test_publish_event_in_wrong_state(self, mock_handle):
         mock_handle.side_effect = ValueError("Event is not in a state that can be published")
         with self.client:
-            response = self.client.post('/events/1/publish')  # Assuming the initial state is not 'created'
+            headers = {'Authorization': f'Bearer {self.valid_token}'}
+            response = self.client.post('/events/1/publish', headers=headers)  # Assuming the initial state is not 'created'
             self.assertEqual(response.status_code, 400)
             self.assertIn("Event is not in a state that can be published", response.json['error'])
 

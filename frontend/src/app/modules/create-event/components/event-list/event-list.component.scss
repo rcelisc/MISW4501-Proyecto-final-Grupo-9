@@ -80,3 +80,32 @@ h2 {
     }
   }
 }
+
+.inner-table {
+  width: 96%; // Slightly smaller to create a nested look
+  margin: 10px auto; // Center the table with some margin
+  border-collapse: collapse; // Ensures borders are neat
+  border: 1px solid mat.get-color-from-palette(theme.$custom-primary, 300); // Soft border color
+
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid mat.get-color-from-palette(theme.$custom-primary, 100);
+  }
+
+  th {
+    background-color: mat.get-color-from-palette(theme.$custom-primary, 100); // Light background for headers
+    color: mat.get-color-from-palette(theme.$custom-primary, 900);
+  }
+
+  tr.user-detail-row:last-child td {
+    border-bottom: none; // Remove the bottom border for the last row
+  }
+}
+
+.user-details-container {
+  background-color: mat.get-color-from-palette(theme.$custom-primary, 50); // Light background for the expandable area
+  padding: 5px; // Padding around the inner table
+  border-radius: 4px; // Rounded corners for the inner table container
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); // Subtle shadow for depth
+}

@@ -16,9 +16,13 @@ def get_users():
 @token_required('athlete', 'complementary_services_professional', 'event_organizer')
 def get_user(user_id):
     current_user = g.current_user
-    if current_user.id != user_id:
+    # Allow event organizers to view any user's details
+    if current_user.type != 'event_organizer' and current_user.id != user_id:
         return jsonify({'message': 'Unauthorized to view this user'}), 403
 
     handler = GetUserByIdQueryHandler()
     user = handler.handle(user_id)
-    return jsonify(user), 200 if user else (jsonify({'message': 'User not found'}), 404)
+    if user:
+        return jsonify(user), 200
+    else:
+        return jsonify({'message': 'User not found'}), 404

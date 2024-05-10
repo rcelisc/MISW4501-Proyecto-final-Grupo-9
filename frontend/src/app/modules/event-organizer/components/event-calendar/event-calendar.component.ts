@@ -35,7 +35,7 @@ export class EventCalendarComponent implements OnInit {
     this.createEventService.getEvents().subscribe(eventsFromServer => {
       this.events = eventsFromServer.map(event => ({
         start: new Date(event.event_date),
-        end: new Date(new Date(event.event_date).getTime() + event.duration * 60000), // Duration is in minutes
+        end: new Date(new Date(event.event_date).getTime() + event.duration * 3600000), // Duration is in hours
         title: event.name,
         color: {
           primary: '#1e90ff',
