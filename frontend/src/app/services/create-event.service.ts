@@ -47,6 +47,11 @@ export class CreateEventService {
     return this.http.post(`${this.apiUrlCommands}/${eventId}/add`, {}, { headers: headers });
   }
 
+  getUserEnrolledEvents(userId: number): Observable<any[]> {
+    const headers = this.createAuthorizationHeader();
+    return this.http.get<any[]>(`${this.apiUrlQueries}/user/${userId}`, { headers });
+  }
+
   private createAuthorizationHeader(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
