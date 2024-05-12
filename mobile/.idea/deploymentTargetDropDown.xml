@@ -5,11 +5,26 @@
       <entry key="DashboardTrainingTest">
         <State />
       </entry>
-      <entry key="HomeTest">
+      <entry key="SuggestRoutesTest">
+        <State />
+      </entry>
+      <entry key="SuggestsTest">
         <State />
       </entry>
       <entry key="app">
-        <State />
+        <State>
+          <targetsSelectedWithDialog>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\celis\.android\avd\Small_Phone_API_VanillaIceCream.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetsSelectedWithDialog>
+        </State>
       </entry>
     </value>
   </component>
