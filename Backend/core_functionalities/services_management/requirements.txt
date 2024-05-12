@@ -18,3 +18,4 @@ Flask[async]
 Flask-Testing
 Flask-Migrate
 Flask-Cors
+pyjwt

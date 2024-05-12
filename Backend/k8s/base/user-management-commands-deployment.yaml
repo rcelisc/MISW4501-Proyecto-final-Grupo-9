@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-management-commands
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-management-commands
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: user-management-commands
+    spec:
+      containers:
+      - name: user-management-commands-container
+        image: gcr.io/miso-proyecto-de-grado-g09/user-management-commands:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3006
+        env:
+        - name: DATABASE_URL
+          value: postgresql://postgres:umCommands@db-user-management-commands:5432/db_user_management_commands
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /secrets/service-account.json
+        - name: STRAVA_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: strava-secrets
+              key: client-id
+        - name: STRAVA_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: strava-secrets
+              key: client-secret
+        - name: STRAVA_REDIRECT_URI
+          valueFrom:
+            secretKeyRef:
+              name: strava-secrets
+              key: redirect-uri
+        - name: FLASK_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: strava-secrets
+              key: flask-secret-key
+        volumeMounts:
+        - mountPath: /secrets
+          name: sa-key-volume
+          readOnly: true
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+      volumes:
+      - name: sa-key-volume
+        secret:
+          secretName: sa-key
+      restartPolicy: Always

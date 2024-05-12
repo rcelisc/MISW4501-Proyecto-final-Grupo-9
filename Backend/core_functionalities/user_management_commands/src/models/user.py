@@ -1,20 +1,35 @@
 from flask_sqlalchemy import SQLAlchemy
 from ..extensions import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     surname = db.Column(db.String(100))
     id_type = db.Column(db.String(50))
-    id_number = db.Column(db.String(50), nullable=False)
+    id_number = db.Column(db.String(50), nullable=False, unique=True)
     city_of_living = db.Column(db.String(100))
     country_of_living = db.Column(db.String(100))
     type = db.Column(db.String(50))
+    password_hash = db.Column(db.String(256))
+    current_token = db.Column(db.String(255))
+    is_active_session = db.Column(db.Boolean, default=False)
 
     __mapper_args__ = {
         'polymorphic_identity':'user',
         'polymorphic_on':type
     }
+
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+    
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 class Athlete(User):
     ethnicity = db.Column(db.String(50))

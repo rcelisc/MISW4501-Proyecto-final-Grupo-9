@@ -88,6 +88,29 @@ paths:
       responses:
         '200':
           description: Item added to event
+  /events/{event_id}/publish:
+    post:
+      summary: Publish an event
+      operationId: publishEvent
+      parameters:
+        - name: event_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://EVENT_MANAGEMENT_COMMANDS_URL/events/{event_id}/publish
+      responses:
+        '200':
+          description: Event published
+  /events/published:
+    get:
+      summary: Get all published events
+      operationId: getPublishedEvents
+      x-google-backend:
+        address: https://EVENT_MANAGEMENT_QUERIES_URL/events/published
+      responses:
+        '200':
+          description: Returns a list of published events
   /user/{user_id}/calendar:
     get:
       summary: Get user's calendar
@@ -103,6 +126,30 @@ paths:
         '200':
           description: Returns a list of events
   # Service Management
+  /nutrition-plans:
+    post:
+      summary: Create a nutrition plan
+      operationId: createNutritionPlan
+      x-google-backend:
+        address
+      requestBody:
+        description: Create Nutrition Plan
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/NutritionPlan'
+      responses:
+        '201':
+          description: Nutrition plan created
+    get:
+      summary: Get all nutrition plans
+      operationId: getNutritionPlans
+      x-google-backend:
+        address: https://SERVICE_MANAGEMENT_URL/nutrition-plans
+      responses:
+        '200':
+          description: Returns a list of nutrition plans
   /services:
     post:
       summary: Create a service
@@ -127,7 +174,45 @@ paths:
       responses:
         '200':
           description: Returns a list of services
+  /services/published:
+    get:
+      summary: Get all published services
+      operationId: getPublishedServices
+      x-google-backend:
+        address: https://SERVICE_MANAGEMENT_URL/services/published
+      responses:
+        '200':
+          description: Returns a list of published services
+  /services/{service_id}/publish:
+    post:
+      summary: Publish a service
+      operationId: publishService
+      parameters:
+        - name: service_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address
   # Training Management
+  /authorize-strava:
+    post:
+      summary: Authorize Strava
+      operationId: authorizeStrava
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_COMMANDS_URL/authorize-strava
+      responses:
+        '200':
+          description: Strava authorized
+  /strava-callback:
+    get:
+      summary: Strava callback
+      operationId: stravaCallback
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_COMMANDS_URL/strava-callback
+      responses:
+        '200':
+          description: Strava callback
   /calculate-ftp-vo2max:
     post:
       summary: Calculate FTP and VO2Max
@@ -222,15 +307,38 @@ paths:
       responses:
         '200':
           description: Session data received
-  /api/training/history:
+  /fetch-strava-activities:
     get:
-      summary: Get training history
-      operationId: getTrainingHistory
+      summary: Fetch Strava activities
+      operationId: fetchStravaActivities
       x-google-backend:
-        address: https://TRAINING_MANAGEMENT_QUERIES_URL/api/training/history
+        address: https://TRAINING_MANAGEMENT_QUERIES_URL/fetch-strava-activities
       responses:
         '200':
-          description: Returns a list of training sessions
+          description: Strava activities fetched
+  /activities:
+    get:
+      summary: Get activities
+      operationId: getActivities
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_QUERIES_URL/activities
+      responses:
+        '200':
+          description: Returns a list of activities
+  /training-plans/{profile}:
+    get:
+      summary: Get training plans
+      operationId: getTrainingPlans
+      parameters:
+        - name: profile
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_QUERIES_URL/training-plans/{profile}
+      responses:
+        '200':
+          description: Returns a list of training plans by profile
   /training-sessions:
     get:
       summary: Get training sessions
@@ -254,6 +362,142 @@ paths:
       responses:
         '200':
           description: Returns a single training session
+  /training-sessions/user/{user_id}:
+    get:
+      summary: Get training sessions by user
+      operationId: getTrainingSessionsByUser
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://TRAINING_MANAGEMENT_QUERIES_URL/training-sessions/user/{user_id}
+      responses:
+        '200':
+          description: Returns a list of training sessions by user
+  /users:
+    post:
+      summary: Create a user
+      operationId: createUser
+      x-google-backend:
+        address: https://USER_MANAGEMENT_URL/users
+      requestBody:
+        description: Create User
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/User'
+      responses:
+        '201':
+          description: User created
+    get:
+      summary: Get all users
+      operationId: getUsers
+      x-google-backend:
+        address: https://USER_MANAGEMENT_URL/users
+      responses:
+        '200':
+          description: Returns a list of users
+  /users/{user_id}:
+    get:
+      summary: Get a user
+      operationId: getUser
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://USER_MANAGEMENT_URL/users/{user_id}
+      responses:
+        '200':
+          description: Returns a single user
+  /users/{user_id}/demographic_data:
+    post:
+      summary: Add demographic data to a user
+      operationId: addDemographicData
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+      requestBody:
+        description: Demographic data to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/DemographicData'
+      x-google-backend:
+        address: https://USER_MANAGEMENT_URL/users/{user_id}/demographic_data
+      responses:
+        '200':
+          description: Demographic data added
+  /users/{user_id}/food_data:
+    post:
+      summary: Add food data to a user
+      operationId: addFoodData
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+      requestBody:
+        description: Food data to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/FoodData'
+      x-google-backend:
+        address: https://USER_MANAGEMENT_URL/users/{user_id}/food_data
+      responses:
+        '200':
+          description: Food data added
+  /users/{user_id}/sports_habits:
+    post:
+      summary: Add sports habits to a user
+      operationId: addSportsHabits
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+      requestBody:
+        description: Sports habits to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/SportsHabits'
+      x-google-backend:
+        address: https://USER_MANAGEMENT_URL/users/{user_id}/sports_habits
+      responses:
+        '200':
+          description: Sports habits added
+  /users/{user_id}/plan:
+    post:
+      summary: Add a plan to a user
+      operationId: addPlan
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+      requestBody:
+        description: Plan to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Plan'
+      x-google-backend:
+        address: https://USER_MANAGEMENT_URL/users/{user_id}/plan
+      responses:
+        '200':
+          description: Plan added
 
 definitions:
   Event:

@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SportInfoService } from '../../../../services/sport-info.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MaterialModule } from '../../../../shared/material.module';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-sport-info',
@@ -12,14 +13,15 @@ import { MaterialModule } from '../../../../shared/material.module';
   templateUrl: './sport-info.component.html',
   styleUrl: './sport-info.component.scss'
 })
-export class SportInfoComponent {
+export class SportInfoComponent implements OnInit{
   sportInfoForm: FormGroup;
-  userId: number = 1; // This should be dynamically set based on the logged-in user
+  userId: number = 0;
   constructor(
     private fb: FormBuilder,
     private sportInfoService: SportInfoService,
     private snackBar: MatSnackBar,
     private router: Router,
+    private authService: AuthService
   ){
     this.sportInfoForm = this.fb.group({
       training_frequency: [''],
@@ -28,6 +30,25 @@ export class SportInfoComponent {
       recovery_time : [''],
       training_pace: [''],
     });
+  }
+  
+  ngOnInit(): void {
+    this.setUserIdFromToken();
+  }
+
+  setUserIdFromToken() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = this.authService.decodeToken(token);
+      if (decodedToken && 'user_id' in decodedToken) {
+        this.userId = decodedToken.user_id;
+      } else {
+        console.error('Token is invalid or expired');
+        this.router.navigate(['/login']); // Redirect to login if the token is invalid or expired
+      }
+    } else {
+      this.router.navigate(['/login']); // Redirect to login if there's no token
+    }
   }
   
   onSubmit(): void {

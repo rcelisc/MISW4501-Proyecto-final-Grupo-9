@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DemographicInfoService } from '../../../../services/demographic-info.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MaterialModule } from '../../../../shared/material.module';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-demographic-info',
@@ -12,14 +13,15 @@ import { MaterialModule } from '../../../../shared/material.module';
   templateUrl: './demographic-info.component.html',
   styleUrl: './demographic-info.component.scss'
 })
-export class DemographicInfoComponent {
+export class DemographicInfoComponent implements OnInit{
   demographicInfoForm: FormGroup;
-  userId: number = 1; // This should be dynamically set based on the logged-in user
+  userId: number = 0;
   constructor(
     private fb: FormBuilder,
     private demographicInfoService: DemographicInfoService,
     private snackBar: MatSnackBar,
     private router: Router,
+    private authService: AuthService
   ){
     this.demographicInfoForm = this.fb.group({
       ethnicity: [''],
@@ -29,7 +31,26 @@ export class DemographicInfoComponent {
       respiratory_rate: [''],
     });
   }
+
+  ngOnInit(): void {
+      this.setUserIdFromToken();
+  }
   
+  setUserIdFromToken() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = this.authService.decodeToken(token);
+      if (decodedToken && 'user_id' in decodedToken) {
+        this.userId = decodedToken.user_id;
+      } else {
+        console.error('Token is invalid or expired');
+        this.router.navigate(['/login']); // Redirect to login if the token is invalid or expired
+      }
+    } else {
+      this.router.navigate(['/login']); // Redirect to login if there's no token
+    }
+  }
+
   onSubmit(): void {
     // Trigger validation for all form fields
     this.demographicInfoForm.markAllAsTouched();

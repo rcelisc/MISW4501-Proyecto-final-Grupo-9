@@ -3,10 +3,12 @@ from datetime import datetime
 from ..commands.training_session import StartTrainingSessionCommandHandler, StopTrainingSessionCommandHandler, ReceiveSessionDataCommandHandler
 import requests
 from ..models.strava_activity import StravaActivity, db
+from ..middlewares.auth import token_required
 
 training_session_blueprint = Blueprint('training_session', __name__)
 
 @training_session_blueprint.route('/start-training', methods=['POST'])
+@token_required('athlete')
 def start_training_session():
     data = request.json
     handler = StartTrainingSessionCommandHandler()
@@ -14,6 +16,7 @@ def start_training_session():
     return jsonify({"session_id": session_id}), 201
 
 @training_session_blueprint.route('/stop-training', methods=['POST'])
+@token_required('athlete')
 def stop_training_session():
     data = request.json
     handler = StopTrainingSessionCommandHandler()
@@ -21,6 +24,7 @@ def stop_training_session():
     return jsonify({"message": "Training session stopped successfully", "session_id": session_id}), 200
 
 @training_session_blueprint.route('/receive_session-data', methods=['POST'])
+@token_required('athlete')
 def submit_session_data():
     data = request.json
     handler = ReceiveSessionDataCommandHandler()
@@ -51,6 +55,7 @@ def fetch_strava_activities():
     return jsonify(activities)
 
 @training_session_blueprint.route('/activities', methods=['GET'])
+@token_required('athlete', 'complementary_services_professional')
 def get_activities():
     activities = StravaActivity.query.all()
     return jsonify([activity.to_dict() for activity in activities])

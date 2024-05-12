@@ -17,6 +17,7 @@ spec:
       containers:
       - name: event-management-queries-container
         image: gcr.io/miso-proyecto-de-grado-g09/event-management-queries:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3002
         env:
