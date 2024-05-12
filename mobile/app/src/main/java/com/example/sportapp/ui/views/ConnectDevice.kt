@@ -976,6 +976,96 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
         Log.e("ConnectDevice", "Error en la conexión Bluetooth: $message")
     }
 
+    private fun signIn(mGoogleApiClient: GoogleApiClient) {
+        val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+        Log.d("ConnectGoogle", "Entro SignIn")
+    }
+
+    // Implementa el método onActivityResult para manejar el resultado del inicio de sesión
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val result = data?.let { Auth.GoogleSignInApi.getSignInResultFromIntent(it) }
+            if (result != null) {
+                handleSignInResult(result)
+
+            }
+        }
+    }
+
+    // Implementa el método para manejar el resultado del inicio de sesión
+    private fun handleSignInResult(result: GoogleSignInResult) {
+        if (result.isSuccess) {
+            //val account = result.signInAccount
+            val account: GoogleSignInAccount? = result.signInAccount
+            Log.d("ConnectGoogle", "Conexión establecida correctamente : " + result.status + " " + account)
+            showToast(this@ConnectDevice,  "Conectado a la cuenta de google.")
+
+        } else {
+            // El inicio de sesión falló, muestra un mensaje de error o toma otras medidas.
+            Log.d("ConnectGoogle", "Error en la Conexión : " + result.status.statusMessage +  " SignInAccount : " + result.signInAccount)
+        }
+    }
+
+    // Configura Google Sign-In
+    fun configureSignIn() {
+        // Crea una instancia de GoogleSignInOptions con las opciones deseadas
+        Log.d("ConnectGoogle", "Inicion configuracion.")
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        // Crea un cliente de GoogleApiClient
+        val mGoogleApiClient = GoogleApiClient.Builder(this)
+            .enableAutoManage(this@ConnectDevice) {
+                Log.d("ConnectGoogle", "Error al crear el cliente mGoogleApiClient . ")
+            }
+            .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+            .build()
+
+
+        Log.d("ConnectGoogle", "GSO " + gso.account.toString())
+
+        // Iniciar sesión con Google
+        signIn(mGoogleApiClient)
+    }
+
+    override fun onConnected() {
+        // Se llama cuando la conexión Bluetooth se establece correctamente
+        Log.d("ConnectDevice", "Conexión establecida correctamente")
+        // Puedes enviar datos al dispositivo Bluetooth si es necesario
+        bluetoothManager.sendData("Hola desde el dispositivo Android!")
+        //Log.d("ConnectDevice", "Datos del dispositivo capturados : $inputStream")
+//        val inputStream = bluetoothManager.inputStream
+//        val jsonData = inputStream?.let { inputStreamToJson(it) }
+//        Log.d("ConnectDevice", "Datos del dispositivo capturados JSON : $jsonData")
+    }
+
+    fun inputStreamToJson(inputStream: InputStream): JSONObject {
+        val jsonStringBuilder = StringBuilder()
+
+        // Lee los datos del InputStream línea por línea y los agrega al StringBuilder
+        val bufferedReader = BufferedReader(InputStreamReader(inputStream))
+        var line: String?
+        while (bufferedReader.readLine().also { line = it } != null) {
+            jsonStringBuilder.append(line)
+        }
+
+        // Crea un objeto JSONObject a partir de la cadena JSON
+        return JSONObject(jsonStringBuilder.toString())
+    }
+
+    override fun onDisconnected() {
+        // Se llama cuando la conexión Bluetooth se desconecta
+        Log.d("ConnectDevice", "Conexión Bluetooth desconectada")
+    }
+    override fun onError(message: String) {
+        // Se llama cuando ocurre un error en la conexión Bluetooth
+        Log.e("ConnectDevice", "Error en la conexión Bluetooth: $message")
+    }
+
     private fun setUpNavigationButtons() {
         findViewById<MaterialButton>(R.id.ivRunExe).setOnClickListener { utilRedirect.redirectToActivity(this, StartTraining::class.java) }
         findViewById<MaterialButton>(R.id.ivHome).setOnClickListener { utilRedirect.redirectToActivity(this, Home::class.java) }
