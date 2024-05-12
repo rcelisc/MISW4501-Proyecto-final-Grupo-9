@@ -14,6 +14,11 @@ class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        setUpNavigationButtons()
+        initNumeration()
+    }
+
+    private fun setUpNavigationButtons() {
         // String appName = getString(R.string.app_name)
         val btnStrava = findViewById<ImageView>(R.id.imgStrava)
         val btnRunExe = findViewById<ImageView>(R.id.ivRunExe)
@@ -45,5 +50,11 @@ class Home : AppCompatActivity() {
         btnSuggest.setOnClickListener { utilRedirect.redirectToActivity(this, Suggests::class.java) }
     }
 
+    private fun  initNumeration() {
+        val tvVersion = findViewById<TextView>(R.id.tvwVersionName)
 
+        val packageInfo = packageManager.getPackageInfo(packageName, 0)
+        tvVersion.text = "v_" + packageInfo.versionName.toString()
+
+    }
 }
