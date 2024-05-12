@@ -39,7 +39,7 @@ export class AthleteCalendarComponent implements OnInit {
     this.createServiceService.getServicesPublished().subscribe((response: any) => {
       const eventsMapped = (response.events as any[]).map(event => ({
         start: new Date(event.event_date),
-        end: new Date(new Date(event.event_date).getTime() + event.duration * 60000),
+        end: new Date(new Date(event.event_date).getTime() + event.duration * 3600000),
         title: event.name,
         color: {
           primary: '#1e90ff', // blue for events

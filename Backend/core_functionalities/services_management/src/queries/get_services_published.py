@@ -1,3 +1,4 @@
+from flask import request
 from ..models.services import Service, db
 import requests
 import os
@@ -16,13 +17,18 @@ def get_services_and_events_published():
     return services, events
 
 def fetch_events():
+    token = request.headers.get('Authorization') 
     # Set a default URL in case the environment variable is not set
     base_url = os.getenv('EVENTS_SERVICE_URL', 'http://event_management_queries_container:3002')
     # CLOUD URL
     # response = requests.get('http://event-management-queries.default.svc.cluster.local:3002/events/published')
     # Build the full URL for fetching events
     full_url = f'{base_url}/events/published'
+    headers = {'Authorization': token}
 
     # Make the request and return the response
-    response = requests.get(full_url)
-    return response.json()  
+    response = requests.get(full_url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return [] 

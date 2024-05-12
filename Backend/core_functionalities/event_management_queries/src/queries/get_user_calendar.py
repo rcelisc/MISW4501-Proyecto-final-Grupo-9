@@ -12,6 +12,7 @@ class GetUserCalendarQueryHandler:
         ).all()
         print(f"Found events for user_id {self.user_id}: {events}")
         return [{
+            'id': event.id,
             'fecha': event.event_date.strftime('%Y-%m-%d %H:%M'),
             'nombre': event.name,
             'ubicación': event.location,

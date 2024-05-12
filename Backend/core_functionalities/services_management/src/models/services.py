@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, Float, Boolean, Integer
 from ..extensions import db
+from sqlalchemy.dialects.postgresql import JSON
 
 class Service(db.Model):
     __tablename__ = 'services'
@@ -9,6 +10,7 @@ class Service(db.Model):
     rate = Column(Float, nullable=False)
     available = Column(Boolean, default=True)
     status = Column(String, default='created', nullable=False)
+    clients = Column(JSON, default=lambda: {"users_ids": []})
 
     def __repr__(self):
         return f"<Service(name={self.name}, available={self.available})>"
