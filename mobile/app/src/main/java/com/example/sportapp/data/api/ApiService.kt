@@ -2,12 +2,13 @@ package com.example.sportapp.data.api
 
 import com.example.sportapp.data.model.CalendarEvent
 import com.example.sportapp.data.model.EventsSuggestionsResponse
-import com.example.sportapp.data.model.ReceiveSesionDataResponse
+import com.example.sportapp.data.model.ReceiveSessionDataResponse
 import com.example.sportapp.data.model.StartTrainingResponse
 import com.example.sportapp.data.model.StopTrainingResponse
 import com.example.sportapp.data.model.TrainingMetricsCalculatedResponse
 import com.example.sportapp.data.model.TrainingPlansResponse
-import com.example.sportapp.data.model.TrainingsSesionsResponse
+import com.example.sportapp.data.model.TrainingsSessionsResponse
+import com.example.sportapp.data.model.LoginResponse
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -36,9 +37,9 @@ interface StopTrainingService {
     fun stopTrainingService(@Body requestBody: RequestBody): Call<StopTrainingResponse>
 }
 
-interface ReceiveSesionDataService {
+interface ReceiveSessionDataService {
     @POST("/receive_session-data")
-    fun receiveSesionDataServiceService(@Body requestBody: RequestBody): Call<ReceiveSesionDataResponse>
+    fun receiveSessionDataServiceService(@Body requestBody: RequestBody): Call<ReceiveSessionDataResponse>
 }
 
 interface TrainingPlansService {
@@ -53,11 +54,11 @@ interface EventsSuggestionsService {
 
 interface TrainingSessionsService {
     @GET("/training-sessions/user/{userId}")
-    fun getTrainingUserService(@Path("userId") userId: Int): Call<List<TrainingsSesionsResponse>>
+    fun getTrainingUserService(@Path("userId") userId: Int): Call<List<TrainingsSessionsResponse>>
 }
 
-//interface ApiService {
-//    @GET("user/{userId}/calendar")
-//    //@GET("/user/1/calendar")
-//    fun getCalendarEvents(@Path("userId") userId: Int): Call<List<CalendarEvent>>
-//}
+interface AuthService {
+    @POST("login")
+    fun login(@Body requestBody: RequestBody): Call<LoginResponse>
+}
+

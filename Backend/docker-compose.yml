@@ -204,6 +204,8 @@ services:
   db_user_management_queries:
     image: postgres:13
     container_name: db_um_queries
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_DB: db_user_management_queries
       POSTGRES_USER: postgres

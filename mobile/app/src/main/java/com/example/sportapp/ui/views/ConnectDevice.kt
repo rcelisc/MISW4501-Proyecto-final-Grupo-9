@@ -1,13 +1,9 @@
 package com.example.sportapp.ui.views
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,142 +11,64 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sportapp.LoginScreen
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
 import com.example.sportapp.UtilRedirect
 import com.example.sportapp.data.services.FitnessSensor
 import com.example.sportapp.data.services.FitnessSensorListener
+import com.example.sportapp.ui.home.Home
 
-interface OnItemClickListener {
-    fun onItemClick(position: Int)
-}
-
-class ConnectDevice : AppCompatActivity() , FitnessSensorListener {
-
-    //private var selectedItemIndex: Int = RecyclerView.NO_POSITION
+class ConnectDevice : AppCompatActivity(), FitnessSensorListener {
     private val sensor = FitnessSensor()
     private lateinit var powerOutputTextView: TextView
     private lateinit var maxHeartRateTextView: TextView
     private lateinit var restingHeartRateTextView: TextView
+    private val utilRedirect = UtilRedirect()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connect_device)
-        val btnStartDevice = findViewById<Button>(R.id.btnStartDevice)
 
-        setUpNavigationButtons()
-        btnStartDevice.setOnClickListener{
-            SportApp.startDevice = true
-            sensor.setListener(this@ConnectDevice) // Pasa una instancia de ConnectDevice como oyente
-            sensor.start()
-
-            val measurements = sensor.generateManualMeasurements()
-            val (powerOutput, maxHeartRate, restingHeartRate) = measurements ?: Triple(0, 0, 0)
-            onMeasurementsChanged(powerOutput, maxHeartRate, restingHeartRate)
-
-        }
-
-        //Inicializa los textviws.
         powerOutputTextView = findViewById(R.id.powerOutputTextView)
         maxHeartRateTextView = findViewById(R.id.maxHeartRateTextView)
         restingHeartRateTextView = findViewById(R.id.restingHeartRateTextView)
 
-        //Inicializa datos de entrenamiento.
-        val dataList = getString(R.string.device).split(",") // Lista de datos
+        findViewById<Button>(R.id.btnStartDevice).setOnClickListener {
+            SportApp.startDevice = true
+            sensor.setListener(this)
+            sensor.start()
+            val measurements = sensor.generateManualMeasurements()
+            measurements?.let { (powerOutput, maxHeartRate, restingHeartRate) ->
+                onMeasurementsChanged(powerOutput, maxHeartRate, restingHeartRate)
+            }
+        }
+
+        setUpRecyclerView()
+        setUpNavigationButtons()
+    }
+
+    private fun setUpRecyclerView() {
+        val dataList = getString(R.string.device).split(",")
 
         val recyclerView = findViewById<RecyclerView>(R.id.rvTypeDevice)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-        val adapter = Adapter(dataList, object : OnItemClickListener {
+        recyclerView.adapter = Adapter(dataList, object : OnItemClickListener {
             override fun onItemClick(position: Int) {
                 val selectedItemName = dataList[position]
-                val message =  getString(R.string.promt_device) + " " + selectedItemName + ""
-                Log.d("DEBUG", "Item seleccionado : " + position.toString())
-                showToast(this@ConnectDevice,  message)
-
+                Toast.makeText(this@ConnectDevice, getString(R.string.promt_device) + " $selectedItemName", Toast.LENGTH_SHORT).show()
             }
-        }, 0) // inicializa selectedItemIndex en 0 para el primer elemento
-
-        recyclerView.adapter = adapter
+        })
     }
 
     private fun setUpNavigationButtons() {
-        val btnRunExe = findViewById<ImageView>(R.id.ivRunExe)
-        val btnExit = findViewById<ImageView>(R.id.ivHome)
-        val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
-        val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
-        val btnDashboard = findViewById<ImageView>(R.id.ivClockW)
-        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
-        val btnSuggestRoutes = findViewById<ImageView>(R.id.ivRun)
-        val btnSuggest = findViewById<ImageView>(R.id.ivSugerencias)
-
-        btnDevice.setOnClickListener{ UtilRedirect().redirectToDeviceActivity(this)}
-        btnRunExe.setOnClickListener{ UtilRedirect().redirectToStartTrainingActivity(this)}
-        btnExit.setOnClickListener{ UtilRedirect().redirectToHomeActivity(this)}
-        btnCalendar.setOnClickListener{ UtilRedirect().redirectToCalendarEventsActivity(this)}
-        btnNotifications.setOnClickListener{ UtilRedirect().redirectToNotificationsActivity(this)}
-        btnDashboard.setOnClickListener{ UtilRedirect().redirectToDashboardTrainingActivity(this)}
-        btnSuggestRoutes.setOnClickListener{ UtilRedirect().redirectToSuggestRoutesActivity(this)}
-        btnSuggest.setOnClickListener{ UtilRedirect().redirectToSuggestsActivity(this)}
-    }
-
-    private inner class Adapter(private val dataList: List<String>, private val listener: OnItemClickListener, private var selectedItemIndex: Int) : RecyclerView.Adapter<Adapter.ViewHolder>() {
-
-        //private var listener: OnItemClickListener? = null
-
-        //private var selectedItemIndex: Int = RecyclerView.NO_POSITION
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
-            return ViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val item = dataList[position]
-            holder.textViewItem.text = item
-
-        }
-
-        override fun getItemCount(): Int {
-            return dataList.size
-        }
-
-//        fun setOnItemClickListener(listener: OnItemClickListener) {
-//            this.listener = listener
-//        }
-
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-            val textViewItem: TextView = itemView.findViewById(R.id.textViewItem)
-
-            fun bind(item: String, position: Int) {
-                textViewItem.text = item
-                itemView.isSelected = (selectedItemIndex == position)
-
-                  //if (selectedItemIndex == position) {
-                  // Cambia el color de fondo del elemento seleccionado
-
-
-                itemView.setBackgroundResource(R.color.backcolorapp)
-//                } else {
-//                    // Restablece el color de fondo del elemento no seleccionado
-//                    itemView.setBackgroundResource(R.color.backtittle)
-//                }
-            }
-
-            init {
-                itemView.setOnClickListener(this)
-            }
-
-            override fun onClick(v: View) {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    selectedItemIndex = position
-                    notifyDataSetChanged()
-                    listener.onItemClick(position)
-                }
-            }
-        }
+        findViewById<ImageView>(R.id.ivRunExe).setOnClickListener { utilRedirect.redirectToActivity(this, StartTraining::class.java) }
+        findViewById<ImageView>(R.id.ivHome).setOnClickListener { utilRedirect.redirectToActivity(this, Home::class.java) }
+        findViewById<ImageView>(R.id.ivCalendar).setOnClickListener { utilRedirect.redirectToActivity(this, CalendarEvents::class.java) }
+        findViewById<ImageView>(R.id.ivNotifications).setOnClickListener { utilRedirect.redirectToActivity(this, Notifications::class.java) }
+        findViewById<ImageView>(R.id.ivClockW).setOnClickListener { utilRedirect.redirectToActivity(this, DashboardTraining::class.java) }
+        findViewById<ImageView>(R.id.ivWatch).setOnClickListener { utilRedirect.redirectToActivity(this, ConnectDevice::class.java) }
+        findViewById<ImageView>(R.id.ivRun).setOnClickListener { utilRedirect.redirectToActivity(this, SuggestRoutes::class.java) }
+        findViewById<ImageView>(R.id.ivSugerencias).setOnClickListener { utilRedirect.redirectToActivity(this, Suggests::class.java) }
     }
 
     override fun onMeasurementsChanged(powerOutput: Int, maxHeartRate: Int, restingHeartRate: Int) {
@@ -158,11 +76,36 @@ class ConnectDevice : AppCompatActivity() , FitnessSensorListener {
             powerOutputTextView.text = "Power Output: $powerOutput watts"
             maxHeartRateTextView.text = "Max Heart Rate: $maxHeartRate bpm"
             restingHeartRateTextView.text = "Resting Heart Rate: $restingHeartRate bpm"
-            Log.d("DEBUG", "Entro a escribir los datos.: ")
         }
     }
 
-    fun showToast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {
-        Toast.makeText(context, message, duration).show()
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
+    private inner class Adapter(private val dataList: List<String>, private val listener: OnItemClickListener) : RecyclerView.Adapter<Adapter.ViewHolder>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
+            return ViewHolder(view, listener)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.textViewItem.text = dataList[position]
+        }
+
+        override fun getItemCount() = dataList.size
+
+        inner class ViewHolder(itemView: View, private val listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+            val textViewItem: TextView = itemView.findViewById(R.id.textViewItem)
+
+            init {
+                itemView.setOnClickListener(this)
+            }
+
+            override fun onClick(v: View) {
+                listener.onItemClick(adapterPosition)
+            }
+        }
     }
 }

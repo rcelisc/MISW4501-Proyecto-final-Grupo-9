@@ -13,16 +13,16 @@
     <string name="stop_training">Finalizar</string>
     <string name="prompt_completed_training">Entrenamiento finalizado!</string>
     <string name="prompt_total_time">Tiempo total:</string>
-    <string name="prompt_date_training">Fecha:</string>
+    <string name="prompt_date_training">Fecha: %1$s</string>
     <string name="prompt_cal_training">Calorías:</string>
-    <string name="prompt_ftp_training">FTP:</string>
-    <string name="prompt_vo2_training">VO2max:</string>
+    <string name="prompt_ftp_training">FTP: %1$s W</string>
+    <string name="prompt_vo2_training">VO2max: %1$s ml/kg/min</string>
     <string name="save_training">Guardar Entrenamiento:</string>
     <string name="calendar_tittle">Calendario de eventos y entrenamientos</string>
     <string name="calendar_event_field">Evento</string>
     <string name="calendar_date_field">Fecha</string>
     <string name="calendar_description_field">Descripción</string>
-    <string name="home_close_sesion">Cerrar Sesión</string>
+    <string name="home_close_session">Cerrar Sesión</string>
     <string name="promt_start_training">Ejercicio iniciado.!!!</string>
     <string name="promt_finish_training">Ejercicio finalizado.!!!</string>
     <string name="promt_data_sended">Datos Enviados!!!</string>
@@ -49,5 +49,12 @@
     <string name="start_device">Iniciar Medición</string>
     <string name="title_suggests">Sugerencias</string>
     <string name="tittle_suggest_routes">Rutas Sugeridas</string>
-
+    <string name="calculation_success">Calculo de FTP y VO2MAX fue exitoso!</string>
+    <string name="error_calling_service">Error llamando al servicio. Codigo de error: %1$d</string>
+    <string name="error_generic">Un error ha ocurrido.</string>
+    <string name="error_finishing_session">Error finalizando la sesion. Codigo de error: %1$d</string>
+    <string name="training_session_finished">Sesion de entrenamiento finalizada exitosamente!</string>
+    <string name="type_run">Tipo: %1$s</string>
+    <string name="total_time">Tiempo total: %1$d min</string>
+    <string name="calories_burned">Calorias quemadas: %1$d</string>
 </resources>

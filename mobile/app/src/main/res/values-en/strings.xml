@@ -14,16 +14,16 @@
     <string name="stop_training">Finish</string>
     <string name="prompt_completed_training">Training finished!!!</string>
     <string name="prompt_total_time">Total time:</string>
-    <string name="prompt_date_training">Date:</string>
+    <string name="prompt_date_training">Date: %1$s</string>
     <string name="prompt_cal_training">Calories:</string>
-    <string name="prompt_ftp_training">FTP:</string>
-    <string name="prompt_vo2_training">VO2max:</string>
+    <string name="prompt_ftp_training">FTP: %1$s W</string>
+    <string name="prompt_vo2_training">VO2max: %1$s ml/kg/min</string>
     <string name="save_training">Save Training</string>
     <string name="calendar_tittle">Calendar Events and Trainings</string>
     <string name="calendar_event_field">Event</string>
     <string name="calendar_date_field">Date</string>
     <string name="calendar_description_field">Description</string>
-    <string name="home_close_sesion">Close Sesión</string>
+    <string name="home_close_session">Close Sesión</string>
     <string name="promt_start_training">Training Started.!!!</string>
     <string name="promt_finish_training">Training Finished.!!!</string>
     <string name="promt_data_sended">Receive Data.!!!</string>
@@ -50,4 +50,12 @@
     <string name="start_device">Start Measurement</string>
     <string name="title_suggests">Suggests</string>
     <string name="tittle_suggest_routes">Suggest Routes</string>
+    <string name="calculation_success">Calculation of FTP and VO2Max successful!</string>
+    <string name="error_calling_service">Error calling the service. Error code: %1$d</string>
+    <string name="error_generic">An error occurred.</string>
+    <string name="error_finishing_session">Error finishing the session. Error code: %1$d</string>
+    <string name="training_session_finished">Training session successfully finished!</string>
+    <string name="type_run">Type: %1$s</string>
+    <string name="total_time">Total time: %1$d min</string>
+    <string name="calories_burned">Calories burned: %1$d</string>
 </resources>
