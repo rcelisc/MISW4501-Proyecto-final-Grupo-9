@@ -63,5 +63,6 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     annotationProcessor ("com.google.dagger:dagger-compiler:2.51.1")
     implementation ("com.google.android.gms:play-services-fitness:21.1.0")
+    implementation ("com.google.android.gms:play-services-base:18.4.0")
     implementation ("com.google.android.gms:play-services-auth:21.1.1")
 }
