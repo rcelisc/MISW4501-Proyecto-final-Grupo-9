@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.sportapp.ui.views.LoginScreen
 import com.example.sportapp.R
 import com.example.sportapp.UtilRedirect
+import com.example.sportapp.ui.views.*
 
 
 class Home : AppCompatActivity() {
@@ -16,7 +18,7 @@ class Home : AppCompatActivity() {
         val btnStrava = findViewById<ImageView>(R.id.imgStrava)
         val btnRunExe = findViewById<ImageView>(R.id.ivRunExe)
         val btnExit = findViewById<ImageView>(R.id.ivHome)
-        val btnExit1 = findViewById<TextView>(R.id.tvwCerrarSesion)
+        val btnExit1 = findViewById<TextView>(R.id.tvwCerrarSession)
         val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
         val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
         val btnDashboard = findViewById<ImageView>(R.id.ivClockW)
@@ -24,21 +26,23 @@ class Home : AppCompatActivity() {
         val btnSuggestRoutes = findViewById<ImageView>(R.id.ivRun)
         val btnSuggest = findViewById<ImageView>(R.id.ivSugerencias)
 
+        val utilRedirect = UtilRedirect()
+
         //Redirige a la Actividad Device
-        btnDevice.setOnClickListener{UtilRedirect().redirectToDeviceActivity(this@Home)}
+        btnDevice.setOnClickListener { utilRedirect.redirectToActivity(this, ConnectDevice::class.java) }
         //Redirige a la Actividad Strava.
-        btnStrava.setOnClickListener{UtilRedirect().redirectToStravaActivity(this@Home)}
+        btnStrava.setOnClickListener { utilRedirect.redirectToActivity(this, StravaViewConnect::class.java) }
         //Redirige a la Actividad Iniciar Entrenamiento.
-        btnRunExe.setOnClickListener{UtilRedirect().redirectToStartTrainingActivity(this@Home)}
-        //Cerrar Sesion.
-        btnExit.setOnClickListener{UtilRedirect().redirectToLoginScreenActivity(this@Home)}
-        btnExit1.setOnClickListener{UtilRedirect().redirectToLoginScreenActivity(this@Home)}
+        btnRunExe.setOnClickListener { utilRedirect.redirectToActivity(this, StartTraining::class.java) }
+        //Cerrar Session.
+        btnExit.setOnClickListener { utilRedirect.redirectToActivity(this, LoginScreen::class.java) }
+        btnExit1.setOnClickListener { utilRedirect.redirectToActivity(this, LoginScreen::class.java) }
         //Redirige a la Actividad Calendario de Eventos.
-        btnCalendar.setOnClickListener{UtilRedirect().redirectToCalendarEventsActivity(this@Home)}
-        btnNotifications.setOnClickListener{UtilRedirect().redirectToNotificationsActivity(this@Home)}
-        btnDashboard.setOnClickListener{UtilRedirect().redirectToDashboardTrainingActivity(this@Home)}
-        btnSuggestRoutes.setOnClickListener{UtilRedirect().redirectToSuggestRoutesActivity(this@Home)}
-        btnSuggest.setOnClickListener{UtilRedirect().redirectToSuggestsActivity(this@Home)}
+        btnCalendar.setOnClickListener { utilRedirect.redirectToActivity(this, CalendarEvents::class.java) }
+        btnNotifications.setOnClickListener { utilRedirect.redirectToActivity(this, Notifications::class.java) }
+        btnDashboard.setOnClickListener { utilRedirect.redirectToActivity(this, DashboardTraining::class.java) }
+        btnSuggestRoutes.setOnClickListener { utilRedirect.redirectToActivity(this, SuggestRoutes::class.java) }
+        btnSuggest.setOnClickListener { utilRedirect.redirectToActivity(this, Suggests::class.java) }
     }
 
 

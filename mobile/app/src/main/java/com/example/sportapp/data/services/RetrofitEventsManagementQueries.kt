@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import com.example.sportapp.Config
 import com.example.sportapp.data.api.CalculateFTPVo2Service
 import com.example.sportapp.data.api.EventsSuggestionsService
-import com.example.sportapp.data.api.ReceiveSesionDataService
+import com.example.sportapp.data.api.ReceiveSessionDataService
 import com.example.sportapp.data.api.StartTrainingService
 import com.example.sportapp.data.api.StopTrainingService
 import com.example.sportapp.data.api.TrainingPlansService
@@ -68,17 +68,17 @@ object RetrofitStopTrainingService {
     }
 }
 
-object RetrofitReceiveSesionDataService {
+object RetrofitReceiveSessionDataService {
 
     private const val BASE_URL = Config.BASE_URL_Trainings.toString()
 
-    fun createApiService(): ReceiveSesionDataService {
+    fun createApiService(): ReceiveSessionDataService {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        return retrofit.create(ReceiveSesionDataService::class.java)
+        return retrofit.create(ReceiveSessionDataService::class.java)
     }
 }
 
@@ -110,9 +110,9 @@ object RetrofitEventSuggestionsService {
     }
 }
 
-object RetrofitTrainingSesionsService {
+object RetrofitTrainingSessionsService {
 
-    private const val BASE_URL = Config.BASE_URL_TrainingsSesions.toString()
+    private const val BASE_URL = Config.BASE_URL_TrainingsSessions.toString()
 
     fun createApiService(): TrainingSessionsService {
         val retrofit = Retrofit.Builder()

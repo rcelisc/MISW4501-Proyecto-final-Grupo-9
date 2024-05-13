@@ -7,8 +7,7 @@ import json
 
 class LoginUserCommandHandler:
     def __init__(self):
-        self.publisher = pubsub_v1.PublisherClient()
-        self.topic_path = self.publisher.topic_path('miso-proyecto-de-grado-g09', 'login-events')
+        pass    
 
     def generate_token(self, user):
         token = jwt.encode({
@@ -42,14 +41,6 @@ class LoginUserCommandHandler:
             user.is_active_session = True
             user.current_token = new_token
             db.session.commit()
-
-            # Publish an event for session start
-            event_data = {
-                'type': 'UserLogin',
-                'user_id': user.id,
-                'role': user.type
-            }
-            self.publisher.publish(self.topic_path, json.dumps(event_data).encode('utf-8'))
 
             # Update user active session flag
             user.active_session = True

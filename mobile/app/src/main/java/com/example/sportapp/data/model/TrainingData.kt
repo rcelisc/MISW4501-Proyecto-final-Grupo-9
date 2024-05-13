@@ -29,14 +29,14 @@ data class StopTrainingResponse (
 )
 
 
-data class ReceiveSesionDataRequest(
+data class ReceiveSessionDataRequest(
     val session_id: String,
     val power_output: Int,
     val max_heart_rate: Int,
     val resting_heart_rate: Int
 )
 
-data class ReceiveSesionDataResponse (
+data class ReceiveSessionDataResponse (
     val message: String
 )
 
@@ -51,7 +51,7 @@ data class TrainingPlansResponse(
     val profile_type: String
 )
 
-data class TrainingsSesionsResponse(
+data class TrainingsSessionsResponse(
     val duration: String,
     val id: String,
     val notes: String,
