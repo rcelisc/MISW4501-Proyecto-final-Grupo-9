@@ -38,10 +38,9 @@ object RetrofitClient {
         return getRetrofit(context, Config.BASE_URL_USERS_QUERIES).create(UserService::class.java)
     }
 
-    fun createEventsService(context: Context): EventsService {
-        return getRetrofit(context, Config.BASE_URL_Events).create(EventsService::class.java)
+    fun getEventsService(context: Context): EventsService {
+        return getRetrofit(context, Config.BASE_URL_SERVICE).create(EventsService::class.java)
     }
-
     fun createTrainingMetricsService(context: Context): TrainingMetricsService {
         return getRetrofit(context, Config.BASE_URL_FTPVo2).create(TrainingMetricsService::class.java)
     }

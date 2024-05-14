@@ -58,4 +58,8 @@
     <string name="type_run">Type: %1$s</string>
     <string name="total_time">Total time: %1$d min</string>
     <string name="calories_burned">Calories burned: %1$d</string>
+    <string name="services_tittle">Service Tittle</string>
+    <string name="service_name_field">Service Name</string>
+    <string name="service_rate_field">Precio del servicio</string>
+    <string name="service_status_field">Estado del servicio</string>
 </resources>

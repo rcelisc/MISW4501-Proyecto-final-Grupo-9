@@ -1,24 +1,24 @@
 package com.example.sportapp.ui.views
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
-import com.example.sportapp.utils.UtilRedirect
-import com.example.sportapp.data.model.EventsSuggestionsResponse
+import com.example.sportapp.data.model.Event
 import com.example.sportapp.data.model.TrainingPlansResponse
-import com.example.sportapp.data.repository.EventsSuggestionsRepository
+import com.example.sportapp.data.repository.EventsRepository
 import com.example.sportapp.data.repository.TrainingPlansRepository
 import com.example.sportapp.data.services.RetrofitClient
 import com.example.sportapp.ui.home.Home
+import com.example.sportapp.utils.UtilRedirect
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,14 +28,13 @@ class Notifications : AppCompatActivity() {
 
     private lateinit var tableAdapter: TableAdapter
     private lateinit var tableAdapterEvents: TableAdapterEvents
-    private val repositoryEvents = EventsSuggestionsRepository(RetrofitClient.createEventsService(this))
+    private val repositoryEvents = EventsRepository(RetrofitClient.getEventsService(this))
     private val repository = TrainingPlansRepository(RetrofitClient.createTrainingPlansService(this))
     private val utilRedirect = UtilRedirect()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_suggestions)
+        setContentView(R.layout.activity_notitications)
         setUpNavigationButtons()
         setUpRecyclerViews()
         fetchTrainingPlans()
@@ -73,18 +72,18 @@ class Notifications : AppCompatActivity() {
     }
 
     private fun fetchEventSuggestions() {
-        repositoryEvents.getEventsSuggestions().enqueue(object : Callback<List<EventsSuggestionsResponse>> {
-            override fun onResponse(call: Call<List<EventsSuggestionsResponse>>, response: Response<List<EventsSuggestionsResponse>>) {
+        repositoryEvents.getCalendarEvents(SportApp.userCodeId).enqueue(object : Callback<List<Event>> {
+            override fun onResponse(call: Call<List<Event>>, response: Response<List<Event>>) {
                 if (response.isSuccessful) {
                     response.body()?.let { events ->
-                        events.forEach(tableAdapterEvents::addItem)
+                        tableAdapterEvents.addItems(events)
                     } ?: Log.d("DEBUG", "Server response is null for Events")
                 } else {
                     Log.d("DEBUG", "Failed to fetch Events. Error code: ${response.code()}")
                 }
             }
 
-            override fun onFailure(call: Call<List<EventsSuggestionsResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<List<Event>>, t: Throwable) {
                 Log.d("DEBUG", "Error fetching Events: ${t.message}")
             }
         })
@@ -131,10 +130,10 @@ class Notifications : AppCompatActivity() {
     }
 
     class TableAdapterEvents : RecyclerView.Adapter<TableAdapterEvents.ViewHolder>() {
-        private val dataEvent = mutableListOf<EventsSuggestionsResponse>()
+        private val dataEvent = mutableListOf<Event>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_event_sugg, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_event, parent, false)
             return ViewHolder(view)
         }
 
@@ -144,17 +143,21 @@ class Notifications : AppCompatActivity() {
 
         override fun getItemCount() = dataEvent.size
 
-        fun addItem(item: EventsSuggestionsResponse) {
-            dataEvent.add(item)
-            notifyItemInserted(dataEvent.size - 1)
+        fun addItems(items: List<Event>) {
+            val startInsertPosition = dataEvent.size
+            dataEvent.addAll(items)
+            notifyItemRangeInserted(startInsertPosition, items.size)
         }
 
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            fun bind(item: EventsSuggestionsResponse) {
-                itemView.findViewById<TextView>(R.id.textViewColumn1).text = item.description
-                itemView.findViewById<TextView>(R.id.textViewColumn2).text = item.name
-                itemView.findViewById<TextView>(R.id.textViewColumn3).text = item.fee.toString()
-                itemView.findViewById<TextView>(R.id.textViewColumn4).text = item.eventDate?.toString()
+            private val column1TextView: TextView = itemView.findViewById(R.id.textViewColumn1)
+            private val column2TextView: TextView = itemView.findViewById(R.id.textViewColumn2)
+            private val column3TextView: TextView = itemView.findViewById(R.id.textViewColumn3)
+
+            fun bind(item: Event) {
+                column1TextView.text = item.name
+                column2TextView.text = item.event_date
+                column3TextView.text = item.description
             }
         }
     }
