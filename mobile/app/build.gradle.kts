@@ -65,4 +65,6 @@ dependencies {
     implementation ("com.google.android.gms:play-services-fitness:21.1.0")
     implementation ("com.google.android.gms:play-services-base:18.4.0")
     implementation ("com.google.android.gms:play-services-auth:21.1.1")
+    implementation ("com.auth0.android:jwtdecode:2.0.0")
+
 }

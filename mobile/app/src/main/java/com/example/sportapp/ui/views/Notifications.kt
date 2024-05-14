@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
-import com.example.sportapp.UtilRedirect
+import com.example.sportapp.utils.UtilRedirect
 import com.example.sportapp.data.model.EventsSuggestionsResponse
 import com.example.sportapp.data.model.TrainingPlansResponse
 import com.example.sportapp.data.repository.EventsSuggestionsRepository
 import com.example.sportapp.data.repository.TrainingPlansRepository
-import com.example.sportapp.data.services.RetrofitEventSuggestionsService
-import com.example.sportapp.data.services.RetrofitTrainingPlansService
+import com.example.sportapp.data.services.RetrofitClient
 import com.example.sportapp.ui.home.Home
+import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,8 +28,8 @@ class Notifications : AppCompatActivity() {
 
     private lateinit var tableAdapter: TableAdapter
     private lateinit var tableAdapterEvents: TableAdapterEvents
-    private val repositoryEvents = EventsSuggestionsRepository(RetrofitEventSuggestionsService.createApiService())
-    private val repository = TrainingPlansRepository(RetrofitTrainingPlansService.createApiService())
+    private val repositoryEvents = EventsSuggestionsRepository(RetrofitClient.createEventsService(this))
+    private val repository = TrainingPlansRepository(RetrofitClient.createTrainingPlansService(this))
     private val utilRedirect = UtilRedirect()
 
 
@@ -91,14 +91,14 @@ class Notifications : AppCompatActivity() {
     }
 
     private fun setUpNavigationButtons() {
-        findViewById<ImageView>(R.id.ivRunExe).setOnClickListener { utilRedirect.redirectToActivity(this, StartTraining::class.java) }
-        findViewById<ImageView>(R.id.ivHome).setOnClickListener { utilRedirect.redirectToActivity(this, Home::class.java) }
-        findViewById<ImageView>(R.id.ivCalendar).setOnClickListener { utilRedirect.redirectToActivity(this, CalendarEvents::class.java) }
-        findViewById<ImageView>(R.id.ivNotifications).setOnClickListener { utilRedirect.redirectToActivity(this, Notifications::class.java) }
-        findViewById<ImageView>(R.id.ivClockW).setOnClickListener { utilRedirect.redirectToActivity(this, DashboardTraining::class.java) }
-        findViewById<ImageView>(R.id.ivWatch).setOnClickListener { utilRedirect.redirectToActivity(this, ConnectDevice::class.java) }
-        findViewById<ImageView>(R.id.ivRun).setOnClickListener { utilRedirect.redirectToActivity(this, SuggestRoutes::class.java) }
-        findViewById<ImageView>(R.id.ivSugerencias).setOnClickListener { utilRedirect.redirectToActivity(this, Suggests::class.java) }
+        findViewById<MaterialButton>(R.id.ivRunExe).setOnClickListener { utilRedirect.redirectToActivity(this, StartTraining::class.java) }
+        findViewById<MaterialButton>(R.id.ivHome).setOnClickListener { utilRedirect.redirectToActivity(this, Home::class.java) }
+        findViewById<MaterialButton>(R.id.ivCalendar).setOnClickListener { utilRedirect.redirectToActivity(this, CalendarEvents::class.java) }
+        findViewById<MaterialButton>(R.id.ivNotifications).setOnClickListener { utilRedirect.redirectToActivity(this, Notifications::class.java) }
+        findViewById<MaterialButton>(R.id.ivClockW).setOnClickListener { utilRedirect.redirectToActivity(this, DashboardTraining::class.java) }
+        findViewById<MaterialButton>(R.id.ivWatch).setOnClickListener { utilRedirect.redirectToActivity(this, ConnectDevice::class.java) }
+        findViewById<MaterialButton>(R.id.ivRun).setOnClickListener { utilRedirect.redirectToActivity(this, SuggestRoutes::class.java) }
+        findViewById<MaterialButton>(R.id.ivSugerencias).setOnClickListener { utilRedirect.redirectToActivity(this, Suggests::class.java) }
     }
 
     class TableAdapter : RecyclerView.Adapter<TableAdapter.ViewHolder>() {

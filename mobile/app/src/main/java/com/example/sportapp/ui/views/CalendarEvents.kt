@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
-import com.example.sportapp.UtilRedirect
+import com.example.sportapp.utils.UtilRedirect
 import com.example.sportapp.data.repository.DataRepository
-import com.example.sportapp.data.services.RetrofitEventsManagementQueries
+import com.example.sportapp.data.services.RetrofitClient
 import com.example.sportapp.data.model.CalendarEvent
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,10 +21,11 @@ import android.widget.TextView
 import android.util.Log
 import com.example.sportapp.ui.home.Home
 import com.example.sportapp.ui.views.*
+import com.google.android.material.button.MaterialButton
 
 class CalendarEvents : AppCompatActivity() {
     private lateinit var tableAdapter: TableAdapter
-    private val repository = DataRepository(RetrofitEventsManagementQueries.createApiService())
+    private val repository = DataRepository(RetrofitClient.createEventsService(this))
     private val utilRedirect = UtilRedirect()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,28 +58,28 @@ class CalendarEvents : AppCompatActivity() {
     }
 
     private fun setUpNavigationButtons() {
-        findViewById<ImageView>(R.id.ivRunExe).setOnClickListener {
+        findViewById<MaterialButton>(R.id.ivRunExe).setOnClickListener {
             utilRedirect.redirectToActivity(this, StartTraining::class.java)
         }
-        findViewById<ImageView>(R.id.ivHome).setOnClickListener {
+        findViewById<MaterialButton>(R.id.ivHome).setOnClickListener {
             utilRedirect.redirectToActivity(this, Home::class.java)
         }
-        findViewById<ImageView>(R.id.ivCalendar).setOnClickListener {
+        findViewById<MaterialButton>(R.id.ivCalendar).setOnClickListener {
             utilRedirect.redirectToActivity(this, CalendarEvents::class.java)
         }
-        findViewById<ImageView>(R.id.ivNotifications).setOnClickListener {
+        findViewById<MaterialButton>(R.id.ivNotifications).setOnClickListener {
             utilRedirect.redirectToActivity(this, Notifications::class.java)
         }
-        findViewById<ImageView>(R.id.ivClockW).setOnClickListener {
+        findViewById<MaterialButton>(R.id.ivClockW).setOnClickListener {
             utilRedirect.redirectToActivity(this, DashboardTraining::class.java)
         }
-        findViewById<ImageView>(R.id.ivWatch).setOnClickListener {
+        findViewById<MaterialButton>(R.id.ivWatch).setOnClickListener {
             utilRedirect.redirectToActivity(this, ConnectDevice::class.java)
         }
-        findViewById<ImageView>(R.id.ivRun).setOnClickListener {
+        findViewById<MaterialButton>(R.id.ivRun).setOnClickListener {
             utilRedirect.redirectToActivity(this, SuggestRoutes::class.java)
         }
-        findViewById<ImageView>(R.id.ivSugerencias).setOnClickListener {
+        findViewById<MaterialButton>(R.id.ivSugerencias).setOnClickListener {
             utilRedirect.redirectToActivity(this, Suggests::class.java)
         }
     }

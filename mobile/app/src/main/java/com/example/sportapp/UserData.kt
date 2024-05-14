@@ -6,7 +6,8 @@ import android.app.Application
 class SportApp : Application() {
     companion object {
         var userSessionId: String = ""
-        var userCodeId: Int = 0
+        var userRole: String? = null
+        var userCodeId: Int = -1
         var powerOutput: Int = 0
         var maxHeartRate: Int = 0
         var restingHeartRate: Int = 0

@@ -18,7 +18,7 @@
             android:text="@string/calendar_event_field"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="@color/white"/>
+            android:textColor="@color/colorBackground"/>
 
         <TextView
             android:layout_width="0dp"

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1E88E5</color> <!-- Blue 600 -->
+    <color name="colorPrimaryDark">#1565C0</color> <!-- Blue 700 -->
+    <color name="colorAccent">#FF4081</color> <!-- Pink A200 -->
+    <color name="colorAccentLight">#FF80AB</color> <!-- Pink A100 -->
+    <color name="colorAccentDark">#F50057</color> <!-- Pink A400 -->
+    <color name="colorError">#D32F2F</color> <!-- Red 700 -->
+    <color name="colorBackground">#121212</color> <!-- Dark background color -->
+    <color name="colorSurface">#121212</color> <!-- Surface color -->
+    <color name="colorOnPrimary">#FFFFFF</color> <!-- Text color on primary -->
+    <color name="colorOnSecondary">#FFFFFF</color> <!-- Text color on secondary -->
+    <color name="colorOnBackground">#FFFFFF</color> <!-- Text color on background -->
+    <color name="colorOnSurface">#FFFFFF</color> <!-- Text color on surface -->
+</resources>

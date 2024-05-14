@@ -9,6 +9,8 @@ object Config {
     const val BASE_URL_Trainings = BASE_URL_FTPVo2
     const val BASE_URL_TrainingPlans = "${BASE_IP}3003/"
     const val BASE_URL_TrainingsSessions = BASE_URL_TrainingPlans
+    const val BASE_URL_USERS = "${BASE_IP}3006/"
+    const val BASE_URL_USERS_QUERIES = "${BASE_IP}3007/"
 
 //    const val BASE_URL_Events = "http://35.232.6.198/"
 //    const val BASE_URL_FTPVo2 = "http://35.232.6.198/"
