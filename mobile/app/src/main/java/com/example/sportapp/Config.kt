@@ -4,7 +4,9 @@ object Config {
 
     //private const val BASE_IP = "http://192.168.1.7:"
     private const val BASE_IP = "http://192.168.58.100:"
-    const val BASE_URL_Events = "${BASE_IP}3002/"
+    const val BASE_URL_Events = "${BASE_IP}3001/"
+    const val BASE_URL_EVENTS_QUERIES = "${BASE_IP}3002/"
+    const val BASE_URL_SERVICE = "${BASE_IP}3005/"
     const val BASE_URL_FTPVo2 = "${BASE_IP}3004/"
     const val BASE_URL_Trainings = BASE_URL_FTPVo2
     const val BASE_URL_TrainingPlans = "${BASE_IP}3003/"

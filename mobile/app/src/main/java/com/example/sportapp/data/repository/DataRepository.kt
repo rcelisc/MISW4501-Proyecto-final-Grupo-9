@@ -10,7 +10,11 @@ import retrofit2.Callback
 import java.util.Date
 
 class DataRepository(private val eventsService: EventsService) {
-    fun getCalendarEvents(userId: Int) = eventsService.getCalendarEvents(userId)
+    fun getCalendarEventsAndServices() = eventsService.getCalendarEventsAndServices()
+}
+
+class EventsRepository(private val eventsService: EventsService) {
+    fun getCalendarEvents(userId: Int) = eventsService.getUserCalendar(userId)
 }
 
 class FTPVO2Repository(private val trainingMetricsService: TrainingMetricsService) {
@@ -52,10 +56,6 @@ class ReceiveSessionDataRepository(private val trainingSessionsService: Training
 
 class TrainingPlansRepository(private val trainingPlanService: TrainingPlanService) {
     fun getTrainingPlans(profile: String) = trainingPlanService.getTrainingPlans(profile)
-}
-
-class EventsSuggestionsRepository(private val eventsService: EventsService) {
-    fun getEventsSuggestions() = eventsService.getEventsSuggestions()
 }
 
 class TrainingSessionsRepository(private val trainingSessionsService: TrainingSessionsService) {

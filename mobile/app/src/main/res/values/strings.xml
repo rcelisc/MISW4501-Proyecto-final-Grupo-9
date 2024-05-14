@@ -57,4 +57,8 @@
     <string name="type_run">Tipo: %1$s</string>
     <string name="total_time">Tiempo total: %1$d min</string>
     <string name="calories_burned">Calorias quemadas: %1$d</string>
+    <string name="services_tittle">Titulo del servicio</string>
+    <string name="service_name_field">Nombre del servicio</string>
+    <string name="service_rate_field">Precio del servicio</string>
+    <string name="service_status_field">Estado del servicio</string>
 </resources>

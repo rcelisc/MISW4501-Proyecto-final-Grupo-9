@@ -6,40 +6,40 @@
     android:padding="8dp"
     android:background="@android:color/white">
 
-    <!-- Event Name -->
+    <!-- Service Name -->
     <TextView
-        android:id="@+id/textViewEventName"
+        android:id="@+id/textViewServiceName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Event Name"
+        android:text="Service Name"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <!-- Event Date -->
+    <!-- Service Description -->
     <TextView
-        android:id="@+id/textViewEventDate"
+        android:id="@+id/textViewServiceDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Event Date"
+        android:text="Service Description"
         android:textColor="@android:color/black"
         android:textSize="14sp" />
 
-    <!-- Event Description -->
+    <!-- Service Rate -->
     <TextView
-        android:id="@+id/textViewEventDescription"
+        android:id="@+id/textViewServiceRate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Event Description"
+        android:text="Service Rate"
         android:textColor="@android:color/black"
         android:textSize="14sp" />
 
-    <!-- Event Fee -->
+    <!-- Service Status -->
     <TextView
-        android:id="@+id/textViewEventFee"
+        android:id="@+id/textViewServiceStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Event Fee"
+        android:text="Service Status"
         android:textColor="@android:color/black"
         android:textSize="14sp" />
 </LinearLayout>
