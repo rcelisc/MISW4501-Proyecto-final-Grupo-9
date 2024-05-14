@@ -49,5 +49,8 @@
     <string name="start_device">Iniciar Medición</string>
     <string name="title_suggests">Sugerencias</string>
     <string name="tittle_suggest_routes">Rutas Sugeridas</string>
-
+    <string name="device_steps">Pasos:</string>
+    <string name="device_powerOutpt">Potencia de salida:</string>
+    <string name="device_maxHeartRate">Frec. Card. Maxima :</string>
+    <string name="device_restingHeartRate">Frec. Card. Reposo :</string>
 </resources>

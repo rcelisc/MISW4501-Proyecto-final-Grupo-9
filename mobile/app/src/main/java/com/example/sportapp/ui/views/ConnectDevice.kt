@@ -47,6 +47,7 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
     private lateinit var powerOutputTextView: TextView
     private lateinit var maxHeartRateTextView: TextView
     private lateinit var restingHeartRateTextView: TextView
+    private lateinit var stepsTextView: TextView
     private val REQUEST_CODE_PERMISSIONS = 101
     private val RC_SIGN_IN = 9001
     private lateinit var googleFitManager: GetGoogleFitManager
@@ -82,23 +83,21 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
             val measurements = sensor.generateManualMeasurements()
             var (powerOutput, maxHeartRate, restingHeartRate) = measurements ?: Triple(0, 0, 0)
 
-
-
 //        // Llamar al método fetchRestingHeartRate para obtener el ritmo cardíaco en reposo
             fetchRestingHeartRate1 { restingHeartRate ->
                 // Procesar el ritmo cardíaco en reposo recibido en el callback
                 Log.d("ConnectGoogle", "Ritmo cardíaco en reposo: $restingHeartRate")
-                resHearRateGoogle = restingHeartRate
-
+                restingHeartRateTextView.text = getString(R.string.device_restingHeartRate)  + " " + restingHeartRate.toString() + " bpm"
             }
 
             getStepsClient(this) { totalPasos ->
                 Log.d("TotalPasos", "Total de pasos del cliente: $totalPasos")
                 // Aquí puedes realizar cualquier acción con el total de pasos obtenido
                 //resHearRateGoogle = totalPasos.toFloat()
-
+                stepsTextView.text = getString(R.string.device_steps)  + " " + totalPasos.toString() + " steps"
             }
             Log.d("ConnectGoogle", "Ritmo cardíaco en reposo google: $resHearRateGoogle")
+
             onMeasurementsChanged(powerOutput, maxHeartRate, resHearRateGoogle.toInt())
         }
 
@@ -110,6 +109,7 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
         powerOutputTextView = findViewById(R.id.powerOutputTextView)
         maxHeartRateTextView = findViewById(R.id.maxHeartRateTextView)
         restingHeartRateTextView = findViewById(R.id.restingHeartRateTextView)
+        stepsTextView = findViewById(R.id.stepsTextView)
 
         //Inicializa datos de entrenamiento.
         val dataList = getString(R.string.device).split(",") // Lista de datos
@@ -307,9 +307,7 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
                             val puntosDatos = respuesta.getDataSet(DataType.TYPE_HEART_RATE_BPM).dataPoints
                             val ultimoPunto = puntosDatos.lastOrNull()
                             val frecuenciaCardiacaReposo = ultimoPunto?.getValue(Field.FIELD_BPM)?.asFloat() ?: 0f
-
                             Log.d("ConnectGoogle", "Datos obtenidos enlistener >>>> : $puntosDatos $frecuenciaCardiacaReposo $ultimoPunto")
-
                             callback(frecuenciaCardiacaReposo)
                         }
                         .addOnFailureListener { excepcion ->
@@ -469,9 +467,9 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
         runOnUiThread {
 
             val mhr = 220 - SportApp.age
-            powerOutputTextView.text = "Power Output: $powerOutput watts"
-            maxHeartRateTextView.text = "Max Heart Rate: $mhr bpm"
-            restingHeartRateTextView.text = "Resting Heart Rate: $resHearRateGoogle bpm"
+            powerOutputTextView.text = getString(R.string.device_maxHeartRate) + " " + powerOutput + " watts"
+            maxHeartRateTextView.text = getString(R.string.device_maxHeartRate) + " " + mhr + " bpm"
+            //restingHeartRateTextView.text = "Resting Heart Rate: $resHearRateGoogle bpm"
             Log.d("DEBUG", "Entro a escribir los datos.: ")
         }
     }

@@ -50,4 +50,8 @@
     <string name="start_device">Start Measurement</string>
     <string name="title_suggests">Suggests</string>
     <string name="tittle_suggest_routes">Suggest Routes</string>
+    <string name="device_steps">Steps:</string>
+    <string name="device_powerOutpt">Power Output:</string>
+    <string name="device_maxHeartRate">Max Heart Rate:</string>
+    <string name="device_restingHeartRate">Resting Heart Rate:</string>
 </resources>

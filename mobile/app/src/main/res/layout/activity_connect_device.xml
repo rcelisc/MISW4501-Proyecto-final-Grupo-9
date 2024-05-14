@@ -136,12 +136,29 @@
                     android:layout_weight="1" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/stepsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="330dp"
+                android:layout_marginBottom="140dp"
+                android:fontFamily="@font/lato_bold_font"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textStyle="normal"
+                android:textSize="22dp"
+                app:layout_constraintBottom_toBottomOf="@+id/editTextText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.587"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textViewTitulo" />
 
             <TextView
                 android:id="@+id/powerOutputTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="380dp"
+                android:layout_marginTop="370dp"
                 android:layout_marginBottom="140dp"
                 android:fontFamily="@font/lato_bold_font"
                 android:text=""
@@ -160,7 +177,7 @@
                 android:id="@+id/maxHeartRateTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="420dp"
+                android:layout_marginTop="410dp"
                 android:layout_marginBottom="140dp"
                 android:fontFamily="@font/lato_bold_font"
                 android:text=""
@@ -178,7 +195,7 @@
                 android:id="@+id/restingHeartRateTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="470dp"
+                android:layout_marginTop="450dp"
                 android:layout_marginBottom="140dp"
                 android:fontFamily="@font/lato_bold_font"
                 android:text=""
