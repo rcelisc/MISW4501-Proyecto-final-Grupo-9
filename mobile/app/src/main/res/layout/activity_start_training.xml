@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@color/backcolorapp">
-
-<LinearLayout
-    android:id="@+id/linearLayout"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="0dp"
-    tools:context=".HomeActivity"
-    tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="92dp">
+    android:background="@color/colorBackground">
 
-    <FrameLayout
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/top_menu_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <!-- Contenido del menu superior -->
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp">
+
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@color/backmenuppal"
             android:stretchColumns="0,1,2,3">
 
             <TableRow
@@ -31,71 +26,92 @@ android:background="@color/backcolorapp">
                 android:layout_height="match_parent"
                 android:gravity="center">
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/ivSugerencias"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/sugerencias" />
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/sugerencias"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Suggestions"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/ivHome"
                     android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/home" />
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/home"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Home"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/ivCalendar"
                     android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/calendario" />
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/calendario"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Calendar"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/ivNotifications"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/notificaciones" />
-
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/notificaciones"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Notifications"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
             </TableRow>
         </TableLayout>
-    </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-    <!-- Contenido principal de la vista -->
-
+    <!-- Main Content -->
     <FrameLayout
         android:id="@+id/content_container"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1">
-        <!-- Aquí coloca el contenido principal de tu vista -->
+        android:layout_margin="16dp"
+        android:background="?attr/colorOnBackground"
+        app:layout_constraintTop_toBottomOf="@id/top_menu_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_menu_container">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:orientation="horizontal"
             android:layout_marginTop="20dp"
-            android:gravity="top"> <!-- Alineación vertical por la parte inferior -->
+            android:gravity="top">
 
-            <!-- TextView -->
             <TextView
                 android:id="@+id/tvwWelcome"
                 android:layout_width="0dp"
@@ -103,11 +119,10 @@ android:background="@color/backcolorapp">
                 android:layout_weight="1"
                 android:text="@string/type_training"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/colorBackground"
                 android:textStyle="bold"
                 android:textSize="22dp" />
 
-            <!-- RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvTypeTraining"
                 android:layout_width="0dp"
@@ -115,51 +130,49 @@ android:background="@color/backcolorapp">
                 android:layout_weight="1" />
         </LinearLayout>
 
-
         <Chronometer
             android:id="@+id/chronometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:text="00 : 00 : 00"
-            android:textColor="@color/white"
+            android:textColor="@color/colorBackground"
             android:layout_marginTop="250dp"
             android:layout_gravity="center_horizontal"
             android:visibility="visible" />
 
-
-            <Button
-                android:id="@+id/btnStartTraining"
-                android:layout_width="226dp"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom|center"
-                android:layout_marginBottom="100dp"
-                android:background="@drawable/button_background"
-
-                android:enabled="true"
-                android:fontFamily="@font/lato_bold_font"
-                android:text="@string/start_training"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.529"
-                app:layout_constraintStart_toStartOf="parent" />
-
-
-
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStartTraining"
+            android:layout_width="226dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="100dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:text="@string/start_training"
+            android:textAllCaps="false"
+            android:textColor="@color/colorBackground"
+            android:textSize="24sp"
+            android:fontFamily="@font/lato_bold_font"
+            app:cornerRadius="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.529"
+            app:layout_constraintStart_toStartOf="parent" />
     </FrameLayout>
 
-    <FrameLayout
+    <!-- Bottom Menu -->
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/bottom_menu_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <!-- Contenido del menu inferior -->
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@color/backmenuppal"
             android:stretchColumns="0,1,2,3">
 
             <TableRow
@@ -167,51 +180,70 @@ android:background="@color/backcolorapp">
                 android:layout_height="match_parent"
                 android:gravity="center">
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/ivRun"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/run" />
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/run"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Run"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/ivClockW"
                     android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/calend_clock" />
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/calend_clock"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Clock"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/ivRunExe"
                     android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/start_exe" />
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/start_exe"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Start"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/ivWatch"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/watch" />
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/watch"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Watch"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
             </TableRow>
         </TableLayout>
-    </FrameLayout>
-</LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.example.sportapp
+package com.example.sportapp.utils
 
 import android.content.Context
 import android.content.Intent
