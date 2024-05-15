@@ -19,7 +19,7 @@ class StartTrainingTest {
         // Verificar que todos los elementos de la interfaz de usuario estén visibles
         onView(withId(R.id.ivHome)).check(matches(isDisplayed()))
         onView(withId(R.id.ivRunExe)).check(matches(isDisplayed()))
-        onView(withId(R.id.rvTypeTraining)).check(matches(isDisplayed()))
+        onView(withId(R.id.tvTrainingTypeTitle)).check(matches(isDisplayed()))
         onView(withId(R.id.chronometer)).check(matches(isDisplayed()))
         onView(withId(R.id.btnStartTraining)).check(matches(isDisplayed()))
     }

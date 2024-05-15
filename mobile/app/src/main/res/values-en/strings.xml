@@ -10,6 +10,7 @@
     <string name="action_sign_in">Login</string>
     <string name="action_send_strava">Send Data</string>
     <string name="type_training">Type: </string>
+    <string name="formatted_type_training">Type: %1$s</string>
     <string name="start_training">Start</string>
     <string name="stop_training">Finish</string>
     <string name="prompt_completed_training">Training finished!!!</string>

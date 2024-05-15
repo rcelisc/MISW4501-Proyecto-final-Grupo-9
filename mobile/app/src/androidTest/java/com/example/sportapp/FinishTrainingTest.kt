@@ -5,7 +5,7 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.sportapp.ui.views.FinishTraining
+import com.example.sportapp.ui.views.StartTraining
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -14,20 +14,20 @@ import org.junit.runner.RunWith
 class FinishTrainingTest {
 
     @get:Rule
-    val activityScenarioRule = ActivityScenarioRule(FinishTraining::class.java)
+    val activityScenarioRule = ActivityScenarioRule(StartTraining::class.java)
 
     @Test
     fun testUIElementsDisplayed() {
         // Verificar que todos los elementos de la interfaz de usuario estén visibles
         Espresso.onView(ViewMatchers.withId(R.id.ivHome)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.ivRunExe)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        Espresso.onView(ViewMatchers.withId(R.id.tvwType)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(ViewMatchers.withId(R.id.tvTrainingTypeTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.tvwTimeTotal)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.tvwDateTraining)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.tvwCalTraining)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.tvwFTP)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.tvwVO2)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        Espresso.onView(ViewMatchers.withId(R.id.btnStart)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(ViewMatchers.withId(R.id.btnStartTraining)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @Test

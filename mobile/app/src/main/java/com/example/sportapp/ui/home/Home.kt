@@ -37,10 +37,10 @@ class Home : AppCompatActivity() {
         val btnExit1 = findViewById<TextView>(R.id.tvCloseSession)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+        bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_run -> {
-                    utilRedirect.redirectToActivity(this, StartTraining::class.java)
+                    utilRedirect.redirectToActivity(this, DashboardTraining::class.java)
                     true
                 }
                 R.id.nav_clock -> {
@@ -48,7 +48,7 @@ class Home : AppCompatActivity() {
                     true
                 }
                 R.id.nav_start -> {
-                    utilRedirect.redirectToActivity(this, CalendarEvents::class.java)
+                    utilRedirect.redirectToActivity(this, StartTraining::class.java)
                     true
                 }
                 R.id.nav_watch -> {
@@ -60,14 +60,14 @@ class Home : AppCompatActivity() {
         }
 
         val topNavigationView = findViewById<BottomNavigationView>(R.id.top_navigation)
-        topNavigationView.setOnNavigationItemSelectedListener { item ->
+        topNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_suggestions -> {
                     utilRedirect.redirectToActivity(this, Suggests::class.java)
                     true
                 }
                 R.id.nav_home -> {
-                    utilRedirect.redirectToActivity(this, LoginScreen::class.java)
+                    utilRedirect.redirectToActivity(this, Home::class.java)
                     true
                 }
                 R.id.nav_calendar -> {

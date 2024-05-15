@@ -37,16 +37,6 @@
             android:theme="@style/Theme.SportApp" />
 
         <activity
-            android:name=".ui.views.FinishTraining"
-            android:exported="false"
-            android:theme="@style/Theme.SportApp" />
-
-        <activity
-            android:name=".ui.views.RunTraining"
-            android:exported="false"
-            android:theme="@style/Theme.SportApp" />
-
-        <activity
             android:name=".ui.views.StartTraining"
             android:exported="false"
             android:theme="@style/Theme.SportApp" />
