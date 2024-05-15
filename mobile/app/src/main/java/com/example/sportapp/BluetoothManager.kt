@@ -41,7 +41,6 @@ class BluetoothManager(private val context: Context, private val listener: Bluet
         }
     }
 
-
     fun connectToDevice(deviceAddress: String) {
         val device: BluetoothDevice? = bluetoothAdapter?.getRemoteDevice(deviceAddress)
 
@@ -99,39 +98,6 @@ class BluetoothManager(private val context: Context, private val listener: Bluet
         }
     }
 
-//    fun sendCommandAndGetResponse(command: String): String? {
-//        try {
-//            outputStream?.write(command.toByteArray())
-//            outputStream?.flush()
-//
-//            Log.i(TAG, "Mensaje Enviado : " + command)
-//            // Esperar la respuesta durante un tiempo limitado
-//            val timeoutMillis = 10000 // 5 segundos
-//            val startTime = System.currentTimeMillis()
-//
-//            while (System.currentTimeMillis() - startTime < timeoutMillis) {
-//                if (inputStream?.available() ?: 0 > 0) {
-//                    val buffer = ByteArray(1024)
-//                    val bytesRead = inputStream?.read(buffer)
-//                    if (bytesRead != null && bytesRead > 0) {
-//                        return String(buffer, 0, bytesRead)
-//                    }
-//                } else {
-//                    // Esperar un breve período antes de verificar nuevamente
-//                    Thread.sleep(100)
-//                }
-//            }
-//
-//            // Si no se recibió ninguna respuesta dentro del tiempo de espera
-//            Log.e(TAG, "Tiempo de espera agotado para recibir la respuesta del comando")
-//        } catch (e: IOException) {
-//            Log.e(TAG, "Error de comunicación al enviar comando", e)
-//        } catch (e: InterruptedException) {
-//            Log.e(TAG, "Error de temporización al esperar la respuesta", e)
-//        }
-//
-//        return null
-//    }
 
     fun sendCommandAndGetResponse(command: String): CompletableFuture<String?> {
         val futureResponse = CompletableFuture<String?>()

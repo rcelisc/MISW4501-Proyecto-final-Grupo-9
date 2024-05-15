@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sportapp.BluetoothManager
 import com.example.sportapp.GetGoogleFitManager
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
@@ -26,7 +25,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
@@ -40,22 +38,18 @@ interface OnItemClickListener {
     fun onItemClick(position: Int)
 }
 
-class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener , FitnessSensorListener {
+class ConnectDevice : AppCompatActivity() , FitnessSensorListener {
 
-    private lateinit var bluetoothManager: BluetoothManager
     private val sensor = FitnessSensor()
     private lateinit var powerOutputTextView: TextView
     private lateinit var maxHeartRateTextView: TextView
     private lateinit var restingHeartRateTextView: TextView
     private lateinit var stepsTextView: TextView
-    private val REQUEST_CODE_PERMISSIONS = 101
     private val RC_SIGN_IN = 9001
     private lateinit var googleFitManager: GetGoogleFitManager
     private lateinit var fitnessOptions: FitnessOptions
     private lateinit var cuenta: GoogleSignInAccount
     var resHearRateGoogle: Float = 0.0F
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,10 +63,10 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
             .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_BASAL_METABOLIC_RATE, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_HEART_POINTS, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_ACTIVITY_SEGMENT, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_ACTIVITY_SEGMENT, FitnessOptions.ACCESS_WRITE)
             .build()
-
 
 
         btnStartDevice.setOnClickListener {
@@ -83,27 +77,25 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
             val measurements = sensor.generateManualMeasurements()
             var (powerOutput, maxHeartRate, restingHeartRate) = measurements ?: Triple(0, 0, 0)
 
-//        // Llamar al método fetchRestingHeartRate para obtener el ritmo cardíaco en reposo
-            fetchRestingHeartRate1 { restingHeartRate ->
-                // Procesar el ritmo cardíaco en reposo recibido en el callback
+            fetchRestingHeartRate { restingHeartRate ->
                 Log.d("ConnectGoogle", "Ritmo cardíaco en reposo: $restingHeartRate")
                 restingHeartRateTextView.text = getString(R.string.device_restingHeartRate)  + " " + restingHeartRate.toString() + " bpm"
             }
 
             getStepsClient(this) { totalPasos ->
                 Log.d("TotalPasos", "Total de pasos del cliente: $totalPasos")
-                // Aquí puedes realizar cualquier acción con el total de pasos obtenido
-                //resHearRateGoogle = totalPasos.toFloat()
                 stepsTextView.text = getString(R.string.device_steps)  + " " + totalPasos.toString() + " steps"
             }
-            Log.d("ConnectGoogle", "Ritmo cardíaco en reposo google: $resHearRateGoogle")
+
+            getCaloriesClient(this) { totalColories ->
+                Log.d("ConnectGoogle", "Total de calories del cliente: $totalColories")
+                SportApp.calories = totalColories.toInt()
+            }
 
             onMeasurementsChanged(powerOutput, maxHeartRate, resHearRateGoogle.toInt())
         }
 
-        // Configurar Google Sign-In
         configureSignIn()
-        startSignIn(signInResultCallback)
 
         //Inicializa los textviws.
         powerOutputTextView = findViewById(R.id.powerOutputTextView)
@@ -125,7 +117,7 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
                 showToast(this@ConnectDevice,  message)
 
             }
-        }, 0) // inicializa selectedItemIndex en 0 para el primer elemento
+        }, 0)
 
         recyclerView.adapter = adapter
     }
@@ -133,17 +125,12 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
         // Callback para manejar el resultado del inicio de sesión
         private val signInResultCallback = object : SignInResultCallback {
             override fun onSignInSuccess() {
-                // El inicio de sesión fue exitoso, obtener los datos de Google Fit
-//                fitnessOptions = FitnessOptions.builder()
-//                    .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
-//                    .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
-//                    .build()
 
                 Log.d("ConnectGoogle", "Definido FitnessOptions: " + fitnessOptions.toString())
                 Log.d("ConnectGoogle", "Definido googleFitManager: " + fitnessOptions.toString())
 
                 // Llamar al método fetchRestingHeartRate para obtener el ritmo cardíaco en reposo
-                fetchRestingHeartRate1 { restingHeartRate ->
+                fetchRestingHeartRate { restingHeartRate ->
                     Log.d("ConnectGoogle", "Ritmo cardíaco en reposo: $restingHeartRate")
                 }
             }
@@ -158,28 +145,7 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
         fun onSignInSuccess()
         fun onSignInError(error: String)
     }
-    fun startSignIn(callback: SignInResultCallback) {
-        // Configurar las opciones de inicio de sesión de Google
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestProfile()
-            .requestId()
-            .requestEmail()
-            // Agrega otras opciones según sea necesario
-            .build()
 
-        // Crear un cliente de inicio de sesión con Google
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        // Iniciar la actividad de inicio de sesión con Google
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
-
-    private fun signIn(mGoogleApiClient: GoogleApiClient) {
-        val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-        Log.d("ConnectGoogle", "Entro SignIn")
-    }
 
     // Implementa el método onActivityResult para manejar el resultado del inicio de sesión
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -188,7 +154,6 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
         if (requestCode == RC_SIGN_IN) {
             val result = data?.let { Auth.GoogleSignInApi.getSignInResultFromIntent(it) }
             if (result != null) {
-
                 handleSignInResult(result)
                 Log.d("ConnectGoogle", "On Activity Result >> : " + result.signInAccount )
 
@@ -201,7 +166,6 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
             Log.d("ConnectGoogle", "On Activity Result LLego por el false")
 
         }
-
     }
 
     private fun handleSignInResult(result: GoogleSignInResult) {
@@ -218,7 +182,7 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
         }
     }
 
-    // Configura Google Sign-In
+
     fun configureSignIn() {
         // Crea una instancia de GoogleSignInOptions con las opciones deseadas
         Log.d("ConnectGoogle", "Inicio configuracion.")
@@ -226,74 +190,20 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
             .requestProfile()
             .requestId()
             .requestEmail()
-            .addExtension(fitnessOptions)
+            .addExtension(fitnessOptions) //Esta es la importante para poder traer los datos.
             .build()
-
-        // Crea un cliente de GoogleApiClient
-        val mGoogleApiClient = GoogleApiClient.Builder(this)
-            .enableAutoManage(this@ConnectDevice) {
-                Log.d("ConnectGoogle", "Error al crear el cliente mGoogleApiClient . ")
-            }
-            .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-            .build()
-
-        // Iniciar sesión con Google
-        signIn(mGoogleApiClient)
     }
-
 
     fun fetchRestingHeartRate(callback: (Float) -> Unit) {
-        cuenta = GoogleSignIn.getAccountForExtension(this, fitnessOptions) // Cuenta
-        if (cuenta != null)
-        {
-            val tiempoFinal = Calendar.getInstance().timeInMillis
-            val tiempoInicial = tiempoFinal - TimeUnit.DAYS.toMillis(7) // Obtener datos de los últimos 7 días
-
-            try {
-                val solicitudFrecuenciaCardiacaReposo = DataReadRequest.Builder()
-                    .read(DataType.TYPE_HEART_RATE_BPM) // Tipo de dato
-                    .setTimeRange(tiempoInicial, tiempoFinal, TimeUnit.MILLISECONDS)
-                    .build()
-
-                Fitness.getHistoryClient(this, cuenta)
-                    .readData(solicitudFrecuenciaCardiacaReposo)
-                    .addOnSuccessListener { respuesta ->
-                        val puntosDatos = respuesta.getDataSet(DataType.TYPE_HEART_RATE_BPM).dataPoints
-                        val ultimoPunto = puntosDatos.lastOrNull()
-                        val frecuenciaCardiacaReposo = ultimoPunto?.getValue(Field.FIELD_BPM)?.asFloat() ?: 0f
-
-                        Log.e("ConnectGoogle", "Datos obtenidos enlistener >>>> : " + puntosDatos.toString()  + "")
-
-                        callback(frecuenciaCardiacaReposo)
-                    }
-                    .addOnFailureListener { excepcion ->
-                        Log.e("ConnectGoogle", "Error al obtener datos >>>> : " + cuenta.toString()  + " Exc: " , excepcion)
-                        callback(0f) // O proporciona un mensaje más informativo o maneja el error en el código de llamada
-                    }
-            } catch (e: IOException) {
-                // Elimina este bloque si no es relevante para el acceso a datos de Google Fit
-                Log.e("ConnectGoogle", "Error al enviar datos por Bluetooth: ${e.message}")
-            }
-        }
-        else{
-            Log.e("ConnectGoogle", "El signin esta vacio o con error.")
-        }
-    }
-
-    fun fetchRestingHeartRate1(callback: (Float) -> Unit) {
         cuenta = GoogleSignIn.getAccountForExtension(this, fitnessOptions)
         if (cuenta != null) {
 
             Log.d("ConnectGoogle", "Permisos de la cuenta. >>>> : ${cuenta.grantedScopes} ")
             Log.d("ConnectGoogle", "Permisos de la fitnesoptions. >>>> : ${fitnessOptions.impliedScopes} ")
 
-            // Verifique si el usuario ha otorgado los permisos necesarios
             if (GoogleSignIn.hasPermissions(cuenta, fitnessOptions)) {
-                val tiempoInicial = Calendar.getInstance().timeInMillis - TimeUnit.DAYS.toMillis(90)
+                val tiempoInicial = Calendar.getInstance().timeInMillis - TimeUnit.DAYS.toMillis(30)
                 val tiempoFinal = Calendar.getInstance().timeInMillis
-
-            Log.d("ConnectGoogle", "Tiempo Inicial. >>>> : ${tiempoInicial.toString()} ")
-            Log.d("ConnectGoogle", "Tiempo Final. >>>> : ${tiempoFinal.toString()} ")
 
                 try {
                     val solicitudFrecuenciaCardiacaReposo = DataReadRequest.Builder()
@@ -320,12 +230,10 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
                 }
             } else {
                 Log.e("ConnectGoogle", "El usuario no ha otorgado los permisos necesarios.")
-                // Proporcione instrucciones sobre cómo otorgar permisos
                 callback(0f)
             }
         } else {
             Log.e("ConnectGoogle", "El usuario no ha iniciado sesión en Google Fit.")
-            // Proporcione instrucciones sobre cómo iniciar sesión
             callback(0f)
         }
     }
@@ -365,29 +273,38 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
         }
         else {
             Log.e("ConnectGoogle", "El usuario no ha iniciado sesión en Google Fit.")
-            // Proporcione instrucciones sobre cómo iniciar sesión
-
         }
     }
 
-    override fun onConnected() {
-        // Se llama cuando la conexión Bluetooth se establece correctamente
-        Log.d("ConnectDevice", "Conexión establecida correctamente")
-        // Puedes enviar datos al dispositivo Bluetooth si es necesario
-        bluetoothManager.sendData("Hola desde el dispositivo Android!")
-        //Log.d("ConnectDevice", "Datos del dispositivo capturados : $inputStream")
-//        val inputStream = bluetoothManager.inputStream
-//        val jsonData = inputStream?.let { inputStreamToJson(it) }
-//        Log.d("ConnectDevice", "Datos del dispositivo capturados JSON : $jsonData")
-    }
+    fun getCaloriesClient(contexto: Context, callback: (Float) -> Unit) {
+        val cuenta = GoogleSignIn.getAccountForExtension(contexto, fitnessOptions)
+        val tiempoActual = System.currentTimeMillis()
+        val tiempoInicial = tiempoActual - TimeUnit.DAYS.toMillis(7) // Obtener datos de los últimos 7 días
 
-    override fun onDisconnected() {
-        // Se llama cuando la conexión Bluetooth se desconecta
-        Log.d("ConnectDevice", "Conexión Bluetooth desconectada")
-    }
-    override fun onError(message: String) {
-        // Se llama cuando ocurre un error en la conexión Bluetooth
-        Log.e("ConnectDevice", "Error en la conexión Bluetooth: $message")
+        val solicitudCalorias = DataReadRequest.Builder()
+            .aggregate(DataType.TYPE_CALORIES_EXPENDED, DataType.AGGREGATE_CALORIES_EXPENDED)
+            .setTimeRange(tiempoInicial, tiempoActual, TimeUnit.MILLISECONDS)
+            .bucketByTime(1, TimeUnit.DAYS) // Agrupar las calorías por día
+            .build()
+
+        Fitness.getHistoryClient(contexto, cuenta)
+            .readData(solicitudCalorias)
+            .addOnSuccessListener { respuesta ->
+                var totalCalorias = 0f
+                respuesta.buckets.forEach { bucket ->
+                    bucket.dataSets.forEach { dataSet ->
+                        dataSet.dataPoints.forEach { dataPoint ->
+                            val calorias = dataPoint.getValue(Field.FIELD_CALORIES).asFloat()
+                            totalCalorias += calorias
+                        }
+                    }
+                }
+                callback(totalCalorias)
+            }
+            .addOnFailureListener { excepcion ->
+                Log.e("ObtenerCaloriasCliente", "Error al obtener las calorías: ", excepcion)
+                callback(0f)
+            }
     }
 
     private fun setUpNavigationButtons() {
@@ -467,10 +384,8 @@ class ConnectDevice : AppCompatActivity() , BluetoothManager.BluetoothListener ,
         runOnUiThread {
 
             val mhr = 220 - SportApp.age
-            powerOutputTextView.text = getString(R.string.device_maxHeartRate) + " " + powerOutput + " watts"
+            powerOutputTextView.text = getString(R.string.device_powerOutpt) + " " + powerOutput + " watts"
             maxHeartRateTextView.text = getString(R.string.device_maxHeartRate) + " " + mhr + " bpm"
-            //restingHeartRateTextView.text = "Resting Heart Rate: $resHearRateGoogle bpm"
-            Log.d("DEBUG", "Entro a escribir los datos.: ")
         }
     }
 

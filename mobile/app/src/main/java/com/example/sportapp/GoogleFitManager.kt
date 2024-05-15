@@ -50,64 +50,35 @@ class GetGoogleFitManager(private val context: Context, private val fitnessOptio
             Log.e("ConnectGoogle", "El signin esta vacio o con error.")
         }
     }
+
+    fun getCaloriesClient(contexto: Context, callback: (Float) -> Unit) {
+        val cuenta = GoogleSignIn.getAccountForExtension(contexto, fitnessOptions)
+        val tiempoActual = System.currentTimeMillis()
+        val tiempoInicial = tiempoActual - TimeUnit.DAYS.toMillis(7) // Obtener datos de los últimos 7 días
+
+        val solicitudCalorias = DataReadRequest.Builder()
+            .aggregate(DataType.TYPE_CALORIES_EXPENDED, DataType.AGGREGATE_CALORIES_EXPENDED)
+            .setTimeRange(tiempoInicial, tiempoActual, TimeUnit.MILLISECONDS)
+            .bucketByTime(1, TimeUnit.DAYS) // Agrupar las calorías por día
+            .build()
+
+        Fitness.getHistoryClient(contexto, cuenta)
+            .readData(solicitudCalorias)
+            .addOnSuccessListener { respuesta ->
+                var totalCalorias = 0f
+                respuesta.buckets.forEach { bucket ->
+                    bucket.dataSets.forEach { dataSet ->
+                        dataSet.dataPoints.forEach { dataPoint ->
+                            val calorias = dataPoint.getValue(Field.FIELD_CALORIES).asFloat()
+                            totalCalorias += calorias
+                        }
+                    }
+                }
+                callback(totalCalorias)
+            }
+            .addOnFailureListener { excepcion ->
+                Log.e("ObtenerCaloriasCliente", "Error al obtener las calorías: ", excepcion)
+                callback(0f)
+            }
+    }
 }
-
-//class GoogleFitManager(private val context: Context, private val fitnessOptions: GoogleSignInOptionsExtension) {
-//
-////    fun fetchRestingHeartRate(callback: (Float) -> Unit) {
-////        val account = GoogleSignIn.getAccountForExtension(context, fitnessOptions)
-////        val endTime = Calendar.getInstance().timeInMillis
-////        val startTime = endTime - TimeUnit.DAYS.toMillis(7) // Obtener datos de los últimos 7 días
-////
-////
-////        try {
-////            val restingHeartRateRequest = DataReadRequest.Builder()
-////                .read(DataType.TYPE_HEART_RATE_BPM)
-////                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-////                .build()
-////
-////            Fitness.getHistoryClient(context, account)
-////                .readData(restingHeartRateRequest)
-////                .addOnSuccessListener { response ->
-////                    val dataPoints = response.getDataSet(DataType.TYPE_HEART_RATE_BPM).dataPoints
-////                    val lastDataPoint = dataPoints.lastOrNull()
-////                    val restingHeartRate = lastDataPoint?.getValue(Field.FIELD_BPM)?.asFloat() ?: 0f
-////                    callback(restingHeartRate)
-////                }
-////                .addOnFailureListener { exception ->
-////                    // Manejar errores aquí
-////                    Log.e("ConnectGoogle", "Error al Obtener los datos de Google: ${exception.message}")
-////                    callback(0f)
-////                }
-////        }
-////        catch (e: IOException) {
-////            Log.e("ConnectGoogle", "Error al enviar datos por Bluetooth: ${e.message}")
-////        }
-////    }
-//
-//
-////    fun fetchMaxHeartRate(callback: (Float) -> Unit) {
-////        val account = GoogleSignIn.getAccountForExtension(context, fitnessOptions)
-////        val endTime = Calendar.getInstance().timeInMillis
-////        val startTime = endTime - TimeUnit.DAYS.toMillis(7) // Obtener datos de los últimos 7 días
-////
-////        val maxHeartRateRequest = DataReadRequest.Builder()
-////            .read(DataType.TYPE_HEART_RATE_MAX)
-////            .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-////            .build()
-////
-////        Fitness.getHistoryClient(context, account)
-////            .readData(maxHeartRateRequest)
-////            .addOnSuccessListener { response ->
-////                val dataPoints = response.getDataSet(DataType.TYPE_HEART_RATE_MAX).dataPoints
-////                val lastDataPoint = dataPoints.lastOrNull()
-////                val maxHeartRate = lastDataPoint?.getValue(Field.FIELD_MAX)?.asFloat() ?: 0f
-////                callback(maxHeartRate)
-////            }
-////            .addOnFailureListener { exception ->
-////                // Manejar errores aquí
-////                callback(0f)
-////            }
-////    }
-//}
-
