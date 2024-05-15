@@ -1,146 +1,118 @@
 package com.example.sportapp.ui.views
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.sportapp.R
-import com.example.sportapp.ui.home.Home
 import androidx.recyclerview.widget.RecyclerView
-import android.view.View
+import com.example.sportapp.R
 import com.example.sportapp.SportApp
-import com.example.sportapp.UtilRedirect
-import com.example.sportapp.data.model.CalendarEvent
-import com.example.sportapp.data.model.EventsSuggestionsResponse
+import com.example.sportapp.data.model.Event
 import com.example.sportapp.data.model.TrainingPlansResponse
-import com.example.sportapp.data.repository.EventsSuggestionsRepository
+import com.example.sportapp.data.repository.EventsRepository
 import com.example.sportapp.data.repository.TrainingPlansRepository
-import com.example.sportapp.data.services.RetrofitEventSuggestionsService
-import com.example.sportapp.data.services.RetrofitTrainingPlansService
+import com.example.sportapp.data.services.RetrofitClient
+import com.example.sportapp.ui.home.Home
+import com.example.sportapp.utils.UtilRedirect
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.math.log
 
 class Notifications : AppCompatActivity() {
 
     private lateinit var tableAdapter: TableAdapter
     private lateinit var tableAdapterEvents: TableAdapterEvents
-    private val repositoryEvents = EventsSuggestionsRepository(RetrofitEventSuggestionsService.createApiService())
-    var repository = TrainingPlansRepository(RetrofitTrainingPlansService.createApiService())
-
-
+    private val repositoryEvents = EventsRepository(RetrofitClient.getEventsService(this))
+    private val repository = TrainingPlansRepository(RetrofitClient.createTrainingPlansService(this))
+    private val utilRedirect = UtilRedirect()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_suggestions)
+        setContentView(R.layout.activity_notitications)
         setUpNavigationButtons()
-        //Tabla de Suggestions
+        setUpRecyclerViews()
+        fetchTrainingPlans()
+        fetchEventSuggestions()
+    }
+
+    private fun setUpRecyclerViews() {
         val recyclerView = findViewById<RecyclerView>(R.id.rvSugestions)
         recyclerView.layoutManager = LinearLayoutManager(this)
         tableAdapter = TableAdapter()
         recyclerView.adapter = tableAdapter
-        //Tabla de eventos
+
         val recyclerViewEvents = findViewById<RecyclerView>(R.id.rvEvents)
         recyclerViewEvents.layoutManager = LinearLayoutManager(this)
         tableAdapterEvents = TableAdapterEvents()
         recyclerViewEvents.adapter = tableAdapterEvents
+    }
 
-        //SportApp.profile
+    private fun fetchTrainingPlans() {
         repository.getTrainingPlans(SportApp.profile).enqueue(object : Callback<List<TrainingPlansResponse>> {
             override fun onResponse(call: Call<List<TrainingPlansResponse>>, response: Response<List<TrainingPlansResponse>>) {
                 if (response.isSuccessful) {
-                    val triningResponse = response.body()
-                    if (triningResponse != null) {
-                        Log.d("DEBUG", "Se encontraron Planes")
-                        for (plan in triningResponse) {
-                            tableAdapter.addItem(plan)
-                        }
-                    } else {
-                        // Manejar el caso en que la respuesta del servidor sea nula
-                        Log.d("DEBUG", "La respuesta del servidor es nula")
-                    }
+                    response.body()?.let { plans ->
+                        plans.forEach(tableAdapter::addItem)
+                    } ?: Log.d("DEBUG", "Server response is null for Training Plans")
                 } else {
-                    // Manejar el caso en que la respuesta del servidor no sea exitosa
-                    Log.d("DEBUG", "La llamada al servicio no fue exitosa. Código de error: ${response.code()}")
+                    Log.d("DEBUG", "Failed to fetch Training Plans. Error code: ${response.code()}")
                 }
-
-                repositoryEvents.getEventsSuggestions().enqueue(object : Callback<List<EventsSuggestionsResponse>> {
-                    override fun onResponse(call: Call<List<EventsSuggestionsResponse>>, response: Response<List<EventsSuggestionsResponse>>) {
-                        if (response.isSuccessful) {
-                            val eventResponse = response.body()
-                            if (eventResponse != null) {
-                                Log.d("DEBUG", "Se encontraron Eventos")
-                                for (event in eventResponse) {
-                                    tableAdapterEvents.addItem(event)
-                                }
-                            } else {
-                                // Manejar el caso en que la respuesta del servidor sea nula
-                                Log.d("DEBUG", "La respuesta del servidor es nula")
-                            }
-                        } else {
-                            // Manejar el caso en que la respuesta del servidor no sea exitosa
-                            Log.d("DEBUG", "La llamada al servicio no fue exitosa. Código de error: ${response.code()}")
-                        }
-                    }
-
-                    override fun onFailure(call: Call<List<EventsSuggestionsResponse>>, t: Throwable) {
-                        // Manejar errores de red o de llamada al servicio
-                        Log.d("DEBUG", "Error en la llamada al servicio: ${t.message}")
-                        t.printStackTrace()
-                    }
-                })
             }
 
             override fun onFailure(call: Call<List<TrainingPlansResponse>>, t: Throwable) {
-                // Manejar errores de red o de llamada al servicio
-                Log.d("DEBUG", "Error en la llamada al servicio: ${t.message}")
-                t.printStackTrace()
+                Log.d("DEBUG", "Error fetching Training Plans: ${t.message}")
+            }
+        })
+    }
+
+    private fun fetchEventSuggestions() {
+        repositoryEvents.getCalendarEvents(SportApp.userCodeId).enqueue(object : Callback<List<Event>> {
+            override fun onResponse(call: Call<List<Event>>, response: Response<List<Event>>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { events ->
+                        tableAdapterEvents.addItems(events)
+                    } ?: Log.d("DEBUG", "Server response is null for Events")
+                } else {
+                    Log.d("DEBUG", "Failed to fetch Events. Error code: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<Event>>, t: Throwable) {
+                Log.d("DEBUG", "Error fetching Events: ${t.message}")
             }
         })
     }
 
     private fun setUpNavigationButtons() {
-        val btnRunExe = findViewById<ImageView>(R.id.ivRunExe)
-        val btnExit = findViewById<ImageView>(R.id.ivHome)
-        val btnCalendar = findViewById<ImageView>(R.id.ivCalendar)
-        val btnNotifications = findViewById<ImageView>(R.id.ivNotifications)
-        val btnDashboard = findViewById<ImageView>(R.id.ivClockW)
-        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
-        val btnSuggestRoutes = findViewById<ImageView>(R.id.ivRun)
-        val btnSuggest = findViewById<ImageView>(R.id.ivSugerencias)
-
-        btnDevice.setOnClickListener{ UtilRedirect().redirectToDeviceActivity(this)}
-        btnRunExe.setOnClickListener{ UtilRedirect().redirectToStartTrainingActivity(this)}
-        btnExit.setOnClickListener{ UtilRedirect().redirectToHomeActivity(this)}
-        btnCalendar.setOnClickListener{ UtilRedirect().redirectToCalendarEventsActivity(this)}
-        btnNotifications.setOnClickListener{ UtilRedirect().redirectToNotificationsActivity(this)}
-        btnDashboard.setOnClickListener{ UtilRedirect().redirectToDashboardTrainingActivity(this)}
-        btnSuggestRoutes.setOnClickListener{ UtilRedirect().redirectToSuggestRoutesActivity(this)}
-        btnSuggest.setOnClickListener{ UtilRedirect().redirectToSuggestsActivity(this)}
+        findViewById<MaterialButton>(R.id.ivRunExe).setOnClickListener { utilRedirect.redirectToActivity(this, StartTraining::class.java) }
+        findViewById<MaterialButton>(R.id.ivHome).setOnClickListener { utilRedirect.redirectToActivity(this, Home::class.java) }
+        findViewById<MaterialButton>(R.id.ivCalendar).setOnClickListener { utilRedirect.redirectToActivity(this, CalendarEvents::class.java) }
+        findViewById<MaterialButton>(R.id.ivNotifications).setOnClickListener { utilRedirect.redirectToActivity(this, Notifications::class.java) }
+        findViewById<MaterialButton>(R.id.ivClockW).setOnClickListener { utilRedirect.redirectToActivity(this, DashboardTraining::class.java) }
+        findViewById<MaterialButton>(R.id.ivWatch).setOnClickListener { utilRedirect.redirectToActivity(this, ConnectDevice::class.java) }
+        findViewById<MaterialButton>(R.id.ivRun).setOnClickListener { utilRedirect.redirectToActivity(this, SuggestRoutes::class.java) }
+        findViewById<MaterialButton>(R.id.ivSugerencias).setOnClickListener { utilRedirect.redirectToActivity(this, Suggests::class.java) }
     }
 
     class TableAdapter : RecyclerView.Adapter<TableAdapter.ViewHolder>() {
-
         private val data = mutableListOf<TrainingPlansResponse>()
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layot_seggestion, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_suggestion, parent, false)
             return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val item = data[position]
-            holder.bind(item)
+            holder.bind(data[position])
         }
 
-        override fun getItemCount(): Int {
-            return data.size
-        }
+        override fun getItemCount() = data.size
 
         fun addItem(item: TrainingPlansResponse) {
             data.add(item)
@@ -148,57 +120,44 @@ class Notifications : AppCompatActivity() {
         }
 
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val column1TextView: TextView = itemView.findViewById(R.id.textViewColumn1)
-            val column2TextView: TextView = itemView.findViewById(R.id.textViewColumn2)
-            val column3TextView: TextView = itemView.findViewById(R.id.textViewColumn3)
-            val column4TextView: TextView = itemView.findViewById(R.id.textViewColumn4)
-
-
             fun bind(item: TrainingPlansResponse) {
-                column1TextView.text = item.description
-                column2TextView.text = item.duration
-                column3TextView.text = item.exercises
-                column4TextView.text = item.objectives
+                itemView.findViewById<TextView>(R.id.textViewColumn1).text = item.description
+                itemView.findViewById<TextView>(R.id.textViewColumn2).text = item.duration
+                itemView.findViewById<TextView>(R.id.textViewColumn3).text = item.exercises
+                itemView.findViewById<TextView>(R.id.textViewColumn4).text = item.objectives
             }
         }
     }
 
     class TableAdapterEvents : RecyclerView.Adapter<TableAdapterEvents.ViewHolder>() {
+        private val dataEvent = mutableListOf<Event>()
 
-        private val dataEvent = mutableListOf<EventsSuggestionsResponse>()
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_event_sugg, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_event, parent, false)
             return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val item = dataEvent[position]
-            holder.bind(item)
+            holder.bind(dataEvent[position])
         }
 
-        override fun getItemCount(): Int {
-            return dataEvent.size
-        }
+        override fun getItemCount() = dataEvent.size
 
-        fun addItem(item: EventsSuggestionsResponse) {
-            dataEvent.add(item)
-            notifyItemInserted(dataEvent.size - 1)
+        fun addItems(items: List<Event>) {
+            val startInsertPosition = dataEvent.size
+            dataEvent.addAll(items)
+            notifyItemRangeInserted(startInsertPosition, items.size)
         }
 
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val column1TextView: TextView = itemView.findViewById(R.id.textViewColumn1)
-            val column2TextView: TextView = itemView.findViewById(R.id.textViewColumn2)
-            val column3TextView: TextView = itemView.findViewById(R.id.textViewColumn3)
-            val column4TextView: TextView = itemView.findViewById(R.id.textViewColumn4)
+            private val column1TextView: TextView = itemView.findViewById(R.id.textViewColumn1)
+            private val column2TextView: TextView = itemView.findViewById(R.id.textViewColumn2)
+            private val column3TextView: TextView = itemView.findViewById(R.id.textViewColumn3)
 
-
-            fun bind(item: EventsSuggestionsResponse) {
-                column1TextView.text = item.description
-                column2TextView.text = item.name
-                column3TextView.text = item.fee.toString()
-                column4TextView.text = item.eventDate?.toString()
-                Log.d("DEBUG", "Error en la llamada al servicio: ${item.eventDate?.toString()}")
-
+            fun bind(item: Event) {
+                column1TextView.text = item.name
+                column2TextView.text = item.event_date
+                column3TextView.text = item.description
             }
         }
     }

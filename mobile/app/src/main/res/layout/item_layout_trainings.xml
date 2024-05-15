@@ -1,82 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- item_layout_trainings.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="@android:color/white"
+    android:layout_margin="4dp"
+    android:elevation="2dp">
 
-    <!-- Fila de títulos -->
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textViewColumn1"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:gravity="center" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:text="@string/dash_type"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:text="@string/dash_duration"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:text="@string/dash_notes"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"/>
-
-
-    </LinearLayout>
-
-    <!-- Fila de datos -->
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textViewColumn2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewColumn1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:textSize="16sp"
-            android:textColor="@android:color/white"/>
+    <TextView
+        android:id="@+id/textViewColumn3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewColumn2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:textSize="16sp"
-            android:textColor="@android:color/white"/>
-
-        <TextView
-            android:id="@+id/textViewColumn3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:textSize="16sp"
-            android:textColor="@android:color/white"/>
-
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textViewColumn4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:gravity="center" />
 
 </LinearLayout>

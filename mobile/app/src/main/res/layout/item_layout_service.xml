@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="@android:color/white">
+
+    <!-- Service Name -->
+    <TextView
+        android:id="@+id/textViewServiceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Service Name"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <!-- Service Description -->
+    <TextView
+        android:id="@+id/textViewServiceDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Service Description"
+        android:textColor="@android:color/black"
+        android:textSize="14sp" />
+
+    <!-- Service Rate -->
+    <TextView
+        android:id="@+id/textViewServiceRate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Service Rate"
+        android:textColor="@android:color/black"
+        android:textSize="14sp" />
+
+    <!-- Service Status -->
+    <TextView
+        android:id="@+id/textViewServiceStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Service Status"
+        android:textColor="@android:color/black"
+        android:textSize="14sp" />
+</LinearLayout>

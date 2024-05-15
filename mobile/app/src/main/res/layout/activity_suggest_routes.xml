@@ -4,273 +4,303 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backcolorapp">
+    android:background="@color/colorBackground">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="0dp"
-        tools:context=".HomeActivity"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="92dp">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/top_menu_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp">
 
-        <FrameLayout
-            android:id="@+id/top_menu_container"
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!-- Contenido del menu superior -->
-            <TableLayout
+            android:layout_height="60dp"
+            android:stretchColumns="0,1,2,3">
+
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/backmenuppal"
-                android:stretchColumns="0,1,2,3">
+                android:layout_height="match_parent"
+                android:gravity="center">
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/ivSugerencias"
-                        android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/sugerencias" />
-
-                    <ImageView
-                        android:id="@+id/ivHome"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/home" />
-
-                    <ImageView
-                        android:id="@+id/ivCalendar"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/calendario" />
-
-                    <ImageView
-                        android:id="@+id/ivNotifications"
-                        android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/notificaciones" />
-
-                </TableRow>
-            </TableLayout>
-        </FrameLayout>
-
-        <!-- Contenido principal de la vista -->
-
-        <FrameLayout
-            android:id="@+id/content_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-            <!-- Aquí coloca el contenido principal de tu vista -->
-
-            <TextView
-                android:id="@+id/tvwWelcome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:layout_marginBottom="140dp"
-                android:fontFamily="@font/lato_bold_font"
-                android:text="@string/tittle_suggest_routes"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="22dp"
-                app:layout_constraintBottom_toBottomOf="@+id/editTextText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.587"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textViewTitulo" />
-
-            <TextView
-                android:id="@+id/tvwCiudad"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="120dp"
-                android:layout_marginBottom="140dp"
-                android:fontFamily="@font/lato_bold_font"
-                android:text="Bogotá, Colombia"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="22dp"
-                app:layout_constraintBottom_toBottomOf="@+id/editTextText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.587"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textViewTitulo" />
-
-            <TextView
-                android:id="@+id/tvwEdad"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="180dp"
-                android:layout_marginBottom="140dp"
-                android:fontFamily="@font/lato_bold_font"
-                android:text="26 años"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="22dp"
-                app:layout_constraintBottom_toBottomOf="@+id/editTextText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.587"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textViewTitulo" />
-
-            <TextView
-                android:id="@+id/tvwPesoEstatura"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="240dp"
-                android:layout_marginBottom="140dp"
-                android:fontFamily="@font/lato_bold_font"
-                android:text="60 kg, 174 cm"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="22dp"
-                app:layout_constraintBottom_toBottomOf="@+id/editTextText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.587"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textViewTitulo" />
-
-
-            <RelativeLayout
-                android:layout_width="260dp"
-                android:layout_height="70dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="450dp"
-                android:background="@color/backmenuppal">
-
-                <!-- Imagen -->
-                <ImageView
-                    android:id="@+id/imgStrava"
-                    android:layout_width="match_parent"
-                    android:layout_height="34dp"
-                    android:layout_centerVertical="false"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/logostrava"
-                    android:layout_marginTop="20dp"/>
-
-                <!-- TextView debajo de la imagen -->
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="550dp"
-                android:background="@color/backcolorapp">
-
-                <!-- TextView debajo de la imagen -->
-                <TextView
-                    android:id="@+id/tvwCerrarSesion"
-                    android:layout_width="match_parent"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/ivSugerencias"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/sugerencias"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Suggestions"
+                    android:textColor="@android:color/white"
                     android:fontFamily="@font/lato_bold_font"
-                    android:text="@string/home_close_sesion"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="0dp"
-                    android:textSize="25dp" />
-            </RelativeLayout>
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
 
-        </FrameLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/ivHome"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/home"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Home"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
 
-        <FrameLayout
-            android:id="@+id/bottom_menu_container"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/ivCalendar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/calendario"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Calendar"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/ivNotifications"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/notificaciones"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Notifications"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+            </TableRow>
+        </TableLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Main Content -->
+    <FrameLayout
+        android:id="@+id/content_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="?attr/colorOnBackground"
+        app:layout_constraintTop_toBottomOf="@id/top_menu_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_menu_container">
+
+        <TextView
+            android:id="@+id/tvwWelcome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!-- Contenido del menu inferior -->
-            <TableLayout
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/lato_bold_font"
+            android:text="@string/tittle_suggest_routes"
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground"
+            android:textStyle="bold"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/tvwCiudad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/lato_bold_font"
+            android:text="Bogotá, Colombia"
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground"
+            android:textStyle="normal"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/tvwEdad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/lato_bold_font"
+            android:text="26 años"
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground"
+            android:textStyle="normal"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/tvwPesoEstatura"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/lato_bold_font"
+            android:text="60 kg, 174 cm"
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground"
+            android:textStyle="normal"
+            android:textSize="22sp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="260dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="450dp"
+            app:cardBackgroundColor="?attr/colorPrimary">
+
+            <ImageView
+                android:id="@+id/imgStrava"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/backmenuppal"
-                android:stretchColumns="0,1,2,3">
+                android:layout_height="34dp"
+                android:layout_centerVertical="false"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/logostrava"
+                android:layout_marginTop="20dp"/>
+        </com.google.android.material.card.MaterialCardView>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center">
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="550dp"
+            app:cardBackgroundColor="?attr/colorOnBackground">
 
-                    <ImageView
-                        android:id="@+id/ivRun"
-                        android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/run" />
+            <TextView
+                android:id="@+id/tvwCerrarSession"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/lato_bold_font"
+                android:text="@string/home_close_session"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+        </com.google.android.material.card.MaterialCardView>
 
-                    <ImageView
-                        android:id="@+id/ivClockW"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/calend_clock" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:textAlignment="textEnd"
+            android:background="@color/colorOnBackground">
 
-                    <ImageView
-                        android:id="@+id/ivRunExe"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/start_exe" />
+            <TextView
+                android:id="@+id/tvwVersionName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:fontFamily="@font/lato_bold_font"
+                android:text="x.x.x"
+                android:textAlignment="inherit"
+                android:textColor="@android:color/black"
+                android:textStyle="normal"
+                android:layout_marginBottom="0dp"
+                android:textSize="12dp" />
+        </RelativeLayout>
+    </FrameLayout>
 
-                    <ImageView
-                        android:id="@+id/ivWatch"
-                        android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/watch" />
-                </TableRow>
-            </TableLayout>
-        </FrameLayout>
+    <!-- Bottom Menu -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bottom_menu_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    </LinearLayout>
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:stretchColumns="0,1,2,3">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/ivRun"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/run"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Run"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/ivClockW"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/calend_clock"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Clock"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/ivRunExe"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/start_exe"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Start"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/ivWatch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    app:icon="@drawable/watch"
+                    app:iconGravity="top"
+                    app:iconPadding="8dp"
+                    app:iconTint="@android:color/white"
+                    android:text="Watch"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/lato_bold_font"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+            </TableRow>
+        </TableLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
