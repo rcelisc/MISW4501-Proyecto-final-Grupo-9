@@ -1,7 +1,6 @@
 package com.example.sportapp.ui.views
 
 import android.content.Context
-import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
@@ -19,12 +18,11 @@ import com.example.sportapp.data.model.TrainingMetricsCalculatedResponse
 import com.example.sportapp.data.repository.FTPVO2Repository
 import com.example.sportapp.data.repository.ReceiveSesionDataRepository
 import com.example.sportapp.data.repository.StopTrainingRepository
+import com.example.sportapp.data.services.Calories
+import com.example.sportapp.data.services.FitnessSensor
 import com.example.sportapp.data.services.RetrofitCalculateFTPVO2max
 import com.example.sportapp.data.services.RetrofitReceiveSesionDataService
 import com.example.sportapp.data.services.RetrofitStopTrainingService
-import  com.example.sportapp.data.services.Calories
-import com.example.sportapp.data.services.FitnessSensor
-import com.example.sportapp.ui.home.Home
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -102,7 +100,7 @@ class FinishTraining : AppCompatActivity() {
                     tvwTypeRun.text = tvwTypeRun.text.toString() + " " +  typeTraining
                     tvwTimeTotal.text = tvwTimeTotal.text.toString() + " " + timeTraining.toString() + " " + getString(R.string.units_minutes)
                     tvwDateTraining.text = tvwDateTraining.text.toString() + " " + SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-                    tvwCalTraining.text = tvwCalTraining.text.toString() + " " + caloriesBurned.toInt().toString()
+                    tvwCalTraining.text = tvwCalTraining.text.toString() + " " + SportApp.calories
 
                     showToast(this@FinishTraining, getString(R.string.promt_finish_training))
                     Log.d("DEBUG", "Sesion Finalizada Correctamente : " + SportApp.userSesionId)
