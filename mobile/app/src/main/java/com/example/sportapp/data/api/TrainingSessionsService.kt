@@ -22,6 +22,4 @@ interface TrainingSessionsService {
     @POST("/receive_session-data")
     fun receiveSessionDataServiceService(@Body requestBody: RequestBody): Call<ReceiveSessionDataResponse>
 
-    @GET("training-sessions/user/{userId}")
-    fun getTrainingUserService(@Path("userId") userId: Int): Call<List<TrainingsSessionsResponse>>
 }

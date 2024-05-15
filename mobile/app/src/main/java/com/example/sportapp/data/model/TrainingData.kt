@@ -55,6 +55,7 @@ data class TrainingsSessionsResponse(
     val duration: String,
     val id: String,
     val notes: String,
+    val end_time: String,
     val training_type: String,
     val user_id: Int
 )

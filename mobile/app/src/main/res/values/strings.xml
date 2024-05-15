@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">SportApp</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">Inicio</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_notifications">Notificaciones</string>
     <string name="prompt_textlogin">Inicia Sesión</string>
     <string name="prompt_usuario">Usuario:</string>
     <string name="prompt_password">Contraseña:</string>
@@ -63,4 +63,8 @@
     <string name="service_rate_field">Precio del servicio</string>
     <string name="service_status_field">Estado del servicio</string>
     <string name="error_starting_session">Error iniciando sesion</string>
+    <string name="training_type">Tipo de entrenamiento</string>
+    <string name="duration">Duracion</string>
+    <string name="end_date">Fecha</string>
+    <string name="notes">Notas</string>
 </resources>
