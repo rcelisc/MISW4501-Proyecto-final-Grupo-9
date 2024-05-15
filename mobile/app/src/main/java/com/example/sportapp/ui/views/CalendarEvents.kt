@@ -74,7 +74,7 @@ class CalendarEvents : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_run -> {
-                    utilRedirect.redirectToActivity(this, StartTraining::class.java)
+                    utilRedirect.redirectToActivity(this, DashboardTraining::class.java)
                     true
                 }
 
@@ -84,7 +84,7 @@ class CalendarEvents : AppCompatActivity() {
                 }
 
                 R.id.nav_start -> {
-                    utilRedirect.redirectToActivity(this, CalendarEvents::class.java)
+                    utilRedirect.redirectToActivity(this, StartTraining::class.java)
                     true
                 }
 

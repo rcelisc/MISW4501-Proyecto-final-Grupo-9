@@ -9,6 +9,7 @@
     <string name="action_sign_in">Continuar</string>
     <string name="action_send_strava">Enviar Datos</string>
     <string name="type_training">Tipo: </string>
+    <string name="formatted_type_training">Tipo: %1$s</string>
     <string name="start_training">Iniciar</string>
     <string name="stop_training">Finalizar</string>
     <string name="prompt_completed_training">Entrenamiento finalizado!</string>
@@ -61,4 +62,5 @@
     <string name="service_name_field">Nombre del servicio</string>
     <string name="service_rate_field">Precio del servicio</string>
     <string name="service_status_field">Estado del servicio</string>
+    <string name="error_starting_session">Error iniciando sesion</string>
 </resources>
