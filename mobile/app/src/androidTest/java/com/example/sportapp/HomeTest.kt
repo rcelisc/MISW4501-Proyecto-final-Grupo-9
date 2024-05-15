@@ -9,6 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.sportapp.ui.home.Home
 import com.example.sportapp.ui.views.CalendarEvents
+import com.example.sportapp.ui.views.LoginScreen
 import com.example.sportapp.ui.views.StartTraining
 import com.example.sportapp.ui.views.StravaViewConnect
 import org.junit.After

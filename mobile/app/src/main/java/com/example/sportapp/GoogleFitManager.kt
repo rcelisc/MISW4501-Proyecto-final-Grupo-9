@@ -110,4 +110,3 @@ class GetGoogleFitManager(private val context: Context, private val fitnessOptio
 ////            }
 ////    }
 //}
-

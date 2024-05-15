@@ -5,8 +5,9 @@ import android.app.Application
 // En el archivo MyApp.kt
 class SportApp : Application() {
     companion object {
-        var userSesionId: String = ""
-        var userCodeId: Int = 0
+        var userSessionId: String = ""
+        var userRole: String? = null
+        var userCodeId: Int = -1
         var powerOutput: Int = 0
         var maxHeartRate: Int = 0
         var restingHeartRate: Int = 0
@@ -16,12 +17,15 @@ class SportApp : Application() {
         var age: Int = 30
         var weight: Int = 80 // kg
         var height: Int = 174 // cm
-
     }
 
     override fun onCreate() {
         super.onCreate()
-        userSesionId = ""
+        resetUserData()
+    }
+
+    private fun resetUserData() {
+        userSessionId = ""
         userCodeId = 0
         powerOutput = 0
         maxHeartRate = 0
@@ -32,6 +36,5 @@ class SportApp : Application() {
         age = 40
         weight = 80
         height = 174
-        //sesionStrava:
     }
 }
