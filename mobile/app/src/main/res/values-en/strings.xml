@@ -31,7 +31,7 @@
     <string name="units_minutes">min.</string>
     <string name="boton_finish">FTP-Vo2Max</string>
     <string name="tittle_suggestions">Suggestions</string>
-    <string name="training_objectives">Objetivos</string>
+    <string name="training_objectives">Objectives</string>
     <string name="training_duration">Duration</string>
     <string name="training_excercises">Exercises</string>
     <string name="training_description">Plan</string>
@@ -61,6 +61,11 @@
     <string name="calories_burned">Calories burned: %1$d</string>
     <string name="services_tittle">Service Tittle</string>
     <string name="service_name_field">Service Name</string>
-    <string name="service_rate_field">Precio del servicio</string>
-    <string name="service_status_field">Estado del servicio</string>
+    <string name="service_rate_field">Service Rate</string>
+    <string name="service_status_field">Service Status</string>
+    <string name="training_type">Training Type</string>
+    <string name="error_starting_session">Error starting session</string>
+    <string name="duration">Duration</string>
+    <string name="end_date">End Date</string>
+    <string name="notes">Notes</string>
 </resources>

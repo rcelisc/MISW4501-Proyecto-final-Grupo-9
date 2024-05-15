@@ -58,6 +58,6 @@ class TrainingPlansRepository(private val trainingPlanService: TrainingPlanServi
     fun getTrainingPlans(profile: String) = trainingPlanService.getTrainingPlans(profile)
 }
 
-class TrainingSessionsRepository(private val trainingSessionsService: TrainingSessionsService) {
-    fun getTrainingSessions(userId: Int) = trainingSessionsService.getTrainingUserService(userId)
+class TrainingSessionsRepository(private val trainingPlanService: TrainingPlanService) {
+    fun getTrainingSessions(userId: Int) = trainingPlanService.getTrainingSessionsByUser(userId)
 }

@@ -15,6 +15,7 @@ import com.example.sportapp.data.model.CalendarEventsAndServicesResponse
 import com.example.sportapp.data.model.Service
 import com.example.sportapp.data.repository.DataRepository
 import com.example.sportapp.data.services.RetrofitClient
+import com.example.sportapp.ui.home.Home
 import com.example.sportapp.utils.UtilRedirect
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
@@ -106,7 +107,7 @@ class CalendarEvents : AppCompatActivity() {
                 }
 
                 R.id.nav_home -> {
-                    utilRedirect.redirectToActivity(this, LoginScreen::class.java)
+                    utilRedirect.redirectToActivity(this, Home::class.java)
                     true
                 }
 
