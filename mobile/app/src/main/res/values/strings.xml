@@ -71,4 +71,7 @@
     <string name="notifications_title">Notificaciones</string>
     <string name="calendar_title">Titulo</string>
     <string name="dismiss_icon_desc">Dismiss</string>
+    <string name="status_disconnected">Disconnected</string>
+    <string name="get_strava_info">Get Strava Info</string>
+    <string name="connect_strava">Connect To Strava</string>
 </resources>
