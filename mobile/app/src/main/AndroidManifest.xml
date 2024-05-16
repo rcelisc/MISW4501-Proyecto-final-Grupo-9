@@ -67,11 +67,6 @@
             android:theme="@style/Theme.SportApp" />
 
         <activity
-            android:name=".ui.views.SuggestRoutes"
-            android:exported="false"
-            android:theme="@style/Theme.SportApp" />
-
-        <activity
             android:name=".ui.views.Suggests"
             android:exported="false"
             android:theme="@style/Theme.SportApp" />

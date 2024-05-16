@@ -1,99 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
-    <!-- Fila de títulos -->
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textViewColumn1"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_weight="2"
+        android:padding="8dp"
+        android:textSize="12sp"
+        android:textColor="@android:color/white" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:padding="8dp"
-            android:text="@string/event_description"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorBackground"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:text="@string/event_name"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:text="@string/event_date"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:text="@string/event_date"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"/>
-
-    </LinearLayout>
-
-    <!-- Fila de datos -->
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textViewColumn2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:textSize="12sp"
+        android:textColor="@android:color/white" />
 
-        <TextView
-            android:id="@+id/textViewColumn1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:padding="8dp"
-            android:textSize="12sp"
-            android:textColor="@android:color/white"/>
+    <TextView
+        android:id="@+id/textViewColumn3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:textSize="12sp"
+        android:textColor="@android:color/white" />
 
-        <TextView
-            android:id="@+id/textViewColumn2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:textSize="12sp"
-            android:textColor="@android:color/white"/>
-
-        <TextView
-            android:id="@+id/textViewColumn3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:textSize="12sp"
-            android:textColor="@android:color/white"/>
-
-        <TextView
-            android:id="@+id/textViewColumn4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:textSize="12sp"
-            android:textColor="@android:color/white"/>
-
-    </LinearLayout>
-
+    <ImageView
+        android:id="@+id/dismissIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:src="@drawable/ic_dismiss"
+        android:contentDescription="@string/dismiss_icon_desc"
+        android:visibility="gone" />
 </LinearLayout>
