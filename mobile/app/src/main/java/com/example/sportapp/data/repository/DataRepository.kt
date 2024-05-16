@@ -61,3 +61,18 @@ class TrainingPlansRepository(private val trainingPlanService: TrainingPlanServi
 class TrainingSessionsRepository(private val trainingPlanService: TrainingPlanService) {
     fun getTrainingSessions(userId: Int) = trainingPlanService.getTrainingSessionsByUser(userId)
 }
+
+class StravaRepository(private val stravaService: StravaService) {
+
+    fun exchangeCodeForToken(code: String, callback: Callback<AccessTokenResponse>) {
+        stravaService.exchangeCodeForToken(code).enqueue(callback)
+    }
+
+    fun fetchStravaActivities(token: String, callback: Callback<List<StravaActivity>>) {
+        stravaService.fetchStravaActivities(token).enqueue(callback)
+    }
+
+    fun getStoredActivities(callback: Callback<List<StravaActivity>>) {
+        stravaService.getStoredActivities().enqueue(callback)
+    }
+}
