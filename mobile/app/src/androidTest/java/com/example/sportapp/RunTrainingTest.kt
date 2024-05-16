@@ -28,7 +28,7 @@ class RunTrainingTest {
         // Simular el clic en el icono de inicio
         onView(withId(R.id.ivHome)).perform(click())
         // Verificar que la actividad de inicio (HomeActivity) se haya abierto
-        onView(withId(R.id.linearLayout)).check(matches(isDisplayed()))
+        onView(withId(R.id.tvWelcome)).check(matches(isDisplayed()))
     }
 
     @Test

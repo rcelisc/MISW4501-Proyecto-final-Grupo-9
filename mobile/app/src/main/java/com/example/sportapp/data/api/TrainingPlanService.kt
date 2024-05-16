@@ -8,7 +8,7 @@ import retrofit2.http.Path
 
 interface TrainingPlanService {
     @GET("training-plans/{profile}")
-    fun getTrainingPlans(@Path("profile") profile: String): Call<List<TrainingPlansResponse>>
+    fun getTrainingPlans(@Path("profile") profile: String?): Call<List<TrainingPlansResponse>>
 
     @GET("training-sessions/user/{userId}")
     fun getTrainingSessionsByUser(@Path("userId") userId: Int): Call<List<TrainingsSessionsResponse>>

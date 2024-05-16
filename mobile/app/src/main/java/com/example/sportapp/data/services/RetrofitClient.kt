@@ -39,6 +39,10 @@ object RetrofitClient {
     }
 
     fun getEventsService(context: Context): EventsService {
+        return getRetrofit(context, Config.BASE_URL_EVENTS_QUERIES).create(EventsService::class.java)
+    }
+
+    fun getEventsAndServicesService(context: Context): EventsService {
         return getRetrofit(context, Config.BASE_URL_SERVICE).create(EventsService::class.java)
     }
     fun createTrainingMetricsService(context: Context): TrainingMetricsService {

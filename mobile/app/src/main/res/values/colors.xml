@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1E88E5</color> <!-- Blue 600 -->
-    <color name="colorPrimaryDark">#1565C0</color> <!-- Blue 700 -->
-    <color name="colorAccent">#FF4081</color> <!-- Pink A200 -->
-    <color name="colorAccentLight">#FF80AB</color> <!-- Pink A100 -->
-    <color name="colorAccentDark">#F50057</color> <!-- Pink A400 -->
-    <color name="colorError">#D32F2F</color> <!-- Red 700 -->
-    <color name="colorBackground">#FFFFFF</color> <!-- Light background color -->
-    <color name="colorSurface">#FFFFFF</color> <!-- Surface color -->
-    <color name="colorOnPrimary">#FFFFFF</color> <!-- Text color on primary -->
-    <color name="colorOnSecondary">#FFFFFF</color> <!-- Text color on secondary -->
-    <color name="colorOnBackground">#212121</color> <!-- Text color on background -->
-    <color name="colorOnSurface">#212121</color> <!-- Text color on surface -->
+    <color name="colorPrimary">#1E88E5</color>
+    <color name="colorPrimaryDark">#1565C0</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentLight">#FF80AB</color>
+    <color name="colorAccentDark">#F50057</color>
+    <color name="colorError">#D32F2F</color>
+    <color name="colorBackground">#F0F0F0</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSecondary">#212121</color>
+    <color name="colorOnBackground">#212121</color>
+    <color name="colorOnSurface">#212121</color>
+    <!-- Additional colors for suggestions/notifications -->
+    <color name="colorSuggestionTraining">#99c9f3</color>
+    <color name="colorSuggestionEvent">#76B6EF</color>
+    <color name="colorNotification">#FFCDD2</color> <!-- Light Red -->
 </resources>

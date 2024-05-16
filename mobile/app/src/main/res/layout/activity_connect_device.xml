@@ -7,93 +7,37 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="0dp"
-        tools:context=".ConnectDeviceActivity">
+    <!-- Top Menu Container -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/top_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/colorOnBackground"
+        app:itemTextColor="@color/colorOnBackground"
+        app:menu="@menu/top_nav_menu"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Top Menu -->
-        <com.google.android.material.card.MaterialCardView
+    <!-- Main Content -->
+    <FrameLayout
+        android:id="@+id/content_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="?attr/colorOnBackground"
+        app:layout_constraintTop_toBottomOf="@id/top_navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/colorPrimary">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/ivSugerencias"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/sugerencias"
-                app:iconGravity="textStart"
-                app:iconPadding="8dp"
-                app:iconTint="@android:color/white"
-                android:text="Sugerencias"
-                android:textColor="@android:color/white"
-                android:fontFamily="@font/lato_bold_font"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/ivHome"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/home"
-                app:iconGravity="textStart"
-                app:iconPadding="8dp"
-                app:iconTint="@android:color/white"
-                android:text="Home"
-                android:textColor="@android:color/white"
-                android:fontFamily="@font/lato_bold_font"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/ivCalendar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/calendario"
-                app:iconGravity="textStart"
-                app:iconPadding="8dp"
-                app:iconTint="@android:color/white"
-                android:text="Calendar"
-                android:textColor="@android:color/white"
-                android:fontFamily="@font/lato_bold_font"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/ivNotifications"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/notificaciones"
-                app:iconGravity="textStart"
-                app:iconPadding="8dp"
-                app:iconTint="@android:color/white"
-                android:text="Notifications"
-                android:textColor="@android:color/white"
-                android:fontFamily="@font/lato_bold_font"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Main Content -->
-        <FrameLayout
-            android:id="@+id/content_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="16dp"
-            android:background="@color/colorBackground">
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="0dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvwWelcome"
@@ -117,7 +61,6 @@
                 android:background="@drawable/item_background_selector"
                 android:gravity="top">
 
-                <!-- TextView -->
                 <TextView
                     android:id="@+id/tvwDevice"
                     android:layout_width="0dp"
@@ -129,7 +72,6 @@
                     android:textStyle="bold"
                     android:textSize="22sp" />
 
-                <!-- RecyclerView -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvTypeDevice"
                     android:layout_width="0dp"
@@ -182,83 +124,26 @@
                 android:layout_height="50dp"
                 android:layout_gravity="bottom|center"
                 android:layout_marginBottom="20dp"
-                app:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/colorPrimary"
                 android:fontFamily="@font/lato_bold_font"
                 android:text="@string/start_device"
                 android:textAllCaps="false"
                 android:textColor="@color/colorOnPrimary"
                 android:textSize="20sp"/>
-        </FrameLayout>
+        </LinearLayout>
+    </FrameLayout>
 
-        <!-- Bottom Menu -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/colorPrimary">
+    <!-- Bottom Menu -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/colorOnBackground"
+        app:itemTextColor="@color/colorOnBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/ivRun"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/run"
-                app:iconGravity="textStart"
-                app:iconPadding="8dp"
-                app:iconTint="@android:color/white"
-                android:text="Run"
-                android:textColor="@android:color/white"
-                android:fontFamily="@font/lato_bold_font"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/ivClockW"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/calend_clock"
-                app:iconGravity="textStart"
-                app:iconPadding="8dp"
-                app:iconTint="@android:color/white"
-                android:text="Clock"
-                android:textColor="@android:color/white"
-                android:fontFamily="@font/lato_bold_font"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/ivRunExe"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/start_exe"
-                app:iconGravity="textStart"
-                app:iconPadding="8dp"
-                app:iconTint="@android:color/white"
-                android:text="Run Exe"
-                android:textColor="@android:color/white"
-                android:fontFamily="@font/lato_bold_font"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/ivWatch"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/watch"
-                app:iconGravity="textStart"
-                app:iconPadding="8dp"
-                app:iconTint="@android:color/white"
-                android:text="Watch"
-                android:textColor="@android:color/white"
-                android:fontFamily="@font/lato_bold_font"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

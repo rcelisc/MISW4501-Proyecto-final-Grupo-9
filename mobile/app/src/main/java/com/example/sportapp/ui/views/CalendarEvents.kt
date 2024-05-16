@@ -16,6 +16,7 @@ import com.example.sportapp.data.model.Service
 import com.example.sportapp.data.repository.DataRepository
 import com.example.sportapp.data.services.RetrofitClient
 import com.example.sportapp.ui.home.Home
+import com.example.sportapp.utils.BadgeUtils
 import com.example.sportapp.utils.UtilRedirect
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
@@ -25,7 +26,7 @@ import retrofit2.Response
 class CalendarEvents : AppCompatActivity() {
     private lateinit var eventsAdapter: EventsAdapter
     private lateinit var servicesAdapter: ServicesAdapter
-    private val repository = DataRepository(RetrofitClient.getEventsService(this))
+    private val repository = DataRepository(RetrofitClient.getEventsAndServicesService(this))
     private val utilRedirect = UtilRedirect()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +46,12 @@ class CalendarEvents : AppCompatActivity() {
         servicesRecyclerView.adapter = servicesAdapter
 
         fetchCalendarEventsAndServices()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.top_navigation)
+        BadgeUtils.updateNotificationBadge(this, bottomNavigationView)
     }
 
     private fun fetchCalendarEventsAndServices() {

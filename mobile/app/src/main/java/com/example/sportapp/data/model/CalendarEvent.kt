@@ -12,6 +12,14 @@ data class Event(
     val name: String
 )
 
+data class EventSuggestion(
+    val descripción: String,
+    val fecha: String,
+    val id: Int,
+    val nombre: String,
+    val ubicación: String
+)
+
 data class Service(
     val available: Boolean,
     val description: String,
