@@ -55,7 +55,7 @@ class ReceiveSessionDataRepository(private val trainingSessionsService: Training
 }
 
 class TrainingPlansRepository(private val trainingPlanService: TrainingPlanService) {
-    fun getTrainingPlans(profile: String) = trainingPlanService.getTrainingPlans(profile)
+    fun getTrainingPlans(profile: String?) = trainingPlanService.getTrainingPlans(profile)
 }
 
 class TrainingSessionsRepository(private val trainingPlanService: TrainingPlanService) {

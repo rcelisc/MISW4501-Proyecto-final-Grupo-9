@@ -29,7 +29,7 @@ class StartTrainingTest {
         // Simular el clic en el icono de inicio
         onView(withId(R.id.ivHome)).perform(click())
         // Verificar que la actividad de inicio (HomeActivity) se haya abierto
-        onView(withId(R.id.linearLayout)).check(matches(isDisplayed()))
+        onView(withId(R.id.tvVersionName)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -37,6 +37,6 @@ class StartTrainingTest {
         // Simular el clic en el icono de inicio de entrenamiento
         onView(withId(R.id.ivRunExe)).perform(click())
         // Verificar que la actividad de inicio de entrenamiento (StartTraining) se haya abierto
-        onView(withId(R.id.linearLayout)).check(matches(isDisplayed()))
+        onView(withId(R.id.tvVersionName)).check(matches(isDisplayed()))
     }
 }

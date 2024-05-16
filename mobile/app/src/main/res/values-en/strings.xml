@@ -68,4 +68,8 @@
     <string name="duration">Duration</string>
     <string name="end_date">End Date</string>
     <string name="notes">Notes</string>
+    <string name="suggestions_title">Suggestions</string>
+    <string name="notifications_title">Notifications</string>
+    <string name="calendar_title">Title</string>
+    <string name="dismiss_icon_desc">Dismiss</string>
 </resources>
