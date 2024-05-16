@@ -27,10 +27,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31" >
 
-        <service
-            android:name=".data.StravaService"
-            android:exported="false" />
-
         <activity
             android:name=".ui.views.CalendarEvents"
             android:exported="false"
@@ -43,8 +39,16 @@
 
         <activity
             android:name=".ui.views.StravaViewConnect"
-            android:exported="false"
-            android:theme="@style/Theme.SportApp" />
+            android:exported="true"
+            android:theme="@style/Theme.SportApp"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="myapp" android:pathPrefix="/strava-callback" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".ui.home.Home"

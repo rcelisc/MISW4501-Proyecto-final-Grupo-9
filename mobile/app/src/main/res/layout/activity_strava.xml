@@ -27,7 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
-        android:background="?attr/colorOnBackground"
+        android:background="?attr/colorBackgroundFloating"
         app:layout_constraintTop_toBottomOf="@id/top_navigation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,6 +64,14 @@
                 android:textSize="24sp"
                 android:fontFamily="@font/lato_bold_font"
                 app:cornerRadius="8dp" />
+
+            <!-- Activities RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/activitiesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                android:visibility="visible"/>
         </LinearLayout>
     </FrameLayout>
 
