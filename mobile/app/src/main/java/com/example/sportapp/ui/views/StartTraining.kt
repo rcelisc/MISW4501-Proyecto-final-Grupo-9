@@ -21,6 +21,7 @@ import com.example.sportapp.data.repository.StopTrainingRepository
 import com.example.sportapp.data.services.Calories
 import com.example.sportapp.data.services.RetrofitClient
 import com.example.sportapp.ui.home.Home
+import com.example.sportapp.utils.BadgeUtils
 import com.example.sportapp.utils.UtilRedirect
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
@@ -74,6 +75,11 @@ class StartTraining : AppCompatActivity() {
         hideFinishTrainingDetails()
     }
 
+    override fun onResume() {
+        super.onResume()
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.top_navigation)
+        BadgeUtils.updateNotificationBadge(this, bottomNavigationView)
+    }
     private fun setUpNavigationButtons() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setOnItemSelectedListener { item ->

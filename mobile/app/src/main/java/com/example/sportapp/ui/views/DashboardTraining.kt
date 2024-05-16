@@ -16,6 +16,7 @@ import com.example.sportapp.data.repository.TrainingPlansRepository
 import com.example.sportapp.data.repository.TrainingSessionsRepository
 import com.example.sportapp.data.services.RetrofitClient
 import com.example.sportapp.ui.home.Home
+import com.example.sportapp.utils.BadgeUtils
 import com.example.sportapp.utils.UtilRedirect
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
@@ -55,6 +56,12 @@ class DashboardTraining : AppCompatActivity() {
                 t.printStackTrace()
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.top_navigation)
+        BadgeUtils.updateNotificationBadge(this, bottomNavigationView)
     }
 
     private fun setUpNavigationButtons() {

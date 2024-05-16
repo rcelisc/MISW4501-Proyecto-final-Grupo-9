@@ -1,16 +1,24 @@
 package com.example.sportapp.ui.home
-import android.util.Log
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sportapp.ui.views.*
 import com.example.sportapp.R
+import com.example.sportapp.SportApp
 import com.example.sportapp.utils.SessionManager
 import com.example.sportapp.utils.UtilRedirect
 import com.example.sportapp.data.services.RetrofitClient
 import com.example.sportapp.data.model.User
+import com.example.sportapp.data.repository.EventsRepository
+import com.example.sportapp.data.repository.TrainingPlansRepository
+import com.example.sportapp.data.model.EventSuggestion
+import com.example.sportapp.data.model.TrainingPlansResponse
+import com.example.sportapp.utils.BadgeUtils
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,6 +31,7 @@ class Home : AppCompatActivity() {
     private lateinit var tvLocation: TextView
     private lateinit var tvAge: TextView
     private lateinit var tvWeightHeight: TextView
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,13 +39,18 @@ class Home : AppCompatActivity() {
         setUpNavigationButtons()
         initNumeration()
         fetchUserData()
+        updateNotificationBadgeOnLogin()
     }
 
+    override fun onResume() {
+        super.onResume()
+        BadgeUtils.updateNotificationBadge(this, bottomNavigationView)
+    }
     private fun setUpNavigationButtons() {
         val btnStrava = findViewById<ImageView>(R.id.imgStrava)
         val btnExit1 = findViewById<TextView>(R.id.tvCloseSession)
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_run -> {
@@ -128,5 +142,9 @@ class Home : AppCompatActivity() {
         } else {
             Log.d("HomeActivity", "User ID is null")
         }
+    }
+    private fun updateNotificationBadgeOnLogin() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.top_navigation)
+        BadgeUtils.updateNotificationBadge(this, bottomNavigationView)
     }
 }

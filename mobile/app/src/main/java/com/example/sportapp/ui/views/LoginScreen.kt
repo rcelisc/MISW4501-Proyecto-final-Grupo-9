@@ -10,6 +10,7 @@ import com.example.sportapp.SportApp
 import com.example.sportapp.data.api.AuthService
 import com.example.sportapp.data.model.LoginRequest
 import com.example.sportapp.data.model.LoginResponse
+import com.example.sportapp.data.model.User
 import com.example.sportapp.databinding.ActivityLoginBinding
 import com.example.sportapp.ui.home.Home
 import com.example.sportapp.utils.UtilRedirect
@@ -50,6 +51,7 @@ class LoginScreen : AppCompatActivity() {
                         val decodedToken = decodeToken(loginResponse.token)
                         if (decodedToken != null && decodedToken.role == "athlete") {
                             saveToken(loginResponse.token)
+                            fetchUserProfile(decodedToken.userId)
                             utilRedirect.redirectToActivity(this@LoginScreen, Home::class.java)
                         } else {
                             Log.e("LoginScreen", "Login failed: Only athletes can log in")
@@ -116,6 +118,30 @@ class LoginScreen : AppCompatActivity() {
         SportApp.userRole = role
         // Set other necessary session details if available
     }
+    private fun fetchUserProfile(userId: Int) {
+        val userService = RetrofitClient.createUserService(this)
+        userService.getUserById(userId).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful) {
+                    val user = response.body()
+                    user?.let {
+                        SportApp.profile = it.profile_type
+                        Log.d("LoginScreen", "User profile fetched and updated: ${it.profile_type}")
+                        utilRedirect.redirectToActivity(this@LoginScreen, Home::class.java)
+                    } ?: run {
+                        Log.d("LoginScreen", "User data is null")
+                    }
+                } else {
+                    Log.d("LoginScreen", "Failed to fetch user data: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.d("LoginScreen", "Error fetching user data: ${t.message}")
+            }
+        })
+    }
 
     data class DecodedToken(val userId: Int, val role: String)
 }
+
