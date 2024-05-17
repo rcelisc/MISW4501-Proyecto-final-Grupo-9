@@ -14,19 +14,16 @@ class Calories {
 
 
     fun calculateExerciseCaloriesBurned(exerciseType: String, durationInMinutes: Int, weight: Int): Double {
-        // Aquí podrías tener una tabla de calorías por ejercicio
-        // o usar un método específico para calcular las calorías
-        // dependiendo del tipo de ejercicio y su intensidad.
         // Por simplicidad, asumimos que recibimos un valor fijo
         // de calorías quemadas por minuto para el ejercicio dado.
-        val caloriesPerMinute: Double = when (exerciseType) {
-            "running" -> 10.0 // Suponiendo 10 calorías por minuto para correr
-            "cycling" -> 8.0  // Suponiendo 8 calorías por minuto para ciclismo
-            else -> 5.0       // Por defecto, 5 calorías por minuto
+        val caloriesPerMinute: Double = when (exerciseType.lowercase()) {
+            "running" -> 10.0
+            "cycling" -> 8.0
+            else -> 5.0 // Swiming.
         }
-        return caloriesPerMinute * durationInMinutes * weight / 60
-    }
 
+        return caloriesPerMinute * durationInMinutes.coerceAtLeast(1) * weight / 60
+    }
 
     fun calculateTotalCaloriesBurned(age: Int, weight: Int, height: Int, isMale: Boolean,
                                       exerciseType: String, durationInMinutes: Int): Double {
