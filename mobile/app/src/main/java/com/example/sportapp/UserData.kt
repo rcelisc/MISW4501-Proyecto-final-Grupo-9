@@ -17,6 +17,8 @@ class SportApp : Application() {
         var age: Int = 30
         var weight: Int = 80 // kg
         var height: Int = 174 // cm
+        var calories: Int = 0 // cm
+        var steps: Int = 0 // cm
     }
 
     override fun onCreate() {
@@ -36,5 +38,7 @@ class SportApp : Application() {
         age = 40
         weight = 80
         height = 174
+        calories = 0
+        steps = 0
     }
 }

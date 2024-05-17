@@ -116,10 +116,10 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
+                android:layout_width="220dp"
                 android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="80dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
                 app:cardBackgroundColor="@color/colorPrimary">
 
                 <TextView
@@ -132,8 +132,9 @@
                     android:text="@string/home_close_session"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
-                    android:textSize="25dp"
-                    android:textStyle="bold"/>
+                    android:textSize="20dp"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="normal"/>
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>

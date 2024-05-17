@@ -74,4 +74,9 @@
     <string name="status_disconnected">Disconnected</string>
     <string name="get_strava_info">Get Strava Info</string>
     <string name="connect_strava">Connect To Strava</string>
+    <string name="device_steps">Pasos:</string>
+    <string name="device_powerOutpt">Potencia de salida:</string>
+    <string name="device_maxHeartRate">Frec. Card. Maxima :</string>
+    <string name="device_restingHeartRate">Frec. Card. Reposo :</string>
+    <string name="sendData_success">Datos enviados con exito!</string>
 </resources>
