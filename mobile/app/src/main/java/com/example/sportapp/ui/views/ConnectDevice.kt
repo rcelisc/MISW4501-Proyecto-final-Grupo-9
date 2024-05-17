@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sportapp.BluetoothManager
-import com.example.sportapp.GetGoogleFitManager
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
 import com.example.sportapp.data.services.FitnessSensor
@@ -21,8 +20,6 @@ import com.example.sportapp.data.services.FitnessSensorListener
 import com.example.sportapp.ui.home.Home
 import com.example.sportapp.utils.BadgeUtils
 import com.example.sportapp.utils.UtilRedirect
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.button.MaterialButton
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -34,6 +31,8 @@ import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.data.Field
 import com.google.android.gms.fitness.request.DataReadRequest
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.button.MaterialButton
 import java.io.IOException
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -49,9 +48,8 @@ class ConnectDevice : AppCompatActivity(), BluetoothManager.BluetoothListener, F
     private lateinit var powerOutputTextView: TextView
     private lateinit var maxHeartRateTextView: TextView
     private lateinit var restingHeartRateTextView: TextView
-    private val REQUEST_CODE_PERMISSIONS = 101
+    private lateinit var stepsTextView: TextView
     private val RC_SIGN_IN = 9001
-    private lateinit var googleFitManager: GetGoogleFitManager
     private lateinit var fitnessOptions: FitnessOptions
     private lateinit var cuenta: GoogleSignInAccount
     var resHearRateGoogle: Float = 0.0F
@@ -64,6 +62,7 @@ class ConnectDevice : AppCompatActivity(), BluetoothManager.BluetoothListener, F
         fitnessOptions = FitnessOptions.builder()
             .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_BASAL_METABOLIC_RATE, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_HEART_POINTS, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_ACTIVITY_SEGMENT, FitnessOptions.ACCESS_READ)
@@ -78,15 +77,23 @@ class ConnectDevice : AppCompatActivity(), BluetoothManager.BluetoothListener, F
             val measurements = sensor.generateManualMeasurements()
             val (powerOutput, maxHeartRate, restingHeartRate) = measurements ?: Triple(0, 0, 0)
 
-            fetchRestingHeartRate1 { restingHeartRate ->
+            fetchRestingHeartRate { restingHeartRate ->
                 Log.d("ConnectGoogle", "Ritmo cardíaco en reposo: $restingHeartRate")
-                resHearRateGoogle = restingHeartRate
+                restingHeartRateTextView.text = getString(R.string.device_restingHeartRate) + " " + restingHeartRate.toString() + " bpm"
+                SportApp.restingHeartRate = restingHeartRate.toInt()
             }
 
             getStepsClient(this) { totalPasos ->
-                Log.d("TotalPasos", "Total de pasos del cliente: $totalPasos")
+                Log.d("ConnectGoogle", "Total de pasos del cliente: $totalPasos")
+                stepsTextView.text = getString(R.string.device_steps) + " " + totalPasos.toString() + " steps"
+                SportApp.steps = totalPasos
             }
-            Log.d("ConnectGoogle", "Ritmo cardíaco en reposo google: $resHearRateGoogle")
+
+            getCaloriesClient(this) { totalCalorias ->
+                Log.d("ConnectGoogle", "Total de  calorias del cliente: $totalCalorias")
+                SportApp.calories = totalCalorias.toInt()
+            }
+
             onMeasurementsChanged(powerOutput, maxHeartRate, resHearRateGoogle.toInt())
         }
 
@@ -98,6 +105,7 @@ class ConnectDevice : AppCompatActivity(), BluetoothManager.BluetoothListener, F
         powerOutputTextView = findViewById(R.id.powerOutputTextView)
         maxHeartRateTextView = findViewById(R.id.maxHeartRateTextView)
         restingHeartRateTextView = findViewById(R.id.restingHeartRateTextView)
+        stepsTextView = findViewById(R.id.stepsTextView)
 
         // Inicializa datos de entrenamiento
         val dataList = getString(R.string.device).split(",") // Lista de datos
@@ -130,7 +138,7 @@ class ConnectDevice : AppCompatActivity(), BluetoothManager.BluetoothListener, F
             Log.d("ConnectGoogle", "Definido googleFitManager: $fitnessOptions")
 
             // Llamar al método fetchRestingHeartRate para obtener el ritmo cardíaco en reposo
-            fetchRestingHeartRate1 { restingHeartRate ->
+            fetchRestingHeartRate { restingHeartRate ->
                 Log.d("ConnectGoogle", "Ritmo cardíaco en reposo: $restingHeartRate")
             }
         }
@@ -219,41 +227,6 @@ class ConnectDevice : AppCompatActivity(), BluetoothManager.BluetoothListener, F
     fun fetchRestingHeartRate(callback: (Float) -> Unit) {
         cuenta = GoogleSignIn.getAccountForExtension(this, fitnessOptions)
         if (cuenta != null) {
-            val tiempoFinal = Calendar.getInstance().timeInMillis
-            val tiempoInicial = tiempoFinal - TimeUnit.DAYS.toMillis(7)
-
-            try {
-                val solicitudFrecuenciaCardiacaReposo = DataReadRequest.Builder()
-                    .read(DataType.TYPE_HEART_RATE_BPM)
-                    .setTimeRange(tiempoInicial, tiempoFinal, TimeUnit.MILLISECONDS)
-                    .build()
-
-                Fitness.getHistoryClient(this, cuenta)
-                    .readData(solicitudFrecuenciaCardiacaReposo)
-                    .addOnSuccessListener { respuesta ->
-                        val puntosDatos = respuesta.getDataSet(DataType.TYPE_HEART_RATE_BPM).dataPoints
-                        val ultimoPunto = puntosDatos.lastOrNull()
-                        val frecuenciaCardiacaReposo = ultimoPunto?.getValue(Field.FIELD_BPM)?.asFloat() ?: 0f
-
-                        Log.e("ConnectGoogle", "Datos obtenidos enlistener >>>> : $puntosDatos")
-
-                        callback(frecuenciaCardiacaReposo)
-                    }
-                    .addOnFailureListener { excepcion ->
-                        Log.e("ConnectGoogle", "Error al obtener datos >>>> : $cuenta Exc: ", excepcion)
-                        callback(0f)
-                    }
-            } catch (e: IOException) {
-                Log.e("ConnectGoogle", "Error al enviar datos por Bluetooth: ${e.message}")
-            }
-        } else {
-            Log.e("ConnectGoogle", "El signin esta vacio o con error.")
-        }
-    }
-
-    fun fetchRestingHeartRate1(callback: (Float) -> Unit) {
-        cuenta = GoogleSignIn.getAccountForExtension(this, fitnessOptions)
-        if (cuenta != null) {
             Log.d("ConnectGoogle", "Permisos de la cuenta. >>>> : ${cuenta.grantedScopes} ")
             Log.d("ConnectGoogle", "Permisos de la fitnesoptions. >>>> : ${fitnessOptions.impliedScopes} ")
 
@@ -333,6 +306,37 @@ class ConnectDevice : AppCompatActivity(), BluetoothManager.BluetoothListener, F
         } else {
             Log.e("ConnectGoogle", "El usuario no ha iniciado sesión en Google Fit.")
         }
+    }
+
+    fun getCaloriesClient(contexto: Context, callback: (Float) -> Unit) {
+        val cuenta = GoogleSignIn.getAccountForExtension(contexto, fitnessOptions)
+        val tiempoActual = System.currentTimeMillis()
+        val tiempoInicial = tiempoActual - TimeUnit.DAYS.toMillis(7) // Obtener datos de los últimos 7 días
+
+        val solicitudCalorias = DataReadRequest.Builder()
+            .aggregate(DataType.TYPE_CALORIES_EXPENDED, DataType.AGGREGATE_CALORIES_EXPENDED)
+            .setTimeRange(tiempoInicial, tiempoActual, TimeUnit.MILLISECONDS)
+            .bucketByTime(1, TimeUnit.DAYS) // Agrupar las calorías por día
+            .build()
+
+        Fitness.getHistoryClient(contexto, cuenta)
+            .readData(solicitudCalorias)
+            .addOnSuccessListener { respuesta ->
+                var totalCalorias = 0f
+                respuesta.buckets.forEach { bucket ->
+                    bucket.dataSets.forEach { dataSet ->
+                        dataSet.dataPoints.forEach { dataPoint ->
+                            val calorias = dataPoint.getValue(Field.FIELD_CALORIES).asFloat()
+                            totalCalorias += calorias
+                        }
+                    }
+                }
+                callback(totalCalorias)
+            }
+            .addOnFailureListener { excepcion ->
+                Log.e("ObtenerCaloriasCliente", "Error al obtener las calorías: ", excepcion)
+                callback(0f)
+            }
     }
 
     override fun onConnected() {
@@ -440,10 +444,10 @@ class ConnectDevice : AppCompatActivity(), BluetoothManager.BluetoothListener, F
     override fun onMeasurementsChanged(powerOutput: Int, maxHeartRate: Int, restingHeartRate: Int) {
         runOnUiThread {
             val mhr = 220 - SportApp.age
-            powerOutputTextView.text = "Power Output: $powerOutput watts"
-            maxHeartRateTextView.text = "Max Heart Rate: $mhr bpm"
-            restingHeartRateTextView.text = "Resting Heart Rate: $restingHeartRate bpm"
-            Log.d("DEBUG", "Entro a escribir los datos.: ")
+            powerOutputTextView.text = getString(R.string.device_powerOutpt) + " " + powerOutput + " watts"
+            SportApp.powerOutput = powerOutput
+            maxHeartRateTextView.text = getString(R.string.device_maxHeartRate) + " " + mhr + " bpm"
+            SportApp.maxHeartRate = mhr
         }
     }
 
