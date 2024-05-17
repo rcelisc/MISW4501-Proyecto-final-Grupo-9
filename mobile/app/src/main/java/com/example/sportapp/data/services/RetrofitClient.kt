@@ -2,7 +2,13 @@ package com.example.sportapp.data.services
 
 import android.content.Context
 import com.example.sportapp.Config
-import com.example.sportapp.data.api.*
+import com.example.sportapp.data.api.AuthService
+import com.example.sportapp.data.api.EventsService
+import com.example.sportapp.data.api.StravaService
+import com.example.sportapp.data.api.TrainingMetricsService
+import com.example.sportapp.data.api.TrainingPlanService
+import com.example.sportapp.data.api.TrainingSessionsService
+import com.example.sportapp.data.api.UserService
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
@@ -61,6 +67,8 @@ object RetrofitClient {
     fun createTrainingPlansService(context: Context): TrainingPlanService {
         return getRetrofit(Config.BASE_URL_TrainingPlans, true, context).create(TrainingPlanService::class.java)
     }
+
+
 
     // Nueva configuración de Retrofit para Strava
     fun createStravaService(context: Context): StravaService {

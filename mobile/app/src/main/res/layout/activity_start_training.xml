@@ -76,7 +76,7 @@
                 android:backgroundTint="@color/colorPrimary"
                 android:text="@string/start_training"
                 android:textAllCaps="false"
-                android:textColor="@color/colorOnBackground"
+                android:textColor="@color/colorOnPrimary"
                 android:textSize="24sp"
                 android:fontFamily="@font/lato_bold_font"
                 app:cornerRadius="8dp"
@@ -145,7 +145,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnFTPVO2"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"

@@ -3,6 +3,7 @@ package com.example.sportapp.ui.views
 import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Chronometer
@@ -12,10 +13,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
+import com.example.sportapp.data.model.ReceiveSessionDataResponse
 import com.example.sportapp.data.model.StartTrainingResponse
 import com.example.sportapp.data.model.StopTrainingResponse
 import com.example.sportapp.data.model.TrainingMetricsCalculatedResponse
 import com.example.sportapp.data.repository.FTPVO2Repository
+import com.example.sportapp.data.repository.ReceiveSessionDataRepository
 import com.example.sportapp.data.repository.StartTrainingRepository
 import com.example.sportapp.data.repository.StopTrainingRepository
 import com.example.sportapp.data.services.Calories
@@ -46,6 +49,8 @@ class StartTraining : AppCompatActivity() {
     private val startRepository = StartTrainingRepository(RetrofitClient.createTrainingSessionsService(this))
     private val stopRepository = StopTrainingRepository(RetrofitClient.createTrainingSessionsService(this))
     private val ftpRepository = FTPVO2Repository(RetrofitClient.createTrainingMetricsService(this))
+    private val receiveSesionData = ReceiveSessionDataRepository(RetrofitClient.createTrainingSessionsService(this))
+
     private val utilRedirect = UtilRedirect()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +59,7 @@ class StartTraining : AppCompatActivity() {
         setUpNavigationButtons()
 
         // Initialize training type spinner
-        val dataList = listOf("Natacion", "Ciclismo", "Running")
+        val dataList = listOf("Natacion", "Ciclismo", "Correr")
         spinnerTrainingType = findViewById(R.id.spinnerTrainingType)
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dataList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -198,20 +203,25 @@ class StartTraining : AppCompatActivity() {
                     tvwCalTraining.visibility = View.VISIBLE
                     btnFTPVO2.visibility = View.VISIBLE
 
+                    Log.d("DEBUG", "Finish Training OK: ${response.code()}")
                     // Automatically calculate FTP and VO2 max
                     calculateFTPVO2()
                 } else {
+                    Log.d("DEBUG", "FT Service call not successful. Error code: ${response.code()}")
                     showToast(this@StartTraining, getString(R.string.error_finishing_session, response.code()))
                 }
             }
 
             override fun onFailure(call: Call<StopTrainingResponse>, t: Throwable) {
+                Log.d("DEBUG", "Error en Finish Training. Error code: ${t.message}")
                 showToast(this@StartTraining, t.message ?: getString(R.string.error_generic))
             }
         })
     }
 
     private fun calculateFTPVO2() {
+        //First Send Data to Calculte FTP.
+        receiveSesionData()
         ftpRepository.postCalculateFTPVo2(SportApp.userSessionId, object : Callback<TrainingMetricsCalculatedResponse> {
             override fun onResponse(call: Call<TrainingMetricsCalculatedResponse>, response: Response<TrainingMetricsCalculatedResponse>) {
                 if (response.isSuccessful) {
@@ -225,11 +235,34 @@ class StartTraining : AppCompatActivity() {
                         showToast(this@StartTraining, getString(R.string.calculation_success))
                     }
                 } else {
+                    Log.d("DEBUG", "Error en Calcular FTP. Response: ${response.toString()}")
                     showToast(this@StartTraining, getString(R.string.error_calling_service, response.code()))
                 }
             }
 
             override fun onFailure(call: Call<TrainingMetricsCalculatedResponse>, t: Throwable) {
+                Log.d("DEBUG", "Error en Calcular FTP. Error code: ${t.message}")
+                showToast(this@StartTraining, t.message ?: getString(R.string.error_generic))
+            }
+        })
+    }
+
+    private fun receiveSesionData() {
+        receiveSesionData.receiveSessionDataService(SportApp.userSessionId, SportApp.powerOutput, SportApp.maxHeartRate, SportApp.restingHeartRate,  object : Callback<ReceiveSessionDataResponse> {
+            override fun onResponse(call: Call<ReceiveSessionDataResponse>, response: Response<ReceiveSessionDataResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        Log.d("DEBUG", "Data Enviada. Response: ${it.message}")
+                        showToast(this@StartTraining, getString(R.string.sendData_success))
+                    }
+                } else {
+                    Log.d("DEBUG", "Error send Data. Response: ${response.toString()}")
+                    showToast(this@StartTraining, getString(R.string.error_calling_service, response.code()))
+                }
+            }
+
+            override fun onFailure(call: Call<ReceiveSessionDataResponse>, t: Throwable) {
+                Log.d("DEBUG", "Error send data. Error code: ${t.message}")
                 showToast(this@StartTraining, t.message ?: getString(R.string.error_generic))
             }
         })
