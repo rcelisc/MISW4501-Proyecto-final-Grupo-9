@@ -12,6 +12,7 @@ class SportApp : Application() {
         var maxHeartRate: Int = 0
         var restingHeartRate: Int = 0
         var profile: String? = ""
+        var plan_type: String? = ""
         var startDevice: Boolean = false
         var isMale: Boolean = true
         var age: Int = 30

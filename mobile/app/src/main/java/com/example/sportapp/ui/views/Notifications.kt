@@ -14,9 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
 import com.example.sportapp.data.model.EventSuggestion
+import com.example.sportapp.data.model.Service
+import com.example.sportapp.data.model.ServicesResponse
 import com.example.sportapp.data.model.TrainingPlansResponse
 import com.example.sportapp.data.model.User
 import com.example.sportapp.data.repository.EventsRepository
+import com.example.sportapp.data.repository.ServicesRepository
 import com.example.sportapp.data.repository.TrainingPlansRepository
 import com.example.sportapp.data.services.RetrofitClient
 import com.example.sportapp.ui.home.Home
@@ -32,8 +35,10 @@ class Notifications : AppCompatActivity() {
     private lateinit var tableAdapter: TableAdapter
     private lateinit var tableAdapterEvents: TableAdapterEvents
     private lateinit var tableAdapterRoutes: TableAdapterRoutes
+    private lateinit var tableAdapterServices: TableAdapterServices
     private val repositoryEvents = EventsRepository(RetrofitClient.getEventsService(this))
     private val repository = TrainingPlansRepository(RetrofitClient.createTrainingPlansService(this))
+    private val servicesRepository = ServicesRepository(RetrofitClient.getServicesPublished(this))
     private val utilRedirect = UtilRedirect()
     private var suggestedRoute: String? = null
 
@@ -51,6 +56,7 @@ class Notifications : AppCompatActivity() {
         BadgeUtils.updateNotificationBadge(this, topNavigationView)
         fetchTrainingPlans()
         fetchEventSuggestions()
+        fetchServicesPublished()
         displayRouteSuggestion()
     }
 
@@ -69,6 +75,11 @@ class Notifications : AppCompatActivity() {
         recyclerViewRoutes.layoutManager = LinearLayoutManager(this)
         tableAdapterRoutes = TableAdapterRoutes { position, suggestionId -> dismissRoute(position, suggestionId) }
         recyclerViewRoutes.adapter = tableAdapterRoutes
+
+        val recyclerViewServices = findViewById<RecyclerView>(R.id.rvServices)
+        recyclerViewServices.layoutManager = LinearLayoutManager(this)
+        tableAdapterServices = TableAdapterServices { position, suggestionId -> dismissService(position, suggestionId) }
+        recyclerViewServices.adapter = tableAdapterServices
     }
 
     private fun fetchUserProfile() {
@@ -80,9 +91,12 @@ class Notifications : AppCompatActivity() {
                     val user = response.body()
                     user?.let {
                         SportApp.profile = it.profile_type
+                        SportApp.plan_type = it.plan_type
                         Log.d("Notifications", "User profile fetched and updated: ${it.profile_type}")
+                        Log.d("Notifications", "User profile fetched and updated: ${it.plan_type}")
                         fetchTrainingPlans()
                         fetchEventSuggestions()
+                        fetchServicesPublished()
                     } ?: run {
                         Log.d("Notifications", "User data is null")
                     }
@@ -148,6 +162,33 @@ class Notifications : AppCompatActivity() {
         })
     }
 
+    private fun fetchServicesPublished() {
+        if (SportApp.plan_type == "intermediate" || SportApp.profile == "premium") {
+            servicesRepository.getServicesPublished().enqueue(object : Callback<ServicesResponse> {
+                override fun onResponse(call: Call<ServicesResponse>, response: Response<ServicesResponse>) {
+                    if (response.isSuccessful) {
+                        response.body()?.let { servicesResponse ->
+                            Log.d("Notifications", "Services published found: $servicesResponse")
+                            tableAdapterServices.clearItems()
+                            servicesResponse.services.forEach {
+                                if (!isDismissed("service_${it.id}")) {
+                                    tableAdapterServices.addItem(it)
+                                }
+                            }
+                            updateNotificationBadge()
+                        } ?: Log.d("Notifications", "Server response is null for Services")
+                    } else {
+                        Log.d("Notifications", "Failed to fetch Services. Error code: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<ServicesResponse>, t: Throwable) {
+                    Log.d("Notifications", "Error fetching Services: ${t.message}")
+                }
+            })
+        }
+    }
+
     private fun displayRouteSuggestion() {
         val sharedPreferences = getSharedPreferences("SportAppPrefs", Context.MODE_PRIVATE)
         suggestedRoute = sharedPreferences.getString("suggestedRoute", null)
@@ -194,6 +235,14 @@ class Notifications : AppCompatActivity() {
     private fun dismissRoute(position: Int, suggestionId: String) {
         Log.d("Notifications", "Dismissing route with ID: $suggestionId at position: $position")
         tableAdapterRoutes.dismissItem(position)
+        addDismissedSuggestion(suggestionId)
+        updateNotificationBadge()
+    }
+
+
+    private fun dismissService(position: Int, suggestionId: String) {
+        Log.d("Notifications", "Dismissing service with ID: $suggestionId at position: $position")
+        tableAdapterServices.dismissItem(position)
         addDismissedSuggestion(suggestionId)
         updateNotificationBadge()
     }
@@ -436,4 +485,59 @@ class Notifications : AppCompatActivity() {
         }
     }
 
+    class TableAdapterServices(private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.Adapter<TableAdapterServices.ViewHolder>() {
+        private val dataServices = mutableListOf<Service>()
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_service_suggestion, parent, false)
+            return ViewHolder(view, onItemDismissed)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.bind(dataServices[position])
+        }
+
+        override fun getItemCount() = dataServices.size
+
+        fun addItem(item: Service) {
+            dataServices.add(item)
+            notifyItemInserted(dataServices.size - 1)
+        }
+
+        fun clearItems() {
+            dataServices.clear()
+            notifyDataSetChanged()
+        }
+
+        fun dismissItem(position: Int) {
+            dataServices.removeAt(position)
+            notifyItemRemoved(position)
+        }
+
+        class ViewHolder(itemView: View, private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.ViewHolder(itemView) {
+            init {
+                itemView.findViewById<View>(R.id.dismissIcon).setOnClickListener {
+                    onItemDismissed(adapterPosition, itemView.tag as String)
+                }
+            }
+
+            fun bind(item: Service) {
+                itemView.findViewById<TextView>(R.id.textViewColumn1).text = item.name
+                itemView.findViewById<TextView>(R.id.textViewColumn2).text = item.description
+                itemView.findViewById<TextView>(R.id.textViewColumn3).text = item.rate.toString()
+                itemView.tag = "service_${item.id}"
+
+                // Set different background color for services
+                val backgroundColorRes = R.color.colorSuggestionService
+                itemView.setBackgroundColor(ContextCompat.getColor(itemView.context, backgroundColorRes))
+
+                // Add a dismiss icon
+                val dismissIcon = itemView.findViewById<View>(R.id.dismissIcon)
+                dismissIcon.visibility = View.VISIBLE
+                dismissIcon.setOnClickListener {
+                    onItemDismissed(adapterPosition, "service_${item.id}")
+                }
+            }
+        }
+    }
 }

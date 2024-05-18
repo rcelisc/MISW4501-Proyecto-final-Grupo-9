@@ -13,6 +13,9 @@ class DataRepository(private val eventsService: EventsService) {
     fun getCalendarEventsAndServices() = eventsService.getCalendarEventsAndServices()
 }
 
+class ServicesRepository(private val servicesService: ServicesService) {
+    fun getServicesPublished() = servicesService.getServicesPublished()
+}
 class EventsRepository(private val eventsService: EventsService) {
     fun getCalendarEvents(userId: Int) = eventsService.getUserCalendar(userId)
 }
