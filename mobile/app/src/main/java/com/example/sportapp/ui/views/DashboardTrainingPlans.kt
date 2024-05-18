@@ -11,9 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
-import com.example.sportapp.data.model.TrainingsSessionsResponse
+import com.example.sportapp.data.model.TrainingPlansResponse
 import com.example.sportapp.data.repository.TrainingPlansRepository
-import com.example.sportapp.data.repository.TrainingSessionsRepository
 import com.example.sportapp.data.services.RetrofitClient
 import com.example.sportapp.ui.home.Home
 import com.example.sportapp.utils.BadgeUtils
@@ -23,14 +22,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DashboardTraining : AppCompatActivity() {
+class DashboardTrainingPlans : AppCompatActivity() {
     private lateinit var tableAdapter: TableAdapter
-    private val repository = TrainingSessionsRepository(RetrofitClient.createTrainingPlansService(this))
+    private val repository = TrainingPlansRepository(RetrofitClient.createTrainingPlansService(this))
     private val utilRedirect = UtilRedirect()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dashboard_training)
+        setContentView(R.layout.activity_dashboard_training_plans)
         setUpNavigationButtons()
 
         val recyclerView = findViewById<RecyclerView>(R.id.rvTrainings)
@@ -38,20 +37,20 @@ class DashboardTraining : AppCompatActivity() {
         tableAdapter = TableAdapter()
         recyclerView.adapter = tableAdapter
 
-        repository.getTrainingSessions(SportApp.userCodeId).enqueue(object :
-            Callback<List<TrainingsSessionsResponse>> {
-            override fun onResponse(call: Call<List<TrainingsSessionsResponse>>, response: Response<List<TrainingsSessionsResponse>>) {
+        repository.getTrainingPlans(SportApp.profile).enqueue(object :
+            Callback<List<TrainingPlansResponse>> {
+            override fun onResponse(call: Call<List<TrainingPlansResponse>>, response: Response<List<TrainingPlansResponse>>) {
                 if (response.isSuccessful) {
-                    response.body()?.let { trainings ->
-                        Log.d("DEBUG", "Trainings found...")
-                        tableAdapter.addItems(trainings)
+                    response.body()?.let { plans ->
+                        Log.d("DEBUG", "Training plans found...")
+                        tableAdapter.addItems(plans)
                     } ?: Log.d("DEBUG", "Server response is null")
                 } else {
                     Log.d("DEBUG", "Service call not successful. Error code: ${response.code()}")
                 }
             }
 
-            override fun onFailure(call: Call<List<TrainingsSessionsResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<List<TrainingPlansResponse>>, t: Throwable) {
                 Log.d("DEBUG", "Error calling the service: ${t.message}")
                 t.printStackTrace()
             }
@@ -109,7 +108,7 @@ class DashboardTraining : AppCompatActivity() {
     }
 
     class TableAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        private val data = mutableListOf<TrainingsSessionsResponse>()
+        private val data = mutableListOf<TrainingPlansResponse>()
 
         companion object {
             const val VIEW_TYPE_HEADER = 0
@@ -122,10 +121,10 @@ class DashboardTraining : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return if (viewType == VIEW_TYPE_HEADER) {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_training_header, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_training_plan_header, parent, false)
                 HeaderViewHolder(view)
             } else {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_trainings, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_training_plans, parent, false)
                 ItemViewHolder(view)
             }
         }
@@ -138,7 +137,7 @@ class DashboardTraining : AppCompatActivity() {
 
         override fun getItemCount() = data.size + 1 // +1 for the header
 
-        fun addItems(items: List<TrainingsSessionsResponse>) {
+        fun addItems(items: List<TrainingPlansResponse>) {
             val startInsertPosition = data.size + 1 // +1 for the header
             data.addAll(items)
             notifyItemRangeInserted(startInsertPosition, items.size)
@@ -152,11 +151,11 @@ class DashboardTraining : AppCompatActivity() {
             private val column3TextView: TextView = itemView.findViewById(R.id.textViewColumn3)
             private val column4TextView: TextView = itemView.findViewById(R.id.textViewColumn4)
 
-            fun bind(item: TrainingsSessionsResponse) {
-                column1TextView.text = item.training_type
+            fun bind(item: TrainingPlansResponse) {
+                column1TextView.text = item.description
                 column2TextView.text = item.duration
-                column3TextView.text = item.end_time
-                column4TextView.text = item.notes
+                column3TextView.text = item.frequency
+                column4TextView.text = item.objectives
             }
         }
     }

@@ -15,9 +15,9 @@ class SportApp : Application() {
         var plan_type: String? = ""
         var startDevice: Boolean = false
         var isMale: Boolean = true
-        var age: Int = 30
-        var weight: Int = 80 // kg
-        var height: Int = 174 // cm
+        var age: Int = 0
+        var weight: Float = 0.0F // kg
+        var height: Float = 0.0F // cm
         var calories: Int = 0 // cm
         var steps: Int = 0 // cm
     }
@@ -36,9 +36,9 @@ class SportApp : Application() {
         profile = ""
         startDevice = false
         isMale = true
-        age = 40
-        weight = 80
-        height = 174
+        age = 0
+        weight = 0.0F
+        height = 0.0F
         calories = 0
         steps = 0
     }

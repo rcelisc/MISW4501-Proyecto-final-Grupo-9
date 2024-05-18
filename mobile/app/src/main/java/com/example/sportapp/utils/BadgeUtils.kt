@@ -13,6 +13,7 @@ import com.example.sportapp.data.repository.ServicesRepository
 import com.example.sportapp.data.repository.TrainingPlansRepository
 import com.example.sportapp.data.services.RetrofitClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -88,7 +89,6 @@ object BadgeUtils {
             })
         }
 
-
         // Check for Route Suggestion
         val suggestedRoute = sharedPreferences.getString("suggestedRoute", null)
         if (suggestedRoute != null && !dismissedSet.contains("route_0")) {
@@ -97,11 +97,13 @@ object BadgeUtils {
         }
 
         // Add count for food and beverage suggestions
-        val foodBeverageSuggestions = getRandomFoodBeverageSuggestions().filter { !dismissedSet.contains("foodBeverage_${it.id}") }
-        notificationCount += foodBeverageSuggestions.size
-        updateBadge(bottomNavigationView, notificationCount)
-
-
+        val foodBeverageJson = sharedPreferences.getString("suggestedFoodBeverage", null)
+        if (foodBeverageJson != null) {
+            val foodBeverageSuggestions = Gson().fromJson(foodBeverageJson, Array<FoodBeverageSuggestion>::class.java)
+                .filter { !dismissedSet.contains("foodBeverage_${it.id}") }
+            notificationCount += foodBeverageSuggestions.size
+            updateBadge(bottomNavigationView, notificationCount)
+        }
     }
 
     private fun updateBadge(bottomNavigationView: BottomNavigationView, count: Int) {
@@ -109,16 +111,5 @@ object BadgeUtils {
         badge.number = count
         badge.isVisible = count > 0
         Log.d("BadgeUtils", "Updating badge count to: $count")
-    }
-
-    private fun getRandomFoodBeverageSuggestions(limit: Int = 1): List<FoodBeverageSuggestion> {
-        val suggestions = listOf(
-            FoodBeverageSuggestion(1, "Banana", "High in potassium and easy to digest.", "Before"),
-            FoodBeverageSuggestion(2, "Energy Bar", "Provides quick energy.", "During"),
-            FoodBeverageSuggestion(3, "Chocolate Milk", "Great for recovery with carbs and protein.", "After"),
-            FoodBeverageSuggestion(4, "Water", "Stay hydrated throughout the activity.", "During"),
-            FoodBeverageSuggestion(5, "Protein Shake", "Helps in muscle recovery.", "After")
-        )
-        return suggestions.shuffled().take(limit)
     }
 }

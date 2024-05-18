@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- activity_dashboard_training_plans.xml -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    tools:context=".ui.views.Suggests">
+    android:background="@color/colorBackground">
 
-    <!-- Top Menu Container -->
+    <!-- Top Navigation Menu -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/top_navigation"
         android:layout_width="0dp"
@@ -39,24 +38,26 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/tvwSuggestionsTitle"
+                android:id="@+id/tvwWelcome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/lato_bold_font"
-                android:text="@string/suggestions_title"
+                android:text="@string/dashboard_plans_tittle"
                 android:textAlignment="center"
                 android:textColor="@color/colorOnBackground"
-                android:textStyle="bold"
-                android:textSize="22sp" />
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-            <!-- Add other UI elements as needed -->
-
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTrainings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical" />
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Menu -->
+    <!-- Bottom Navigation Menu -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
@@ -64,9 +65,9 @@
         android:background="@color/colorPrimary"
         app:itemIconTint="@color/colorOnBackground"
         app:itemTextColor="@color/colorOnBackground"
+        app:menu="@menu/bottom_nav_menu"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

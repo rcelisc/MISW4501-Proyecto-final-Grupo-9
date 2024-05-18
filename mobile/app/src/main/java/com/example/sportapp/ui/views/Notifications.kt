@@ -27,6 +27,7 @@ import com.example.sportapp.ui.home.Home
 import com.example.sportapp.utils.UtilRedirect
 import com.example.sportapp.utils.BadgeUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,7 +45,6 @@ class Notifications : AppCompatActivity() {
     private val utilRedirect = UtilRedirect()
     private var suggestedRoute: String? = null
     private var suggestedFoodBeverage: List<FoodBeverageSuggestion>? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -222,7 +222,14 @@ class Notifications : AppCompatActivity() {
         val dismissedSet = sharedPreferences.getStringSet("dismissedSuggestions", emptySet()) ?: emptySet()
 
         if (suggestedFoodBeverage == null) {
-            suggestedFoodBeverage = getRandomFoodBeverageSuggestions()
+            val foodBeverageJson = sharedPreferences.getString("suggestedFoodBeverage", null)
+            suggestedFoodBeverage = if (foodBeverageJson != null) {
+                Gson().fromJson(foodBeverageJson, Array<FoodBeverageSuggestion>::class.java).toList()
+            } else {
+                getRandomFoodBeverageSuggestions().also {
+                    sharedPreferences.edit().putString("suggestedFoodBeverage", Gson().toJson(it)).apply()
+                }
+            }
         }
 
         suggestedFoodBeverage?.let { suggestions ->
@@ -235,7 +242,6 @@ class Notifications : AppCompatActivity() {
             updateNotificationBadge()
         }
     }
-
 
     private fun getRandomRoute(): String {
         val routes = listOf(
@@ -279,7 +285,6 @@ class Notifications : AppCompatActivity() {
         addDismissedSuggestion(suggestionId)
         updateNotificationBadge()
     }
-
 
     private fun dismissService(position: Int, suggestionId: String) {
         Log.d("Notifications", "Dismissing service with ID: $suggestionId at position: $position")
@@ -327,7 +332,7 @@ class Notifications : AppCompatActivity() {
                     true
                 }
                 R.id.nav_clock -> {
-                    utilRedirect.redirectToActivity(this, DashboardTraining::class.java)
+                    utilRedirect.redirectToActivity(this, DashboardTrainingPlans::class.java)
                     true
                 }
                 R.id.nav_start -> {
@@ -345,10 +350,6 @@ class Notifications : AppCompatActivity() {
         val topNavigationView = findViewById<BottomNavigationView>(R.id.top_navigation)
         topNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_suggestions -> {
-                    utilRedirect.redirectToActivity(this, Suggests::class.java)
-                    true
-                }
                 R.id.nav_home -> {
                     utilRedirect.redirectToActivity(this, Home::class.java)
                     true

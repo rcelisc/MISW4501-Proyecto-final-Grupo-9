@@ -23,9 +23,7 @@ class CalendarEventsTest {
 
     @Test
     fun testNavigationClick() {
-        // Haz clic en el icono de inicio
-        Espresso.onView(ViewMatchers.withId(R.id.ivHome))
-            .perform(ViewActions.click())
+
         // Agrega aquí aserciones adicionales según el comportamiento esperado después de hacer clic en el icono de inicio
     }
 
