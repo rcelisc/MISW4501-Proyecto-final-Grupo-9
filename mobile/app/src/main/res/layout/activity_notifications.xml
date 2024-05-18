@@ -38,19 +38,6 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/tvwEventsTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="@font/lato_bold_font"
-                android:text="@string/notifications_title"
-                android:textAlignment="center"
-                android:textColor="@color/colorOnBackground"
-                android:textStyle="bold"
-                android:textSize="22sp" />
-
-            <TextView
                 android:id="@+id/tvwSuggestionsTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,11 +58,19 @@
                 android:scrollbars="vertical" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRoutes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:scrollbars="vertical" />
+
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvEvents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:scrollbars="vertical" />
+
         </LinearLayout>
     </ScrollView>
 
