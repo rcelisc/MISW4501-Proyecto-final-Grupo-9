@@ -93,4 +93,7 @@ export class ServicePublishedListComponent implements OnInit {
       error: (error) => console.error('Error purchasing service', error)
     });
   }
+  goBack(): void {
+    this.router.navigate(['/athlete-dashboard']);
+  }
 }

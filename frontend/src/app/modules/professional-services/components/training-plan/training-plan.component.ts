@@ -62,4 +62,7 @@ export class TrainingPlanComponent {
           });
         }
       }
+      goBack(): void {
+        this.router.navigate(['/professional-dashboard']);
+      }
 }

@@ -1,4 +1,7 @@
 <div class="container">
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
     <h2 i18n="@@sportInfoTitle" class="title">Agregar informacion deportiva</h2>
     <form [formGroup]="sportInfoForm" (ngSubmit)="onSubmit()">
       <div class="form-field">

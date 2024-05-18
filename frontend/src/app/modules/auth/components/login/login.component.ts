@@ -49,4 +49,7 @@ export class LoginComponent {
       }
     });
   }
+  goBack(): void {
+    this.router.navigate(['/']);
+  }
 }

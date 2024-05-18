@@ -53,4 +53,7 @@ export class ServiceListComponent implements OnInit {
       }
     });
   }
+  goBack(): void {
+    this.router.navigate(['/professional-dashboard']);
+  }
 }

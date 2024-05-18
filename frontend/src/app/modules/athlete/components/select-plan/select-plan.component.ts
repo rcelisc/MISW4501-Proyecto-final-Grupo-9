@@ -65,4 +65,8 @@ export class SelectPlanComponent implements OnInit{
         }
       });
    }
+
+   goBack(): void {
+    this.router.navigate(['/athlete-dashboard']);
+  }
  }

@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { MatIconModule } from '@angular/material/icon'
 import { NotificationManagerComponent } from './notification/notification.component';
 
 
@@ -31,7 +32,8 @@ import { NotificationManagerComponent } from './notification/notification.compon
     MatNativeDateModule,
     MatGridListModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule,
   ]
 })
 export class MaterialModule {}

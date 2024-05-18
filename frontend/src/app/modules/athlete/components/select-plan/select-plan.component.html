@@ -1,4 +1,7 @@
 <div class="container">
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
     <h2 class="dashboard-title">Seleccionar Plan</h2>
     <div class="card-container">
       <mat-card class="dashboard-card" *ngFor="let item of dashboardItems">

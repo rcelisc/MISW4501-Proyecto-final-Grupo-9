@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { MonthViewDay } from 'calendar-utils';
 import { NotificationManagerComponent } from '../../../../shared/notification/notification.component';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-athlete-calendar',
   standalone: true,
@@ -28,7 +29,8 @@ export class AthleteCalendarComponent implements OnInit {
   constructor(
     private createServiceService: CreateServiceService,
     private notificationService: NotificationService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -147,5 +149,9 @@ export class AthleteCalendarComponent implements OnInit {
 
   closeDetails(): void {
     this.isDetailsVisible = false;
+  }
+
+  goBack(): void {
+    this.router.navigate(['/athlete-dashboard']);
   }
 }

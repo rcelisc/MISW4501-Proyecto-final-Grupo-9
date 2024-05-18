@@ -73,4 +73,8 @@ export class SportInfoComponent implements OnInit{
       }
     });
   }
+
+  goBack(): void {
+    this.router.navigate(['/athlete-dashboard']);
+  }
 }

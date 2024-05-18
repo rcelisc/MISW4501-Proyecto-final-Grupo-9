@@ -1,4 +1,7 @@
 <div class="container">
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
   <h2 i18n="@@createServiceTitle" class="title">Crear Servicio</h2>
   <form [formGroup]="createServiceForm" (ngSubmit)="onSubmit()">
     <div class="form-field">

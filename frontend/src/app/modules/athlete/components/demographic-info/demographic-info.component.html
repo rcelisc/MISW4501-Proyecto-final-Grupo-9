@@ -1,4 +1,7 @@
 <div class="container">
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
     <h2 i18n="@@demographicInfoTitle" class="title">Agregar informacion demografica y de salud</h2>
     <form [formGroup]="demographicInfoForm" (ngSubmit)="onSubmit()">
       <div class="form-field">

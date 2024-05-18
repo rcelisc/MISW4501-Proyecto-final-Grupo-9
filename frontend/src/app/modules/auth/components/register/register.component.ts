@@ -78,4 +78,8 @@ export class RegisterComponent {
       this.snackBar.open('Por favor, complete los campos requeridos.', 'Cerrar', { duration: 3000 });
     }
   }
+
+  goBack(): void {
+    this.router.navigate(['/']);
+  }
 }

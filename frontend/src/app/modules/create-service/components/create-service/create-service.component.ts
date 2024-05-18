@@ -50,4 +50,7 @@ export class CreateServiceComponent {
       }
     });
   }
+  goBack(): void {
+    this.router.navigate(['/professional-dashboard']);
+  }
 }
