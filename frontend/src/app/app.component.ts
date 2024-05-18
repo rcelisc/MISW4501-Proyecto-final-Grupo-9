@@ -9,10 +9,11 @@ import { AuthService } from './services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'SportApp';showLogoutButton: boolean = false;
+  title = 'SportApp';
+  showLogoutButton: boolean = false;
 
   constructor(private router: Router, private authService: AuthService) {
     // Listen to routing changes
@@ -20,6 +21,33 @@ export class AppComponent {
       // Determine if the logout button should be displayed
       this.showLogoutButton = !['/', '/login', '/register'].includes(this.router.url);
     });
+  }
+
+  handleLogoClick() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = this.authService.decodeToken(token);
+      if (decodedToken && 'role' in decodedToken) {
+        switch (decodedToken.role) {
+          case 'athlete':
+            this.router.navigate(['/athlete-dashboard']);
+            break;
+          case 'event_organizer':
+            this.router.navigate(['/organizer-dashboard']);
+            break;
+          case 'complementary_services_professional':
+            this.router.navigate(['/professional-dashboard']);
+            break;
+          default:
+            this.router.navigate(['/']);
+            break;
+        }
+      } else {
+        this.router.navigate(['/']);
+      }
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 
   logout() {
