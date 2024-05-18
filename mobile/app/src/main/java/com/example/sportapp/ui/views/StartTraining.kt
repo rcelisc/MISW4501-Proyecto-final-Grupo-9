@@ -17,6 +17,7 @@ import com.example.sportapp.data.model.ReceiveSessionDataResponse
 import com.example.sportapp.data.model.StartTrainingResponse
 import com.example.sportapp.data.model.StopTrainingResponse
 import com.example.sportapp.data.model.TrainingMetricsCalculatedResponse
+import com.example.sportapp.data.model.User
 import com.example.sportapp.data.repository.FTPVO2Repository
 import com.example.sportapp.data.repository.ReceiveSessionDataRepository
 import com.example.sportapp.data.repository.StartTrainingRepository
@@ -57,6 +58,7 @@ class StartTraining : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start_training)
         setUpNavigationButtons()
+        fetchUserProfile()
 
         // Initialize training type spinner
         val dataList = listOf("Natacion", "Ciclismo", "Correr")
@@ -85,6 +87,34 @@ class StartTraining : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.top_navigation)
         BadgeUtils.updateNotificationBadge(this, bottomNavigationView)
     }
+
+    private fun fetchUserProfile() {
+        val userId = SportApp.userCodeId
+        val userService = RetrofitClient.createUserService(this)
+        userService.getUserById(userId).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful) {
+                    val user = response.body()
+                    user?.let {
+                        SportApp.age = it.age
+                        SportApp.weight = it.weight
+                        SportApp.height = it.height
+                        SportApp.profile = it.profile_type
+                        SportApp.plan_type = it.plan_type
+                        Log.d("StartTraining", "User profile fetched and updated")
+                    } ?: run {
+                        Log.d("StartTraining", "User data is null")
+                    }
+                } else {
+                    Log.d("StartTraining", "Failed to fetch user data: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.d("StartTraining", "Error fetching user data: ${t.message}")
+            }
+        })
+    }
     private fun setUpNavigationButtons() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setOnItemSelectedListener { item ->
@@ -94,7 +124,7 @@ class StartTraining : AppCompatActivity() {
                     true
                 }
                 R.id.nav_clock -> {
-                    utilRedirect.redirectToActivity(this, DashboardTraining::class.java)
+                    utilRedirect.redirectToActivity(this, DashboardTrainingPlans::class.java)
                     true
                 }
                 R.id.nav_start -> {
@@ -112,10 +142,6 @@ class StartTraining : AppCompatActivity() {
         val topNavigationView = findViewById<BottomNavigationView>(R.id.top_navigation)
         topNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_suggestions -> {
-                    utilRedirect.redirectToActivity(this, Suggests::class.java)
-                    true
-                }
                 R.id.nav_home -> {
                     utilRedirect.redirectToActivity(this, Home::class.java)
                     true
@@ -190,7 +216,8 @@ class StartTraining : AppCompatActivity() {
     }
 
     private fun finishTrainingSession(timeTraining: Int, typeTraining: String) {
-        val caloriesBurned = Calories().calculateTotalCaloriesBurned(SportApp.age, SportApp.weight, SportApp.height, SportApp.isMale, typeTraining, timeTraining)
+        Log.d("DEBUG", "timeTraining: $timeTraining, typeTraining: $typeTraining weight: ${SportApp.weight} ")
+        val caloriesBurned = Calories().calculateTotalCaloriesBurned(typeTraining, timeTraining, SportApp.weight)
         stopRepository.stopTrainingService(SportApp.userSessionId, Date(), timeTraining, caloriesBurned.toInt(), "", object : Callback<StopTrainingResponse> {
             override fun onResponse(call: Call<StopTrainingResponse>, response: Response<StopTrainingResponse>) {
                 if (response.isSuccessful) {
@@ -204,8 +231,7 @@ class StartTraining : AppCompatActivity() {
                     btnFTPVO2.visibility = View.VISIBLE
 
                     Log.d("DEBUG", "Finish Training OK: ${response.code()}")
-                    // Automatically calculate FTP and VO2 max
-                    calculateFTPVO2()
+                    receiveSesionData()
                 } else {
                     Log.d("DEBUG", "FT Service call not successful. Error code: ${response.code()}")
                     showToast(this@StartTraining, getString(R.string.error_finishing_session, response.code()))
@@ -220,8 +246,6 @@ class StartTraining : AppCompatActivity() {
     }
 
     private fun calculateFTPVO2() {
-        //First Send Data to Calculte FTP.
-        receiveSesionData()
         ftpRepository.postCalculateFTPVo2(SportApp.userSessionId, object : Callback<TrainingMetricsCalculatedResponse> {
             override fun onResponse(call: Call<TrainingMetricsCalculatedResponse>, response: Response<TrainingMetricsCalculatedResponse>) {
                 if (response.isSuccessful) {

@@ -1,16 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_suggestions"
-        android:icon="@drawable/ic_suggestions"
-        android:title="Suggestions"/>
-    <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home"
         android:title="Home"/>
     <item
+        android:id="@+id/nav_space"
+        android:icon="@android:color/transparent"
+        android:title=""
+        android:enabled="false"
+        android:checkable="false"/>
+    <item
         android:id="@+id/nav_calendar"
         android:icon="@drawable/ic_calendar"
-        android:title="Calendar"/>
+        android:title="Events"/>
     <item
         android:id="@+id/nav_notifications"
         android:icon="@drawable/ic_notifications"

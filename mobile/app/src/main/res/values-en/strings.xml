@@ -35,12 +35,12 @@
     <string name="training_duration">Duration</string>
     <string name="training_excercises">Exercises</string>
     <string name="training_description">Plan</string>
-    <string name="table_training_plans_tittle">Trainings Plans</string>
+    <string name="dashboard_plans_tittle">My Trainings Plans</string>
     <string name="event_description">Event</string>
     <string name="event_name">Name</string>
     <string name="event_date">Date</string>
     <string name="event_fee">Fee</string>
-    <string name="prompt_dashboard_tittle">My Trainings</string>
+    <string name="prompt_dashboard_tittle">My Session Trainings</string>
     <string name="dash_date">Date</string>
     <string name="dash_duration">Duration</string>
     <string name="dash_type">Type</string>
@@ -80,4 +80,8 @@
     <string name="device_maxHeartRate">Max Heart Rate:</string>
     <string name="device_restingHeartRate">Resting Heart Rate:</string>
     <string name="sendData_success">Send data succesfull!</string>
+    <string name="column_description">Description</string>
+    <string name="column_duration">Duration</string>
+    <string name="column_frequency">Frecuency</string>
+    <string name="column_objectives">Objectives</string>
 </resources>

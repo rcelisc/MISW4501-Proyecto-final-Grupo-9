@@ -87,7 +87,7 @@ class CalendarEvents : AppCompatActivity() {
                 }
 
                 R.id.nav_clock -> {
-                    utilRedirect.redirectToActivity(this, DashboardTraining::class.java)
+                    utilRedirect.redirectToActivity(this, DashboardTrainingPlans::class.java)
                     true
                 }
 
@@ -108,10 +108,6 @@ class CalendarEvents : AppCompatActivity() {
         val topNavigationView = findViewById<BottomNavigationView>(R.id.top_navigation)
         topNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_suggestions -> {
-                    utilRedirect.redirectToActivity(this, Suggests::class.java)
-                    true
-                }
 
                 R.id.nav_home -> {
                     utilRedirect.redirectToActivity(this, Home::class.java)
