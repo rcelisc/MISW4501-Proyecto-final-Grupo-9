@@ -73,4 +73,8 @@ export class DemographicInfoComponent implements OnInit{
       }
     });
   }
+
+  goBack(): void {
+    this.router.navigate(['/athlete-dashboard']);
+  }
 }

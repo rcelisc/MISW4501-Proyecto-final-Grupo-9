@@ -1,4 +1,7 @@
 <div class="container">
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
     <h2 class="title">Iniciar Sesión</h2>
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
       <div class="form-field">

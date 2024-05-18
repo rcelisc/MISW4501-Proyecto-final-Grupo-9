@@ -1,4 +1,7 @@
 <div class="container">
+    <button mat-icon-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
     <h2 class="title" i18n="@@trainingPlanTittle">Crear plan de entrenamiento</h2>
     <form [formGroup]="formulario" (ngSubmit)="enviarFormulario()">
 

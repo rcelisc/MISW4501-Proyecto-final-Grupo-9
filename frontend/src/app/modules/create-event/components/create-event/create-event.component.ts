@@ -76,4 +76,8 @@ export class CreateEventComponent {
       }
     });
   }
+
+  goBack(): void {
+    this.router.navigate(['/organizer-dashboard']);
+  }
 }

@@ -57,4 +57,8 @@ export class TrainingHistoryComponent implements OnInit {
       });
     }
   }
+
+  goBack(): void {
+    this.router.navigate(['/athlete-dashboard']);
+  }
 }

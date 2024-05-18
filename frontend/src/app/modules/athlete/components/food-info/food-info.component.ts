@@ -65,5 +65,9 @@ export class FoodInfoComponent implements OnInit{
       }
     });
   }
+  
+  goBack(): void {
+    this.router.navigate(['/athlete-dashboard']);
+  }
 }
 

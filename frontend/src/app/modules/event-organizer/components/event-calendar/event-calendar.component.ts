@@ -6,6 +6,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CommonModule } from '@angular/common';
 import { MonthViewDay } from 'calendar-utils';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -25,7 +26,9 @@ export class EventCalendarComponent implements OnInit {
   selectedEvents: CalendarEvent[] = [];
   isDetailsVisible: boolean = false;
 
-  constructor(private createEventService: CreateEventService) {}
+  constructor(private createEventService: CreateEventService,
+              private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.fetchEvents();
@@ -83,5 +86,7 @@ export class EventCalendarComponent implements OnInit {
   closeDetails(): void {
     this.isDetailsVisible = false;
   }
-  
+  goBack(): void {
+    this.router.navigate(['/organizer-dashboard']);
+  }
 }

@@ -1,4 +1,7 @@
 <div class="container">
+    <button mat-icon-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
     <h2 class="title" i18n="@@trainingHistoryTitle">Historial de entrenamientos</h2>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 

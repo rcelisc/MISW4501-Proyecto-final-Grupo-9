@@ -89,4 +89,7 @@ export class EventListComponent implements OnInit {
       }
     });
   }
+  goBack(): void {
+    this.router.navigate(['/organizer-dashboard']);
+  }
 }

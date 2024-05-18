@@ -99,4 +99,7 @@ export class MealPlanComponent implements OnInit{
         });
       }
     }
+    goBack(): void {
+      this.router.navigate(['/professional-dashboard']);
+    }
   }
