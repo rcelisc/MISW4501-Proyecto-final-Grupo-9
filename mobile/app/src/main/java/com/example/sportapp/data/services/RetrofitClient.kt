@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.sportapp.Config
 import com.example.sportapp.data.api.AuthService
 import com.example.sportapp.data.api.EventsService
+import com.example.sportapp.data.api.ServicesService
 import com.example.sportapp.data.api.StravaService
 import com.example.sportapp.data.api.TrainingMetricsService
 import com.example.sportapp.data.api.TrainingPlanService
@@ -54,6 +55,10 @@ object RetrofitClient {
 
     fun getEventsAndServicesService(context: Context): EventsService {
         return getRetrofit(Config.BASE_URL_SERVICE, true, context).create(EventsService::class.java)
+    }
+
+    fun getServicesPublished(context: Context): ServicesService {
+        return getRetrofit(Config.BASE_URL_SERVICE, true, context).create(ServicesService::class.java)
     }
 
     fun createTrainingMetricsService(context: Context): TrainingMetricsService {

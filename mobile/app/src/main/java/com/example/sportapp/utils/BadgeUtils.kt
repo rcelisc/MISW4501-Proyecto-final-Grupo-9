@@ -5,8 +5,10 @@ import android.util.Log
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
 import com.example.sportapp.data.model.EventSuggestion
+import com.example.sportapp.data.model.ServicesResponse
 import com.example.sportapp.data.model.TrainingPlansResponse
 import com.example.sportapp.data.repository.EventsRepository
+import com.example.sportapp.data.repository.ServicesRepository
 import com.example.sportapp.data.repository.TrainingPlansRepository
 import com.example.sportapp.data.services.RetrofitClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -23,6 +25,7 @@ object BadgeUtils {
 
         val trainingPlansRepository = TrainingPlansRepository(RetrofitClient.createTrainingPlansService(context))
         val eventsRepository = EventsRepository(RetrofitClient.getEventsService(context))
+        val servicesRepository = ServicesRepository(RetrofitClient.getServicesPublished(context))
 
         var notificationCount = 0
 
@@ -59,6 +62,31 @@ object BadgeUtils {
                 Log.e("BadgeUtils", "Error fetching events: ${t.message}")
             }
         })
+
+        // Count for Services
+        if (SportApp.plan_type == "intermediate" || SportApp.profile == "premium") {
+            servicesRepository.getServicesPublished().enqueue(object : Callback<ServicesResponse> {
+                override fun onResponse(
+                    call: Call<ServicesResponse>,
+                    response: Response<ServicesResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        response.body()?.let { servicesResponse ->
+                            val count =
+                                servicesResponse.services.count { !dismissedSet.contains("service_${it.id}") }
+                            Log.d("BadgeUtils", "Services count: $count")
+                            notificationCount += count
+                            updateBadge(bottomNavigationView, notificationCount)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<ServicesResponse>, t: Throwable) {
+                    Log.e("BadgeUtils", "Error fetching services: ${t.message}")
+                }
+            })
+        }
+
 
         // Check for Route Suggestion
         val suggestedRoute = sharedPreferences.getString("suggestedRoute", null)
