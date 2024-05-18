@@ -1,21 +1,20 @@
-<router-outlet>
+<router-outlet></router-outlet>
 
-  <main>
-    <div>
-      <header>
-        <nav class="navbar navbar-expand">
-          <div class="container-fluid">
-            <a class="navbar-brand" routerLink="/" style="font-size: 48px; font-weight: Bold; margin-left: 100px; color: white;">
-              SportApp<span class="app-version"> v2.0</span>
-            </a>
-            <button *ngIf="showLogoutButton" (click)="logout()" class="logout-button">
-              Logout
-            </button>
-          </div>
-        </nav>
-      </header>
-    </div>
-  </main>
-  
-  <router-outlet />
-  
+<main>
+  <div>
+    <header>
+      <nav class="navbar navbar-expand">
+        <div class="container-fluid">
+          <a class="navbar-brand" (click)="handleLogoClick()" style="cursor: pointer; font-size: 48px; font-weight: bold; margin-left: 100px; color: white;">
+            SportApp<span class="app-version"> v2.0</span>
+          </a>
+          <button *ngIf="showLogoutButton" (click)="logout()" class="logout-button">
+            Logout
+          </button>
+        </div>
+      </nav>
+    </header>
+  </div>
+</main>
+
+<router-outlet></router-outlet>
