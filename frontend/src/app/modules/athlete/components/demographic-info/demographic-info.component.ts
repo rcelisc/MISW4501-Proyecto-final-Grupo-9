@@ -5,37 +5,39 @@ import { DemographicInfoService } from '../../../../services/demographic-info.se
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MaterialModule } from '../../../../shared/material.module';
 import { AuthService } from '../../../../services/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-demographic-info',
   standalone: true,
   imports: [MaterialModule, ReactiveFormsModule],
   templateUrl: './demographic-info.component.html',
-  styleUrl: './demographic-info.component.scss'
+  styleUrls: ['./demographic-info.component.scss']
 })
-export class DemographicInfoComponent implements OnInit{
+export class DemographicInfoComponent implements OnInit {
   demographicInfoForm: FormGroup;
   userId: number = 0;
+
   constructor(
     private fb: FormBuilder,
     private demographicInfoService: DemographicInfoService,
     private snackBar: MatSnackBar,
     private router: Router,
     private authService: AuthService
-  ){
+  ) {
     this.demographicInfoForm = this.fb.group({
-      ethnicity: [''],
-      heart_rate: [''],
-      vo2_max: [''],
-      blood_pressure : [''],
-      respiratory_rate: [''],
+      ethnicity: ['', Validators.required],
+      heart_rate: ['', Validators.required],
+      vo2_max: ['', Validators.required],
+      blood_pressure: ['', Validators.required],
+      respiratory_rate: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
-      this.setUserIdFromToken();
+    this.setUserIdFromToken();
   }
-  
+
   setUserIdFromToken() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -58,18 +60,18 @@ export class DemographicInfoComponent implements OnInit{
     if (!this.demographicInfoForm.valid) {
       this.snackBar.open('Por favor, complete los campos requeridos.', 'Cerrar', {
         duration: 3000,
-        panelClass: ['snack-bar-error'] 
+        panelClass: ['snack-bar-error']
       });
-      return; 
+      return;
     }
 
     this.demographicInfoService.createDemographicInfo(this.userId, this.demographicInfoForm.value).subscribe({
       next: (response) => {
-        this.snackBar.open('Informacion demografica agregada exitosamente', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Información demográfica agregada exitosamente', 'Cerrar', { duration: 3000 });
         this.router.navigate(['/athlete-dashboard']);
       },
       error: (error) => {
-        this.snackBar.open('Error al agregar informacion demografica del usuario', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Error al agregar información demográfica del usuario', 'Cerrar', { duration: 3000 });
       }
     });
   }

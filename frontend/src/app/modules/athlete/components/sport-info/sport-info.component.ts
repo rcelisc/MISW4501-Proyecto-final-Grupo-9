@@ -11,27 +11,28 @@ import { AuthService } from '../../../../services/auth.service';
   standalone: true,
   imports: [MaterialModule, ReactiveFormsModule],
   templateUrl: './sport-info.component.html',
-  styleUrl: './sport-info.component.scss'
+  styleUrls: ['./sport-info.component.scss']
 })
-export class SportInfoComponent implements OnInit{
+export class SportInfoComponent implements OnInit {
   sportInfoForm: FormGroup;
   userId: number = 0;
+
   constructor(
     private fb: FormBuilder,
     private sportInfoService: SportInfoService,
     private snackBar: MatSnackBar,
     private router: Router,
     private authService: AuthService
-  ){
+  ) {
     this.sportInfoForm = this.fb.group({
-      training_frequency: [''],
-      sports_practiced: [''],
-      average_session_duration: [''],
-      recovery_time : [''],
-      training_pace: [''],
+      training_frequency: ['', Validators.required],
+      sports_practiced: ['', Validators.required],
+      average_session_duration: ['', Validators.required],
+      recovery_time: ['', Validators.required],
+      training_pace: ['', Validators.required],
     });
   }
-  
+
   ngOnInit(): void {
     this.setUserIdFromToken();
   }
@@ -50,7 +51,7 @@ export class SportInfoComponent implements OnInit{
       this.router.navigate(['/login']); // Redirect to login if there's no token
     }
   }
-  
+
   onSubmit(): void {
     // Trigger validation for all form fields
     this.sportInfoForm.markAllAsTouched();
@@ -58,18 +59,18 @@ export class SportInfoComponent implements OnInit{
     if (!this.sportInfoForm.valid) {
       this.snackBar.open('Por favor, complete los campos requeridos.', 'Cerrar', {
         duration: 3000,
-        panelClass: ['snack-bar-error'] 
+        panelClass: ['snack-bar-error']
       });
-      return; 
+      return;
     }
 
     this.sportInfoService.createSportInfo(this.userId, this.sportInfoForm.value).subscribe({
       next: (response) => {
-        this.snackBar.open('Informacion deportiva agregada exitosamente', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Información deportiva agregada exitosamente', 'Cerrar', { duration: 3000 });
         this.router.navigate(['/athlete-dashboard']);
       },
       error: (error) => {
-        this.snackBar.open('Error al agregar informacion deportiva del usuario', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Error al agregar información deportiva del usuario', 'Cerrar', { duration: 3000 });
       }
     });
   }
