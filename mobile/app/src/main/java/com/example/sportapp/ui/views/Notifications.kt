@@ -31,9 +31,11 @@ class Notifications : AppCompatActivity() {
 
     private lateinit var tableAdapter: TableAdapter
     private lateinit var tableAdapterEvents: TableAdapterEvents
+    private lateinit var tableAdapterRoutes: TableAdapterRoutes
     private val repositoryEvents = EventsRepository(RetrofitClient.getEventsService(this))
     private val repository = TrainingPlansRepository(RetrofitClient.createTrainingPlansService(this))
     private val utilRedirect = UtilRedirect()
+    private var suggestedRoute: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +51,7 @@ class Notifications : AppCompatActivity() {
         BadgeUtils.updateNotificationBadge(this, topNavigationView)
         fetchTrainingPlans()
         fetchEventSuggestions()
+        displayRouteSuggestion()
     }
 
     private fun setUpRecyclerViews() {
@@ -61,6 +64,11 @@ class Notifications : AppCompatActivity() {
         recyclerViewEvents.layoutManager = LinearLayoutManager(this)
         tableAdapterEvents = TableAdapterEvents { position, suggestionId -> dismissEvent(position, suggestionId) }
         recyclerViewEvents.adapter = tableAdapterEvents
+
+        val recyclerViewRoutes = findViewById<RecyclerView>(R.id.rvRoutes)
+        recyclerViewRoutes.layoutManager = LinearLayoutManager(this)
+        tableAdapterRoutes = TableAdapterRoutes { position, suggestionId -> dismissRoute(position, suggestionId) }
+        recyclerViewRoutes.adapter = tableAdapterRoutes
     }
 
     private fun fetchUserProfile() {
@@ -140,6 +148,35 @@ class Notifications : AppCompatActivity() {
         })
     }
 
+    private fun displayRouteSuggestion() {
+        val sharedPreferences = getSharedPreferences("SportAppPrefs", Context.MODE_PRIVATE)
+        suggestedRoute = sharedPreferences.getString("suggestedRoute", null)
+
+        if (suggestedRoute == null) {
+            suggestedRoute = getRandomRoute()
+            sharedPreferences.edit().putString("suggestedRoute", suggestedRoute).apply()
+        }
+
+        suggestedRoute?.let { route ->
+            if (!isDismissed("route_0")) {
+                tableAdapterRoutes.clearItems()
+                tableAdapterRoutes.addItem(route)
+                updateNotificationBadge()
+            }
+        }
+    }
+
+    private fun getRandomRoute(): String {
+        val routes = listOf(
+            "Scenic Route along the River",
+            "Urban Trail through Downtown",
+            "Mountain Path with Elevation",
+            "Forest Loop near the Park",
+            "Beachfront Path by the Sea"
+        )
+        return routes.random()
+    }
+
     private fun dismissSuggestion(position: Int, suggestionId: String) {
         Log.d("Notifications", "Dismissing suggestion with ID: $suggestionId at position: $position")
         tableAdapter.dismissItem(position)
@@ -150,6 +187,13 @@ class Notifications : AppCompatActivity() {
     private fun dismissEvent(position: Int, suggestionId: String) {
         Log.d("Notifications", "Dismissing event with ID: $suggestionId at position: $position")
         tableAdapterEvents.dismissItem(position)
+        addDismissedSuggestion(suggestionId)
+        updateNotificationBadge()
+    }
+
+    private fun dismissRoute(position: Int, suggestionId: String) {
+        Log.d("Notifications", "Dismissing route with ID: $suggestionId at position: $position")
+        tableAdapterRoutes.dismissItem(position)
         addDismissedSuggestion(suggestionId)
         updateNotificationBadge()
     }
@@ -256,7 +300,7 @@ class Notifications : AppCompatActivity() {
 
         class ViewHolder(itemView: View, private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.ViewHolder(itemView) {
             init {
-                itemView.setOnClickListener {
+                itemView.findViewById<View>(R.id.dismissIcon).setOnClickListener {
                     onItemDismissed(adapterPosition, itemView.tag as String)
                 }
             }
@@ -313,7 +357,7 @@ class Notifications : AppCompatActivity() {
 
         class ViewHolder(itemView: View, private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.ViewHolder(itemView) {
             init {
-                itemView.setOnClickListener {
+                itemView.findViewById<View>(R.id.dismissIcon).setOnClickListener {
                     onItemDismissed(adapterPosition, itemView.tag as String)
                 }
             }
@@ -337,4 +381,59 @@ class Notifications : AppCompatActivity() {
             }
         }
     }
+
+    class TableAdapterRoutes(private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.Adapter<TableAdapterRoutes.ViewHolder>() {
+        private val dataRoutes = mutableListOf<String>()
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_route, parent, false)
+            return ViewHolder(view, onItemDismissed)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.bind(dataRoutes[position])
+        }
+
+        override fun getItemCount() = dataRoutes.size
+
+        fun addItem(item: String) {
+            dataRoutes.add(item)
+            notifyItemInserted(dataRoutes.size - 1)
+        }
+
+        fun clearItems() {
+            dataRoutes.clear()
+            notifyDataSetChanged()
+        }
+
+        fun dismissItem(position: Int) {
+            dataRoutes.removeAt(position)
+            notifyItemRemoved(position)
+        }
+
+        class ViewHolder(itemView: View, private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.ViewHolder(itemView) {
+            init {
+                itemView.findViewById<View>(R.id.dismissIcon).setOnClickListener {
+                    onItemDismissed(adapterPosition, itemView.tag as String)
+                }
+            }
+
+            fun bind(item: String) {
+                itemView.findViewById<TextView>(R.id.textViewColumn1).text = item
+                itemView.tag = "route_${adapterPosition}"
+
+                // Set different background color for routes
+                val backgroundColorRes = R.color.colorSuggestionRoute
+                itemView.setBackgroundColor(ContextCompat.getColor(itemView.context, backgroundColorRes))
+
+                // Add a dismiss icon
+                val dismissIcon = itemView.findViewById<View>(R.id.dismissIcon)
+                dismissIcon.visibility = View.VISIBLE
+                dismissIcon.setOnClickListener {
+                    onItemDismissed(adapterPosition, "route_${adapterPosition}")
+                }
+            }
+        }
+    }
+
 }

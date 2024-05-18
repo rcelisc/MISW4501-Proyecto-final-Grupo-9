@@ -15,5 +15,6 @@
     <!-- Additional colors for suggestions/notifications -->
     <color name="colorSuggestionTraining">#37474F</color>
     <color name="colorSuggestionEvent">#263238</color>
+    <color name="colorSuggestionRoute">#263238</color>
     <color name="colorNotification">#E57373</color> <!-- Darker Red -->
 </resources>

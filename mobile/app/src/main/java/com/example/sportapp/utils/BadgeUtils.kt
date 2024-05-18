@@ -59,6 +59,13 @@ object BadgeUtils {
                 Log.e("BadgeUtils", "Error fetching events: ${t.message}")
             }
         })
+
+        // Check for Route Suggestion
+        val suggestedRoute = sharedPreferences.getString("suggestedRoute", null)
+        if (suggestedRoute != null && !dismissedSet.contains("route_0")) {
+            notificationCount += 1
+            updateBadge(bottomNavigationView, notificationCount)
+        }
     }
 
     private fun updateBadge(bottomNavigationView: BottomNavigationView, count: Int) {
