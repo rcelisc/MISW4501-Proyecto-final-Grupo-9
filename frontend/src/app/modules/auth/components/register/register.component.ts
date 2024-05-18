@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MaterialModule } from '../../../../shared/material.module';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,17 +19,17 @@ const routes: { [key in UserType]: string } = {
   standalone: true,
   imports: [MaterialModule, ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
 
   constructor(
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private router: Router
-  ){
+  ) {
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
       surname: ['', Validators.required],
@@ -50,6 +49,28 @@ export class RegisterComponent {
       sports: [''],
       profile_type: [''],
     });
+  }
+
+  ngOnInit(): void {
+    this.registerForm.get('type')?.valueChanges.subscribe(userType => {
+      this.updateValidators(userType);
+    });
+  }
+
+  updateValidators(userType: UserType) {
+    const athleteFields = ['age', 'gender', 'weight', 'height', 'city_of_birth', 'country_of_birth', 'sports', 'profile_type'];
+
+    if (userType === 'athlete') {
+      athleteFields.forEach(field => {
+        this.registerForm.get(field)?.setValidators(Validators.required);
+        this.registerForm.get(field)?.updateValueAndValidity();
+      });
+    } else {
+      athleteFields.forEach(field => {
+        this.registerForm.get(field)?.clearValidators();
+        this.registerForm.get(field)?.updateValueAndValidity();
+      });
+    }
   }
 
   onRegister() {
