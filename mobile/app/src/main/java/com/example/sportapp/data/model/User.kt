@@ -11,8 +11,8 @@ data class User(
     val type: String,
     val age: Int,
     val gender: String,
-    val weight: Float?,
-    val height: Float?,
+    val weight: Float,
+    val height: Float,
     val city_of_birth: String?,
     val country_of_birth: String?,
     val sports: String?, // Changed to String

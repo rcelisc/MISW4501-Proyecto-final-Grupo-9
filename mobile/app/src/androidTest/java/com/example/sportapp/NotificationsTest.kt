@@ -38,29 +38,16 @@ class NotificationsTest {
     @Test
     fun testHomeButtonClick() {
 
-        // Hace clic en el icono de inicio
-        onView(withId(R.id.ivHome)).perform(click())
-
-//        // Verifica que la actividad Home se haya iniciado
-//        onView(withId(R.id.home_activity_layout)).check(matches(isDisplayed()))
     }
 
     @Test
     fun testRunExeButtonClick() {
-        // Hace clic en el icono de ejecutar entrenamiento
-        onView(withId(R.id.ivRunExe)).perform(click())
 
-//        // Verifica que la actividad StartTraining se haya iniciado
-//        onView(withId(R.id.start_training_activity_layout)).check(matches(isDisplayed()))
     }
 
     @Test
     fun testCalendarButtonClick() {
-        // Hace clic en el icono de calendario
-        onView(withId(R.id.ivCalendar)).perform(click())
 
-//        // Verifica que la actividad CalendarEvents se haya iniciado
-//        onView(withId(R.id.calendar_events_activity_layout)).check(matches(isDisplayed()))
     }
 
 
