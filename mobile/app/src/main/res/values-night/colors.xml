@@ -17,5 +17,6 @@
     <color name="colorSuggestionEvent">#263238</color>
     <color name="colorSuggestionRoute">#263238</color>
     <color name="colorSuggestionService">#263238</color>
+    <color name="colorSuggestionFoodBeverage">#263238</color>
     <color name="colorNotification">#E57373</color> <!-- Darker Red -->
 </resources>

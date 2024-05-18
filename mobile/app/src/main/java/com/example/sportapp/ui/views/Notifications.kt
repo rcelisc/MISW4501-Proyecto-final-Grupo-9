@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
 import com.example.sportapp.data.model.EventSuggestion
+import com.example.sportapp.data.model.FoodBeverageSuggestion
 import com.example.sportapp.data.model.Service
 import com.example.sportapp.data.model.ServicesResponse
 import com.example.sportapp.data.model.TrainingPlansResponse
@@ -36,11 +37,14 @@ class Notifications : AppCompatActivity() {
     private lateinit var tableAdapterEvents: TableAdapterEvents
     private lateinit var tableAdapterRoutes: TableAdapterRoutes
     private lateinit var tableAdapterServices: TableAdapterServices
+    private lateinit var tableAdapterFoodBeverage: TableAdapterFoodBeverage
     private val repositoryEvents = EventsRepository(RetrofitClient.getEventsService(this))
     private val repository = TrainingPlansRepository(RetrofitClient.createTrainingPlansService(this))
     private val servicesRepository = ServicesRepository(RetrofitClient.getServicesPublished(this))
     private val utilRedirect = UtilRedirect()
     private var suggestedRoute: String? = null
+    private var suggestedFoodBeverage: List<FoodBeverageSuggestion>? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +62,7 @@ class Notifications : AppCompatActivity() {
         fetchEventSuggestions()
         fetchServicesPublished()
         displayRouteSuggestion()
+        displayFoodBeverageSuggestions()
     }
 
     private fun setUpRecyclerViews() {
@@ -80,6 +85,11 @@ class Notifications : AppCompatActivity() {
         recyclerViewServices.layoutManager = LinearLayoutManager(this)
         tableAdapterServices = TableAdapterServices { position, suggestionId -> dismissService(position, suggestionId) }
         recyclerViewServices.adapter = tableAdapterServices
+
+        val recyclerViewFoodBeverage = findViewById<RecyclerView>(R.id.rvFoodBeverage)
+        recyclerViewFoodBeverage.layoutManager = LinearLayoutManager(this)
+        tableAdapterFoodBeverage = TableAdapterFoodBeverage { position, suggestionId -> dismissFoodBeverage(position, suggestionId) }
+        recyclerViewFoodBeverage.adapter = tableAdapterFoodBeverage
     }
 
     private fun fetchUserProfile() {
@@ -207,6 +217,26 @@ class Notifications : AppCompatActivity() {
         }
     }
 
+    private fun displayFoodBeverageSuggestions() {
+        val sharedPreferences = getSharedPreferences("SportAppPrefs", Context.MODE_PRIVATE)
+        val dismissedSet = sharedPreferences.getStringSet("dismissedSuggestions", emptySet()) ?: emptySet()
+
+        if (suggestedFoodBeverage == null) {
+            suggestedFoodBeverage = getRandomFoodBeverageSuggestions()
+        }
+
+        suggestedFoodBeverage?.let { suggestions ->
+            tableAdapterFoodBeverage.clearItems()
+            suggestions.forEach {
+                if (!dismissedSet.contains("foodBeverage_${it.id}")) {
+                    tableAdapterFoodBeverage.addItem(it)
+                }
+            }
+            updateNotificationBadge()
+        }
+    }
+
+
     private fun getRandomRoute(): String {
         val routes = listOf(
             "Scenic Route along the River",
@@ -216,6 +246,17 @@ class Notifications : AppCompatActivity() {
             "Beachfront Path by the Sea"
         )
         return routes.random()
+    }
+
+    private fun getRandomFoodBeverageSuggestions(limit: Int = 1): List<FoodBeverageSuggestion> {
+        val suggestions = listOf(
+            FoodBeverageSuggestion(1, "Banana", "High in potassium and easy to digest.", "Before"),
+            FoodBeverageSuggestion(2, "Energy Bar", "Provides quick energy.", "During"),
+            FoodBeverageSuggestion(3, "Chocolate Milk", "Great for recovery with carbs and protein.", "After"),
+            FoodBeverageSuggestion(4, "Water", "Stay hydrated throughout the activity.", "During"),
+            FoodBeverageSuggestion(5, "Protein Shake", "Helps in muscle recovery.", "After")
+        )
+        return suggestions.shuffled().take(limit)
     }
 
     private fun dismissSuggestion(position: Int, suggestionId: String) {
@@ -243,6 +284,13 @@ class Notifications : AppCompatActivity() {
     private fun dismissService(position: Int, suggestionId: String) {
         Log.d("Notifications", "Dismissing service with ID: $suggestionId at position: $position")
         tableAdapterServices.dismissItem(position)
+        addDismissedSuggestion(suggestionId)
+        updateNotificationBadge()
+    }
+
+    private fun dismissFoodBeverage(position: Int, suggestionId: String) {
+        Log.d("Notifications", "Dismissing food/beverage suggestion with ID: $suggestionId at position: $position")
+        tableAdapterFoodBeverage.dismissItem(position)
         addDismissedSuggestion(suggestionId)
         updateNotificationBadge()
     }
@@ -536,6 +584,62 @@ class Notifications : AppCompatActivity() {
                 dismissIcon.visibility = View.VISIBLE
                 dismissIcon.setOnClickListener {
                     onItemDismissed(adapterPosition, "service_${item.id}")
+                }
+            }
+        }
+    }
+
+    class TableAdapterFoodBeverage(private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.Adapter<TableAdapterFoodBeverage.ViewHolder>() {
+        private val dataFoodBeverage = mutableListOf<FoodBeverageSuggestion>()
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_food_beverage, parent, false)
+            return ViewHolder(view, onItemDismissed)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.bind(dataFoodBeverage[position])
+        }
+
+        override fun getItemCount() = dataFoodBeverage.size
+
+        fun addItem(item: FoodBeverageSuggestion) {
+            dataFoodBeverage.add(item)
+            notifyItemInserted(dataFoodBeverage.size - 1)
+        }
+
+        fun clearItems() {
+            dataFoodBeverage.clear()
+            notifyDataSetChanged()
+        }
+
+        fun dismissItem(position: Int) {
+            dataFoodBeverage.removeAt(position)
+            notifyItemRemoved(position)
+        }
+
+        class ViewHolder(itemView: View, private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.ViewHolder(itemView) {
+            init {
+                itemView.findViewById<View>(R.id.dismissIcon).setOnClickListener {
+                    onItemDismissed(adapterPosition, itemView.tag as String)
+                }
+            }
+
+            fun bind(item: FoodBeverageSuggestion) {
+                itemView.findViewById<TextView>(R.id.textViewColumn1).text = item.name
+                itemView.findViewById<TextView>(R.id.textViewColumn2).text = item.description
+                itemView.findViewById<TextView>(R.id.textViewColumn3).text = item.timing
+                itemView.tag = "foodBeverage_${item.id}"
+
+                // Set different background color for food and beverage suggestions
+                val backgroundColorRes = R.color.colorSuggestionFoodBeverage
+                itemView.setBackgroundColor(ContextCompat.getColor(itemView.context, backgroundColorRes))
+
+                // Add a dismiss icon
+                val dismissIcon = itemView.findViewById<View>(R.id.dismissIcon)
+                dismissIcon.visibility = View.VISIBLE
+                dismissIcon.setOnClickListener {
+                    onItemDismissed(adapterPosition, "foodBeverage_${item.id}")
                 }
             }
         }
