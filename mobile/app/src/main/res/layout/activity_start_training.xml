@@ -119,6 +119,21 @@
                 android:textSize="22sp"
                 android:visibility="gone" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFTPVO2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="@string/boton_finish"
+                android:textAllCaps="false"
+                android:textColor="@color/colorBackground"
+                android:textSize="24sp"
+                android:fontFamily="@font/lato_bold_font"
+                app:cornerRadius="8dp"
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/tvwFTP"
                 android:layout_width="match_parent"
@@ -141,21 +156,6 @@
                 android:textAlignment="center"
                 android:textColor="@color/colorOnBackground"
                 android:textSize="22sp"
-                android:visibility="gone" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnFTPVO2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/colorPrimary"
-                android:text="@string/boton_finish"
-                android:textAllCaps="false"
-                android:textColor="@color/colorBackground"
-                android:textSize="24sp"
-                android:fontFamily="@font/lato_bold_font"
-                app:cornerRadius="8dp"
                 android:visibility="gone" />
 
         </LinearLayout>

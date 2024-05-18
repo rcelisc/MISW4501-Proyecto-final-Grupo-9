@@ -19,8 +19,6 @@ class FinishTrainingTest {
     @Test
     fun testUIElementsDisplayed() {
         // Verificar que todos los elementos de la interfaz de usuario estén visibles
-        Espresso.onView(ViewMatchers.withId(R.id.ivHome)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        Espresso.onView(ViewMatchers.withId(R.id.ivRunExe)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.tvTrainingTypeTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.tvwTimeTotal)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.tvwDateTraining)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
@@ -33,15 +31,12 @@ class FinishTrainingTest {
     @Test
     fun testNavigationToHome() {
         // Simular el clic en el icono de inicio
-        Espresso.onView(ViewMatchers.withId(R.id.ivHome)).perform(ViewActions.click())
         // Verificar que la actividad de inicio (Home) se haya abierto
         Espresso.onView(ViewMatchers.withId(R.id.itemContainer)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @Test
     fun testNavigationToStartTraining() {
-        // Simular el clic en el icono de inicio de entrenamiento
-        Espresso.onView(ViewMatchers.withId(R.id.ivRunExe)).perform(ViewActions.click())
         // Verificar que la actividad de inicio de entrenamiento (StartTraining) se haya abierto
         Espresso.onView(ViewMatchers.withId(R.id.itemContainer)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }

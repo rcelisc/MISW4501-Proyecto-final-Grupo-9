@@ -14,15 +14,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sportapp.R
 import com.example.sportapp.SportApp
 import com.example.sportapp.data.model.EventSuggestion
+import com.example.sportapp.data.model.FoodBeverageSuggestion
+import com.example.sportapp.data.model.Service
+import com.example.sportapp.data.model.ServicesResponse
 import com.example.sportapp.data.model.TrainingPlansResponse
 import com.example.sportapp.data.model.User
 import com.example.sportapp.data.repository.EventsRepository
+import com.example.sportapp.data.repository.ServicesRepository
 import com.example.sportapp.data.repository.TrainingPlansRepository
 import com.example.sportapp.data.services.RetrofitClient
 import com.example.sportapp.ui.home.Home
 import com.example.sportapp.utils.UtilRedirect
 import com.example.sportapp.utils.BadgeUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,9 +36,15 @@ class Notifications : AppCompatActivity() {
 
     private lateinit var tableAdapter: TableAdapter
     private lateinit var tableAdapterEvents: TableAdapterEvents
+    private lateinit var tableAdapterRoutes: TableAdapterRoutes
+    private lateinit var tableAdapterServices: TableAdapterServices
+    private lateinit var tableAdapterFoodBeverage: TableAdapterFoodBeverage
     private val repositoryEvents = EventsRepository(RetrofitClient.getEventsService(this))
     private val repository = TrainingPlansRepository(RetrofitClient.createTrainingPlansService(this))
+    private val servicesRepository = ServicesRepository(RetrofitClient.getServicesPublished(this))
     private val utilRedirect = UtilRedirect()
+    private var suggestedRoute: String? = null
+    private var suggestedFoodBeverage: List<FoodBeverageSuggestion>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +60,9 @@ class Notifications : AppCompatActivity() {
         BadgeUtils.updateNotificationBadge(this, topNavigationView)
         fetchTrainingPlans()
         fetchEventSuggestions()
+        fetchServicesPublished()
+        displayRouteSuggestion()
+        displayFoodBeverageSuggestions()
     }
 
     private fun setUpRecyclerViews() {
@@ -61,6 +75,21 @@ class Notifications : AppCompatActivity() {
         recyclerViewEvents.layoutManager = LinearLayoutManager(this)
         tableAdapterEvents = TableAdapterEvents { position, suggestionId -> dismissEvent(position, suggestionId) }
         recyclerViewEvents.adapter = tableAdapterEvents
+
+        val recyclerViewRoutes = findViewById<RecyclerView>(R.id.rvRoutes)
+        recyclerViewRoutes.layoutManager = LinearLayoutManager(this)
+        tableAdapterRoutes = TableAdapterRoutes { position, suggestionId -> dismissRoute(position, suggestionId) }
+        recyclerViewRoutes.adapter = tableAdapterRoutes
+
+        val recyclerViewServices = findViewById<RecyclerView>(R.id.rvServices)
+        recyclerViewServices.layoutManager = LinearLayoutManager(this)
+        tableAdapterServices = TableAdapterServices { position, suggestionId -> dismissService(position, suggestionId) }
+        recyclerViewServices.adapter = tableAdapterServices
+
+        val recyclerViewFoodBeverage = findViewById<RecyclerView>(R.id.rvFoodBeverage)
+        recyclerViewFoodBeverage.layoutManager = LinearLayoutManager(this)
+        tableAdapterFoodBeverage = TableAdapterFoodBeverage { position, suggestionId -> dismissFoodBeverage(position, suggestionId) }
+        recyclerViewFoodBeverage.adapter = tableAdapterFoodBeverage
     }
 
     private fun fetchUserProfile() {
@@ -72,9 +101,12 @@ class Notifications : AppCompatActivity() {
                     val user = response.body()
                     user?.let {
                         SportApp.profile = it.profile_type
+                        SportApp.plan_type = it.plan_type
                         Log.d("Notifications", "User profile fetched and updated: ${it.profile_type}")
+                        Log.d("Notifications", "User profile fetched and updated: ${it.plan_type}")
                         fetchTrainingPlans()
                         fetchEventSuggestions()
+                        fetchServicesPublished()
                     } ?: run {
                         Log.d("Notifications", "User data is null")
                     }
@@ -140,6 +172,99 @@ class Notifications : AppCompatActivity() {
         })
     }
 
+    private fun fetchServicesPublished() {
+        if (SportApp.plan_type == "intermediate" || SportApp.profile == "premium") {
+            servicesRepository.getServicesPublished().enqueue(object : Callback<ServicesResponse> {
+                override fun onResponse(call: Call<ServicesResponse>, response: Response<ServicesResponse>) {
+                    if (response.isSuccessful) {
+                        response.body()?.let { servicesResponse ->
+                            Log.d("Notifications", "Services published found: $servicesResponse")
+                            tableAdapterServices.clearItems()
+                            servicesResponse.services.forEach {
+                                if (!isDismissed("service_${it.id}")) {
+                                    tableAdapterServices.addItem(it)
+                                }
+                            }
+                            updateNotificationBadge()
+                        } ?: Log.d("Notifications", "Server response is null for Services")
+                    } else {
+                        Log.d("Notifications", "Failed to fetch Services. Error code: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<ServicesResponse>, t: Throwable) {
+                    Log.d("Notifications", "Error fetching Services: ${t.message}")
+                }
+            })
+        }
+    }
+
+    private fun displayRouteSuggestion() {
+        val sharedPreferences = getSharedPreferences("SportAppPrefs", Context.MODE_PRIVATE)
+        suggestedRoute = sharedPreferences.getString("suggestedRoute", null)
+
+        if (suggestedRoute == null) {
+            suggestedRoute = getRandomRoute()
+            sharedPreferences.edit().putString("suggestedRoute", suggestedRoute).apply()
+        }
+
+        suggestedRoute?.let { route ->
+            if (!isDismissed("route_0")) {
+                tableAdapterRoutes.clearItems()
+                tableAdapterRoutes.addItem(route)
+                updateNotificationBadge()
+            }
+        }
+    }
+
+    private fun displayFoodBeverageSuggestions() {
+        val sharedPreferences = getSharedPreferences("SportAppPrefs", Context.MODE_PRIVATE)
+        val dismissedSet = sharedPreferences.getStringSet("dismissedSuggestions", emptySet()) ?: emptySet()
+
+        if (suggestedFoodBeverage == null) {
+            val foodBeverageJson = sharedPreferences.getString("suggestedFoodBeverage", null)
+            suggestedFoodBeverage = if (foodBeverageJson != null) {
+                Gson().fromJson(foodBeverageJson, Array<FoodBeverageSuggestion>::class.java).toList()
+            } else {
+                getRandomFoodBeverageSuggestions().also {
+                    sharedPreferences.edit().putString("suggestedFoodBeverage", Gson().toJson(it)).apply()
+                }
+            }
+        }
+
+        suggestedFoodBeverage?.let { suggestions ->
+            tableAdapterFoodBeverage.clearItems()
+            suggestions.forEach {
+                if (!dismissedSet.contains("foodBeverage_${it.id}")) {
+                    tableAdapterFoodBeverage.addItem(it)
+                }
+            }
+            updateNotificationBadge()
+        }
+    }
+
+    private fun getRandomRoute(): String {
+        val routes = listOf(
+            "Scenic Route along the River",
+            "Urban Trail through Downtown",
+            "Mountain Path with Elevation",
+            "Forest Loop near the Park",
+            "Beachfront Path by the Sea"
+        )
+        return routes.random()
+    }
+
+    private fun getRandomFoodBeverageSuggestions(limit: Int = 1): List<FoodBeverageSuggestion> {
+        val suggestions = listOf(
+            FoodBeverageSuggestion(1, "Banana", "High in potassium and easy to digest.", "Before"),
+            FoodBeverageSuggestion(2, "Energy Bar", "Provides quick energy.", "During"),
+            FoodBeverageSuggestion(3, "Chocolate Milk", "Great for recovery with carbs and protein.", "After"),
+            FoodBeverageSuggestion(4, "Water", "Stay hydrated throughout the activity.", "During"),
+            FoodBeverageSuggestion(5, "Protein Shake", "Helps in muscle recovery.", "After")
+        )
+        return suggestions.shuffled().take(limit)
+    }
+
     private fun dismissSuggestion(position: Int, suggestionId: String) {
         Log.d("Notifications", "Dismissing suggestion with ID: $suggestionId at position: $position")
         tableAdapter.dismissItem(position)
@@ -150,6 +275,27 @@ class Notifications : AppCompatActivity() {
     private fun dismissEvent(position: Int, suggestionId: String) {
         Log.d("Notifications", "Dismissing event with ID: $suggestionId at position: $position")
         tableAdapterEvents.dismissItem(position)
+        addDismissedSuggestion(suggestionId)
+        updateNotificationBadge()
+    }
+
+    private fun dismissRoute(position: Int, suggestionId: String) {
+        Log.d("Notifications", "Dismissing route with ID: $suggestionId at position: $position")
+        tableAdapterRoutes.dismissItem(position)
+        addDismissedSuggestion(suggestionId)
+        updateNotificationBadge()
+    }
+
+    private fun dismissService(position: Int, suggestionId: String) {
+        Log.d("Notifications", "Dismissing service with ID: $suggestionId at position: $position")
+        tableAdapterServices.dismissItem(position)
+        addDismissedSuggestion(suggestionId)
+        updateNotificationBadge()
+    }
+
+    private fun dismissFoodBeverage(position: Int, suggestionId: String) {
+        Log.d("Notifications", "Dismissing food/beverage suggestion with ID: $suggestionId at position: $position")
+        tableAdapterFoodBeverage.dismissItem(position)
         addDismissedSuggestion(suggestionId)
         updateNotificationBadge()
     }
@@ -186,7 +332,7 @@ class Notifications : AppCompatActivity() {
                     true
                 }
                 R.id.nav_clock -> {
-                    utilRedirect.redirectToActivity(this, DashboardTraining::class.java)
+                    utilRedirect.redirectToActivity(this, DashboardTrainingPlans::class.java)
                     true
                 }
                 R.id.nav_start -> {
@@ -204,10 +350,6 @@ class Notifications : AppCompatActivity() {
         val topNavigationView = findViewById<BottomNavigationView>(R.id.top_navigation)
         topNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_suggestions -> {
-                    utilRedirect.redirectToActivity(this, Suggests::class.java)
-                    true
-                }
                 R.id.nav_home -> {
                     utilRedirect.redirectToActivity(this, Home::class.java)
                     true
@@ -256,7 +398,7 @@ class Notifications : AppCompatActivity() {
 
         class ViewHolder(itemView: View, private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.ViewHolder(itemView) {
             init {
-                itemView.setOnClickListener {
+                itemView.findViewById<View>(R.id.dismissIcon).setOnClickListener {
                     onItemDismissed(adapterPosition, itemView.tag as String)
                 }
             }
@@ -313,7 +455,7 @@ class Notifications : AppCompatActivity() {
 
         class ViewHolder(itemView: View, private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.ViewHolder(itemView) {
             init {
-                itemView.setOnClickListener {
+                itemView.findViewById<View>(R.id.dismissIcon).setOnClickListener {
                     onItemDismissed(adapterPosition, itemView.tag as String)
                 }
             }
@@ -333,6 +475,172 @@ class Notifications : AppCompatActivity() {
                 dismissIcon.visibility = View.VISIBLE
                 dismissIcon.setOnClickListener {
                     onItemDismissed(adapterPosition, "event_${item.id}")
+                }
+            }
+        }
+    }
+
+    class TableAdapterRoutes(private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.Adapter<TableAdapterRoutes.ViewHolder>() {
+        private val dataRoutes = mutableListOf<String>()
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_route, parent, false)
+            return ViewHolder(view, onItemDismissed)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.bind(dataRoutes[position])
+        }
+
+        override fun getItemCount() = dataRoutes.size
+
+        fun addItem(item: String) {
+            dataRoutes.add(item)
+            notifyItemInserted(dataRoutes.size - 1)
+        }
+
+        fun clearItems() {
+            dataRoutes.clear()
+            notifyDataSetChanged()
+        }
+
+        fun dismissItem(position: Int) {
+            dataRoutes.removeAt(position)
+            notifyItemRemoved(position)
+        }
+
+        class ViewHolder(itemView: View, private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.ViewHolder(itemView) {
+            init {
+                itemView.findViewById<View>(R.id.dismissIcon).setOnClickListener {
+                    onItemDismissed(adapterPosition, itemView.tag as String)
+                }
+            }
+
+            fun bind(item: String) {
+                itemView.findViewById<TextView>(R.id.textViewColumn1).text = item
+                itemView.tag = "route_${adapterPosition}"
+
+                // Set different background color for routes
+                val backgroundColorRes = R.color.colorSuggestionRoute
+                itemView.setBackgroundColor(ContextCompat.getColor(itemView.context, backgroundColorRes))
+
+                // Add a dismiss icon
+                val dismissIcon = itemView.findViewById<View>(R.id.dismissIcon)
+                dismissIcon.visibility = View.VISIBLE
+                dismissIcon.setOnClickListener {
+                    onItemDismissed(adapterPosition, "route_${adapterPosition}")
+                }
+            }
+        }
+    }
+
+    class TableAdapterServices(private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.Adapter<TableAdapterServices.ViewHolder>() {
+        private val dataServices = mutableListOf<Service>()
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_service_suggestion, parent, false)
+            return ViewHolder(view, onItemDismissed)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.bind(dataServices[position])
+        }
+
+        override fun getItemCount() = dataServices.size
+
+        fun addItem(item: Service) {
+            dataServices.add(item)
+            notifyItemInserted(dataServices.size - 1)
+        }
+
+        fun clearItems() {
+            dataServices.clear()
+            notifyDataSetChanged()
+        }
+
+        fun dismissItem(position: Int) {
+            dataServices.removeAt(position)
+            notifyItemRemoved(position)
+        }
+
+        class ViewHolder(itemView: View, private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.ViewHolder(itemView) {
+            init {
+                itemView.findViewById<View>(R.id.dismissIcon).setOnClickListener {
+                    onItemDismissed(adapterPosition, itemView.tag as String)
+                }
+            }
+
+            fun bind(item: Service) {
+                itemView.findViewById<TextView>(R.id.textViewColumn1).text = item.name
+                itemView.findViewById<TextView>(R.id.textViewColumn2).text = item.description
+                itemView.findViewById<TextView>(R.id.textViewColumn3).text = item.rate.toString()
+                itemView.tag = "service_${item.id}"
+
+                // Set different background color for services
+                val backgroundColorRes = R.color.colorSuggestionService
+                itemView.setBackgroundColor(ContextCompat.getColor(itemView.context, backgroundColorRes))
+
+                // Add a dismiss icon
+                val dismissIcon = itemView.findViewById<View>(R.id.dismissIcon)
+                dismissIcon.visibility = View.VISIBLE
+                dismissIcon.setOnClickListener {
+                    onItemDismissed(adapterPosition, "service_${item.id}")
+                }
+            }
+        }
+    }
+
+    class TableAdapterFoodBeverage(private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.Adapter<TableAdapterFoodBeverage.ViewHolder>() {
+        private val dataFoodBeverage = mutableListOf<FoodBeverageSuggestion>()
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_food_beverage, parent, false)
+            return ViewHolder(view, onItemDismissed)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.bind(dataFoodBeverage[position])
+        }
+
+        override fun getItemCount() = dataFoodBeverage.size
+
+        fun addItem(item: FoodBeverageSuggestion) {
+            dataFoodBeverage.add(item)
+            notifyItemInserted(dataFoodBeverage.size - 1)
+        }
+
+        fun clearItems() {
+            dataFoodBeverage.clear()
+            notifyDataSetChanged()
+        }
+
+        fun dismissItem(position: Int) {
+            dataFoodBeverage.removeAt(position)
+            notifyItemRemoved(position)
+        }
+
+        class ViewHolder(itemView: View, private val onItemDismissed: (Int, String) -> Unit) : RecyclerView.ViewHolder(itemView) {
+            init {
+                itemView.findViewById<View>(R.id.dismissIcon).setOnClickListener {
+                    onItemDismissed(adapterPosition, itemView.tag as String)
+                }
+            }
+
+            fun bind(item: FoodBeverageSuggestion) {
+                itemView.findViewById<TextView>(R.id.textViewColumn1).text = item.name
+                itemView.findViewById<TextView>(R.id.textViewColumn2).text = item.description
+                itemView.findViewById<TextView>(R.id.textViewColumn3).text = item.timing
+                itemView.tag = "foodBeverage_${item.id}"
+
+                // Set different background color for food and beverage suggestions
+                val backgroundColorRes = R.color.colorSuggestionFoodBeverage
+                itemView.setBackgroundColor(ContextCompat.getColor(itemView.context, backgroundColorRes))
+
+                // Add a dismiss icon
+                val dismissIcon = itemView.findViewById<View>(R.id.dismissIcon)
+                dismissIcon.visibility = View.VISIBLE
+                dismissIcon.setOnClickListener {
+                    onItemDismissed(adapterPosition, "foodBeverage_${item.id}")
                 }
             }
         }
