@@ -2,18 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { CalendarEvent, CalendarEventAction, CalendarView } from 'angular-calendar';
 import { CreateServiceService } from '../../../../services/create-service.service'
 import { NotificationService } from '../../../../services/notification.service';
-import { MaterialModule } from '../../../../shared/material.module';
+import { MaterialModule } from '../../../../material.module';
 import { CalendarModule } from 'angular-calendar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { MonthViewDay } from 'calendar-utils';
 import { NotificationManagerComponent } from '../../../../shared/notification/notification.component';
 import { Router } from '@angular/router';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-athlete-calendar',
   standalone: true,
   imports: [
-    MaterialModule, CalendarModule, CommonModule, NotificationManagerComponent
+    MaterialModule, CalendarModule, CommonModule, NotificationManagerComponent, TranslateModule
   ],
   templateUrl: './athlete-calendar.component.html',
   styleUrl: './athlete-calendar.component.scss'
@@ -31,6 +33,7 @@ export class AthleteCalendarComponent implements OnInit {
     private notificationService: NotificationService,
     private snackBar: MatSnackBar,
     private router: Router,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -104,10 +107,14 @@ export class AthleteCalendarComponent implements OnInit {
     });
 
     if (todayEvents.length > 0) {
-      this.notificationService.showNotification('Today\'s events: ' + todayEvents.join(', '));
+      this.translate.get('todayEvents', { events: todayEvents.join(', ') }).subscribe((res: string) => {
+        this.notificationService.showNotification(res);
+      });
     }
     if (tomorrowEvents.length > 0) {
-      this.notificationService.showNotification('Tomorrow\'s events: ' + tomorrowEvents.join(', '));
+      this.translate.get('tomorrowEvents', { events: tomorrowEvents.join(', ') }).subscribe((res: string) => {
+        this.notificationService.showNotification(res);
+      });
     }
   }
 

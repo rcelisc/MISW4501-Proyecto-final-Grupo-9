@@ -8,6 +8,10 @@
           <a class="navbar-brand" (click)="handleLogoClick()" style="cursor: pointer; font-size: 48px; font-weight: bold; margin-left: 100px; color: white;">
             SportApp<span class="app-version"> v2.0</span>
           </a>
+          <div class="language-switcher">
+            <button (click)="switchLanguage('en')">English</button>
+            <button (click)="switchLanguage('es')">Español</button>
+          </div>
           <button *ngIf="showLogoutButton" (click)="logout()" class="logout-button">
             Logout
           </button>

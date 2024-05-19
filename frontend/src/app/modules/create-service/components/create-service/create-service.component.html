@@ -2,31 +2,31 @@
   <button mat-icon-button (click)="goBack()">
     <mat-icon>arrow_back</mat-icon>
   </button>
-  <h2 i18n="@@createServiceTitle" class="title">Crear Servicio</h2>
+  <h2 class="title">{{ 'createServiceTitle' | translate }}</h2>
   <form [formGroup]="createServiceForm" (ngSubmit)="onSubmit()">
     <div class="form-field">
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@createServiceName">Nombre</mat-label>
+        <mat-label>{{ 'createServiceName' | translate }}</mat-label>
         <input matInput formControlName="name">
       </mat-form-field>
     </div>
 
     <div class="form-field">
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@createServiceDescription">Descripción</mat-label>
+        <mat-label>{{ 'createServiceDescription' | translate }}</mat-label>
         <textarea matInput formControlName="description"></textarea>
       </mat-form-field>
     </div>
 
     <div class="form-field">
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@createServiceRate">Costo</mat-label>
+        <mat-label>{{ 'createServiceRate' | translate }}</mat-label>
         <input matInput formControlName="rate" type="number">
       </mat-form-field>
     </div>
 
     <div class="button-container">
-      <button mat-button class="create-button" type="submit" i18n="@@createServiceButton" >Crear</button>
+      <button mat-button class="create-button" type="submit">{{ 'createServiceButton' | translate }}</button>
     </div>
   </form>
 </div>

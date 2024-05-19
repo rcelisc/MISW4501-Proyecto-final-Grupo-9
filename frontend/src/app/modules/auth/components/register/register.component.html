@@ -2,41 +2,41 @@
   <button mat-icon-button (click)="goBack()">
     <mat-icon>arrow_back</mat-icon>
   </button>
-  <h2 class="title" i18n="@@registerTitle">Regístrate</h2>
+  <h2 class="title">{{ 'registerTitle' | translate }}</h2>
   <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
     <!-- Basic User Fields -->
     <div class="form-field">
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@registerName">Nombre</mat-label>
+        <mat-label>{{ 'registerName' | translate }}</mat-label>
         <input matInput formControlName="name">
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@registerSurname">Apellido</mat-label>
+        <mat-label>{{ 'registerSurname' | translate }}</mat-label>
         <input matInput formControlName="surname">
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@registerIdType">ID Type</mat-label>
+        <mat-label>{{ 'registerIdType' | translate }}</mat-label>
         <mat-select formControlName="id_type">
           <mat-option value="National ID">National ID</mat-option>
           <mat-option value="Passport">Passport</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@registerIdNumber">Número de ID</mat-label>
+        <mat-label>{{ 'registerIdNumber' | translate }}</mat-label>
         <input matInput formControlName="id_number">
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@password">Contraseña</mat-label>
+        <mat-label>{{ 'password' | translate }}</mat-label>
         <input matInput type="password" formControlName="password">
       </mat-form-field>
     </div>
     <div class="form-field">
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@registerType">Tipo de Usuario</mat-label>
+        <mat-label>{{ 'registerType' | translate }}</mat-label>
         <mat-select formControlName="type">
-          <mat-option value="athlete" i18n="@@userTypeAthlete">Atleta</mat-option>
-          <mat-option value="complementary_services_professional" i18n="@@userTypeProfessional">Profesional</mat-option>
-          <mat-option value="event_organizer" i18n="@@userTypeOrganizer">Organizador</mat-option>
+          <mat-option value="athlete">{{ 'userTypeAthlete' | translate }}</mat-option>
+          <mat-option value="complementary_services_professional">{{ 'userTypeProfessional' | translate }}</mat-option>
+          <mat-option value="event_organizer">{{ 'userTypeOrganizer' | translate }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -44,35 +44,35 @@
     <ng-container *ngIf="registerForm.get('type')?.value === 'athlete'">
       <div class="form-field">
         <mat-form-field appearance="fill">
-          <mat-label i18n="@@registerAge">Edad</mat-label>
+          <mat-label>{{ 'registerAge' | translate }}</mat-label>
           <input matInput type="number" formControlName="age">
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label i18n="@@registerGender">Género</mat-label>
+          <mat-label>{{ 'registerGender' | translate }}</mat-label>
           <input matInput formControlName="gender">
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label i18n="@@registerWeight">Peso</mat-label>
+          <mat-label>{{ 'registerWeight' | translate }}</mat-label>
           <input matInput type="number" formControlName="weight">
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label i18n="@@registerHeight">Altura</mat-label>
+          <mat-label>{{ 'registerHeight' | translate }}</mat-label>
           <input matInput type="number" formControlName="height">
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label i18n="@@registerCityOfBirth">Ciudad de Nacimiento</mat-label>
+          <mat-label>{{ 'registerCityOfBirth' | translate }}</mat-label>
           <input matInput formControlName="city_of_birth">
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label i18n="@@registerCountryOfBirth">País de Nacimiento</mat-label>
+          <mat-label>{{ 'registerCountryOfBirth' | translate }}</mat-label>
           <input matInput formControlName="country_of_birth">
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label i18n="@@registerSports">Deportes</mat-label>
+          <mat-label>{{ 'registerSports' | translate }}</mat-label>
           <input matInput formControlName="sports">
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label i18n="@@registerProfileType">Tipo de perfil</mat-label>
+          <mat-label>{{ 'registerProfileType' | translate }}</mat-label>
           <mat-select formControlName="profile_type">
             <mat-option value="Beginner">Principiante</mat-option>
             <mat-option value="Intermediate">Intermedio</mat-option>
@@ -84,7 +84,7 @@
     <!-- Fields for other user types can be added in similar ng-container blocks -->
 
     <div class="button-container">
-      <button mat-button class="action-button" type="submit" i18n="@@registerButton">Regístrate</button>
+      <button mat-button class="action-button" type="submit">{{ 'registerButton' | translate }}</button>
     </div>
   </form>
 </div>

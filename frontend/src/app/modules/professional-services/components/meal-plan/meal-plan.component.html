@@ -2,48 +2,47 @@
   <button mat-icon-button (click)="goBack()">
     <mat-icon>arrow_back</mat-icon>
   </button>
-    <h2 class="title" i18n="@@mealPlanTittle">Crear Plan de alimentación</h2>
-    <form [formGroup]="formulario" (ngSubmit)="crearPlanAlimentacion()">
+  <h2 class="title">{{ 'mealPlanTittle' | translate }}</h2>
+  <form [formGroup]="formulario" (ngSubmit)="crearPlanAlimentacion()">
 
-        <mat-form-field appearance="fill">
-            <mat-label i18n="@@mealPlanUser">Usuario</mat-label>
-            <mat-select formControlName="user_id">
-              <mat-option *ngFor="let user of users" [value]="user.id">{{ user.name + ' ' + user.surname }}</mat-option>
-            </mat-select>
-        </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>{{ 'mealPlanUser' | translate }}</mat-label>
+      <mat-select formControlName="user_id">
+        <mat-option *ngFor="let user of users" [value]="user.id">{{ user.name + ' ' + user.surname }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-        <div class="form-field">
-            <mat-form-field appearance="fill">
-              <mat-label i18n="@@mealPlanObjectives">Objetivo</mat-label>
-              <input matInput formControlName="nutritional_objectives">
-            </mat-form-field>
-        </div>
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'mealPlanObjectives' | translate }}</mat-label>
+        <input matInput formControlName="nutritional_objectives">
+      </mat-form-field>
+    </div>
 
-        <div class="form-field">
-            <mat-form-field appearance="fill">
-              <mat-label i18n="@@mealPlanDescription">Descripcion</mat-label>
-              <input matInput formControlName="description">
-            </mat-form-field>
-        </div>
-        <div class="form-field">
-            <mat-form-field appearance="fill">
-              <mat-label i18n="@@mealPlanFrequency">Frecuencia</mat-label>
-              <input matInput formControlName="meal_frequency">
-            </mat-form-field>
-        </div>
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'mealPlanDescription' | translate }}</mat-label>
+        <input matInput formControlName="description">
+      </mat-form-field>
+    </div>
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'mealPlanFrequency' | translate }}</mat-label>
+        <input matInput formControlName="meal_frequency">
+      </mat-form-field>
+    </div>
 
-        <mat-form-field appearance="fill">
-            <mat-label i18n="@@mealPlanType">Tipo de perfil</mat-label>
-            <mat-select formControlName="food_types">
-              <mat-option value="Beginner">Principiante</mat-option>
-              <mat-option value="Intermediate">Intermedio</mat-option>
-              <mat-option value="Advance">Avanzado</mat-option>
-            </mat-select>
-        </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>{{ 'mealPlanType' | translate }}</mat-label>
+      <mat-select formControlName="food_types">
+        <mat-option value="Beginner">Principiante</mat-option>
+        <mat-option value="Intermediate">Intermedio</mat-option>
+        <mat-option value="Advance">Avanzado</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-        <div class="button-container">
-            <button mat-button class="action-button" type="submit" i18n="@@mealPlanButton">Crear Plan</button>
-        </div>
-
-      </form>
+    <div class="button-container">
+      <button mat-button class="action-button" type="submit">{{ 'mealPlanButton' | translate }}</button>
+    </div>
+  </form>
 </div>

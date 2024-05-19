@@ -5,7 +5,7 @@ import { PlanService } from '../../../../services/plan.service';
 import { delay, finalize, of, tap, throwError } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MaterialModule } from '../../../../shared/material.module';
+import { MaterialModule } from '../../../../material.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('SelectPlanComponent', () => {

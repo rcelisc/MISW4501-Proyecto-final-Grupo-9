@@ -3,14 +3,15 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FoodInfoService } from '../../../../services/food-info.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MaterialModule } from '../../../../shared/material.module';
+import { MaterialModule } from '../../../../material.module';
 import { AuthService } from '../../../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-food-info',
   standalone: true,
-  imports: [MaterialModule, ReactiveFormsModule, CommonModule],
+  imports: [MaterialModule, ReactiveFormsModule, CommonModule, TranslateModule],
   templateUrl: './food-info.component.html',
   styleUrls: ['./food-info.component.scss']
 })
@@ -23,7 +24,8 @@ export class FoodInfoComponent implements OnInit {
     private foodInfoService: FoodInfoService,
     private snackBar: MatSnackBar,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private translate: TranslateService
   ) {
     this.foodInfoForm = this.fb.group({
       daily_calories: ['', Validators.required],
@@ -58,20 +60,26 @@ export class FoodInfoComponent implements OnInit {
     this.foodInfoForm.markAllAsTouched();
 
     if (!this.foodInfoForm.valid) {
-      this.snackBar.open('Por favor, complete los campos requeridos.', 'Cerrar', {
-        duration: 3000,
-        panelClass: ['snack-bar-error']
+      this.translate.get('requiredFieldsError').subscribe((res: string) => {
+        this.snackBar.open(res, 'Cerrar', {
+          duration: 3000,
+          panelClass: ['snack-bar-error']
+        });
       });
       return;
     }
 
     this.foodInfoService.createFoodInfo(this.userId, this.foodInfoForm.value).subscribe({
       next: (response) => {
-        this.snackBar.open('Información alimenticia agregada exitosamente', 'Cerrar', { duration: 3000 });
-        this.router.navigate(['/athlete-dashboard']);
+        this.translate.get('foodInfoAddedSuccess').subscribe((res: string) => {
+          this.snackBar.open(res, 'Cerrar', { duration: 3000 });
+          this.router.navigate(['/athlete-dashboard']);
+        });
       },
       error: (error) => {
-        this.snackBar.open('Error al agregar información alimenticia del usuario', 'Cerrar', { duration: 3000 });
+        this.translate.get('foodInfoAddedError').subscribe((res: string) => {
+          this.snackBar.open(res, 'Cerrar', { duration: 3000 });
+        });
       }
     });
   }

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MaterialModule } from '../../../../shared/material.module';
+import { MaterialModule } from '../../../../material.module';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 type UserType = 'athlete' | 'complementary_services_professional' | 'event_organizer';
 
@@ -17,7 +18,7 @@ const routes: { [key in UserType]: string } = {
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [MaterialModule, ReactiveFormsModule, CommonModule],
+  imports: [MaterialModule, ReactiveFormsModule, CommonModule, TranslateModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
@@ -28,8 +29,10 @@ export class RegisterComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) {
+    this.translate.setDefaultLang('en');
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
       surname: ['', Validators.required],
@@ -49,6 +52,10 @@ export class RegisterComponent implements OnInit {
       sports: [''],
       profile_type: [''],
     });
+  }
+
+  switchLanguage(language: string) {
+    this.translate.use(language);
   }
 
   ngOnInit(): void {
@@ -91,12 +98,12 @@ export class RegisterComponent implements OnInit {
         },
         error: (error) => {
           console.error('Registration error:', error);
-          this.snackBar.open('Error al crear el evento', 'Cerrar', { duration: 3000 });
+          this.snackBar.open(this.translate.instant('registerError'), 'Cerrar', { duration: 3000 });
         }
       });
     } else {
       console.error('Form is not valid');
-      this.snackBar.open('Por favor, complete los campos requeridos.', 'Cerrar', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('registerRequiredFieldsError'), 'Cerrar', { duration: 3000 });
     }
   }
 

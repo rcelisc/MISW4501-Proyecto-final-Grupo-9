@@ -3,13 +3,14 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SportInfoService } from '../../../../services/sport-info.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MaterialModule } from '../../../../shared/material.module';
+import { MaterialModule } from '../../../../material.module';
 import { AuthService } from '../../../../services/auth.service';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sport-info',
   standalone: true,
-  imports: [MaterialModule, ReactiveFormsModule],
+  imports: [MaterialModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './sport-info.component.html',
   styleUrls: ['./sport-info.component.scss']
 })
@@ -22,8 +23,10 @@ export class SportInfoComponent implements OnInit {
     private sportInfoService: SportInfoService,
     private snackBar: MatSnackBar,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private translate: TranslateService
   ) {
+    this.translate.setDefaultLang('en');
     this.sportInfoForm = this.fb.group({
       training_frequency: ['', Validators.required],
       sports_practiced: ['', Validators.required],
@@ -31,6 +34,10 @@ export class SportInfoComponent implements OnInit {
       recovery_time: ['', Validators.required],
       training_pace: ['', Validators.required],
     });
+  }
+
+  switchLanguage(language: string) {
+    this.translate.use(language);
   }
 
   ngOnInit(): void {
@@ -57,20 +64,26 @@ export class SportInfoComponent implements OnInit {
     this.sportInfoForm.markAllAsTouched();
 
     if (!this.sportInfoForm.valid) {
-      this.snackBar.open('Por favor, complete los campos requeridos.', 'Cerrar', {
-        duration: 3000,
-        panelClass: ['snack-bar-error']
+      this.translate.get('requiredFieldsError').subscribe((res: string) => {
+        this.snackBar.open(res, 'Close', {
+          duration: 3000,
+          panelClass: ['snack-bar-error']
+        });
       });
       return;
     }
 
     this.sportInfoService.createSportInfo(this.userId, this.sportInfoForm.value).subscribe({
       next: (response) => {
-        this.snackBar.open('Información deportiva agregada exitosamente', 'Cerrar', { duration: 3000 });
-        this.router.navigate(['/athlete-dashboard']);
+        this.translate.get('sportInfoAddedSuccess').subscribe((res: string) => {
+          this.snackBar.open(res, 'Close', { duration: 3000 });
+          this.router.navigate(['/athlete-dashboard']);
+        });
       },
       error: (error) => {
-        this.snackBar.open('Error al agregar información deportiva del usuario', 'Cerrar', { duration: 3000 });
+        this.translate.get('sportInfoAddedError').subscribe((res: string) => {
+          this.snackBar.open(res, 'Close', { duration: 3000 });
+        });
       }
     });
   }

@@ -1,37 +1,41 @@
 import { Component, OnInit } from '@angular/core';
-import { MaterialModule } from '../../../../shared/material.module';
+import { MaterialModule } from '../../../../material.module';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PlanService } from '../../../../services/plan.service';
 import { AuthService } from '../../../../services/auth.service';
 import { Router } from '@angular/router';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-select-plan',
   standalone: true,
-  imports: [MaterialModule, CommonModule, RouterModule],
+  imports: [MaterialModule, CommonModule, RouterModule, TranslateModule],
   templateUrl: './select-plan.component.html',
   styleUrl: './select-plan.component.scss'
 })
 export class SelectPlanComponent implements OnInit{
-  dashboardItems = [
-    { title: 'Plan Basico', content: 'Disfruta de todas las funcionalidades basicas para el registro de tus entrenamientos', planType: 'basic' },
-    { title: 'Plan Intermedio', content: 'Disfruta de todas las funcionalidades de monitoreo peridico de tus indices de salud y deportivos', planType: 'intermediate' },
-    { title: 'Plan Premium', content: 'Disfruta de atencion personalizada con nuestros servicios profesionales y atencion prioritaria', planType: 'premium' },
-   ];
-   
+  dashboardItems: any[] = [];
   userId: number = 0;
 
   constructor( 
   private snackBar: MatSnackBar, 
   private planService: PlanService,
   private authService: AuthService,
-  private router: Router
-  ) {}
+  private router: Router,
+  private translate: TranslateService
+
+  ) {this.translate.setDefaultLang('en');}
+
+  switchLanguage(language: string) {
+    this.translate.use(language);
+  }
 
   ngOnInit() {
     this.setUserIdFromToken();
+    this.setDashboardItems();
   }
 
   setUserIdFromToken() {
@@ -48,23 +52,38 @@ export class SelectPlanComponent implements OnInit{
       this.router.navigate(['/login']); // Redirect to login if there's no token
     }
   }
+
+  setDashboardItems() {
+    this.dashboardItems = [
+      { titleKey: 'basicPlanTitle', contentKey: 'basicPlanContent', planType: 'basic' },
+      { titleKey: 'intermediatePlanTitle', contentKey: 'intermediatePlanContent', planType: 'intermediate' },
+      { titleKey: 'premiumPlanTitle', contentKey: 'premiumPlanContent', planType: 'premium' }
+    ];
+  }
  
-   updatePlan(planType: string) {
+  updatePlan(planType: string) {
     if (!this.userId) {
-      this.snackBar.open('User not authenticated', 'Close', { duration: 2000 });
+      this.translate.get('userNotAuthenticated').subscribe((res: string) => {
+        this.snackBar.open(res, 'Close', { duration: 2000 });
+      });
       return;
     }
+
 
     this.planService.updatePlan(this.userId, planType)
       .subscribe({
         next: (response) => {
-          this.snackBar.open(`Plan updated to ${planType}`, 'Close', { duration: 2000 });
+          this.translate.get('planUpdated', { planType }).subscribe((res: string) => {
+            this.snackBar.open(res, 'Close', { duration: 2000 });
+          });
         },
         error: () => {
-          this.snackBar.open('Failed to update plan', 'Close', { duration: 2000 });
+          this.translate.get('updatePlanFailed').subscribe((res: string) => {
+            this.snackBar.open(res, 'Close', { duration: 2000 });
+          });
         }
       });
-   }
+  }
 
    goBack(): void {
     this.router.navigate(['/athlete-dashboard']);
