@@ -76,7 +76,7 @@ export class CreateEventComponent {
     this.createEventService.createEvent(formData).subscribe({
       next: (response) => {
         this.snackBar.open(this.translate.instant('createEventSuccess'), 'Cerrar', { duration: 3000 });
-        this.router.navigate(['/event-list']);
+        this.router.navigate(['/organizer-dashboard']);
       },
       error: (error) => {
         this.snackBar.open(this.translate.instant('createEventError'), 'Cerrar', { duration: 3000 });

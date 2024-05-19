@@ -15,6 +15,12 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
 export class EventOrganizerDashboardComponent implements OnInit {
   dashboardItems: any[] = [];
   userData: any;
+  // Role mappings
+  roleMappings: { [key: string]: string } = {
+    'athlete': 'userTypeAthlete',
+    'complementary_services_professional': 'userTypeProfessional',
+    'event_organizer': 'userTypeOrganizer'
+  };
 
   constructor(private authService: AuthService, private translate: TranslateService) {
     this.translate.setDefaultLang('en');
@@ -33,6 +39,7 @@ export class EventOrganizerDashboardComponent implements OnInit {
         this.authService.getUserById(decodedToken.user_id).subscribe({
           next: (data) => {
             this.userData = data;
+            this.userData.translatedRole = this.roleMappings[data.type];
           },
           error: (err) => {
             console.error('Failed to fetch user data:', err);
