@@ -13,8 +13,8 @@ export class TrainingPlanService {
   private baseQueriesUrl: string;
 
   constructor(private http: HttpClient) {
-    this.baseCommandsUrl = `${environment.baseUrlCommandsTraining}/training-plan`;
-    this.baseQueriesUrl = `${environment.baseUrlQueriesTraining}`;
+    this.baseCommandsUrl = `${environment.baseUrl}/training-plan`;
+    this.baseQueriesUrl = `${environment.baseUrl}`;
   }
 
   createPlan(plan: TrainingPlanRequest): Observable<TrainingPlanResponse> {

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { jwtDecode } from "jwt-decode";
+import { environment } from '../../environments/environment';
 
 
 
@@ -10,9 +11,7 @@ import { jwtDecode } from "jwt-decode";
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:3006/';
-  private baseUrlQueries = 'http://localhost:3007/';
-  //private baseUrl = 'https://35.232.6.198/users';
+  private baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -41,13 +40,13 @@ export class AuthService {
   }
 
   getUserById(userId: number) {
-    return this.http.get<any>(`${this.baseUrlQueries}users/${userId}`, {
+    return this.http.get<any>(`${this.baseUrl}/users/${userId}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     });
   }
 
   getUsers(userType: string): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrlQueries}users/get?type=${userType}`, {
+    return this.http.get<any[]>(`${this.baseUrl}/users/get?type=${userType}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     });
   }

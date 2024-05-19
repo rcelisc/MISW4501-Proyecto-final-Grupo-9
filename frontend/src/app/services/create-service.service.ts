@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map, forkJoin } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CreateServiceService {
+  private baseUrl = environment.baseUrl;
 
-  private readonly apiUrl = 'http://localhost:3005/services';
-  //private readonly apiUrl = 'https://35.232.6.198/services';
-  private readonly eventsApiUrl = 'http://localhost:3002/events';
+  private readonly apiUrl = `${this.baseUrl}/services`;
+  private readonly eventsApiUrl = `${this.baseUrl}/events`;
 
   constructor(private http: HttpClient) { }
   

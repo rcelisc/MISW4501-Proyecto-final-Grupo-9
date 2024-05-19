@@ -11,7 +11,7 @@ export class NutritionPlanService {
   private baseUrl: string;
 
   constructor(private http: HttpClient) { 
-    this.baseUrl = `${environment.baseUrlNutrition}/nutrition-plans`;
+    this.baseUrl = `${environment.baseUrl}/nutrition-plans`;
   }
 
   createMealPlan(mealPlanData: any): Observable<any> {
