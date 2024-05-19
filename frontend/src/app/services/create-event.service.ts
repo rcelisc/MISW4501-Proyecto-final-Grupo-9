@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CreateEventService {
-
-  private readonly apiUrlCommands = 'http://localhost:3001/events';
-  private readonly apiUrlQueries = 'http://localhost:3002/events';
-  //private readonly apiUrlCommands = 'https://35.232.6.198/events';
-  //private readonly apiUrlQueries = 'https://35.232.6.198/events/get';
+  private baseUrl = environment.baseUrl;
+  private readonly apiUrlCommands = `${this.baseUrl}/events`;
+  private readonly apiUrlQueries = `${this.baseUrl}/events`;
 
   constructor(private http: HttpClient) { }
 
