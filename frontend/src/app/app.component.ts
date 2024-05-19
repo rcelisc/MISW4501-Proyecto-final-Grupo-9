@@ -13,7 +13,7 @@ import { SharedModule } from './shared/shared.module';
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterModule, MaterialModule, SharedModule],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'SportApp';

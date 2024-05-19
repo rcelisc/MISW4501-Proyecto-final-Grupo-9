@@ -2,7 +2,7 @@
 @use '../../../custom-theme.scss' as theme;
 
 .notification-container {
-    position: fixed;
+    position: flex;
     top: 10px;
     right: 10px;
     display: flex;
