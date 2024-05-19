@@ -1,63 +1,68 @@
 <div class="container">
-    <h2 i18n="@@listServicesPublishedTitle">Mis Servicios</h2>
-        <table mat-table [dataSource]="servicesDataSource" class="mat-elevation-z8">
-        <ng-container matColumnDef="nombre" >
-            <th mat-header-cell *matHeaderCellDef i18n="@@listServicesPublishedName"> Nombre </th>
-            <td mat-cell *matCellDef="let service"> {{ service.name }} </td>
-        </ng-container>
-    
-        <ng-container matColumnDef="descripcion">
-            <th mat-header-cell *matHeaderCellDef i18n="@@listServicesPublishedDescription"> Descripción </th>
-            <td mat-cell *matCellDef="let service"> {{ service.description }} </td>
-        </ng-container>
-    
-        <ng-container matColumnDef="costo">
-            <th mat-header-cell *matHeaderCellDef i18n="@@listServicesPublishedRate"> Costo </th>
-            <td mat-cell *matCellDef="let service"> {{ service.rate }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="disponibilidad">
-            <th mat-header-cell *matHeaderCellDef> Disponibilidad </th>
-            <td mat-cell *matCellDef="let service">
-                <button *ngIf="!service.purchased" (click)="purchaseService(service.id)">Comprar</button>
-                <span *ngIf="service.purchased">Comprado</span>
-            </td>
-        </ng-container>
-    
-        <tr mat-header-row *matHeaderRowDef="servicesDisplayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: servicesDisplayedColumns;"></tr>
-        </table>
-    
-    <h2 i18n="@@listEventsPublishedTitle">Mis Eventos</h2>
-        <table mat-table [dataSource]="eventsDataSource" class="mat-elevation-z8">
-            <ng-container matColumnDef="nombre" >
-                <th mat-header-cell *matHeaderCellDef i18n="@@listEventsPublishedName"> Nombre </th>
-                <td mat-cell *matCellDef="let event"> {{ event.name }} </td>
-            </ng-container>
-        
-            <ng-container matColumnDef="descripcion">
-                <th mat-header-cell *matHeaderCellDef i18n="@@listEventsPublishedDescription"> Descripción </th>
-                <td mat-cell *matCellDef="let event"> {{ event.description }} </td>
-            </ng-container>
-        
-            <ng-container matColumnDef="costo">
-                <th mat-header-cell *matHeaderCellDef i18n="@@listEventPublishedRate"> Costo </th>
-                <td mat-cell *matCellDef="let event"> {{ event.fee }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="fechaEvento">
-                <th mat-header-cell *matHeaderCellDef i18n="@@listEventsPublishedEventDate"> Fecha del Evento </th>
-                <td mat-cell *matCellDef="let event"> {{ event.event_date | date:'mediumDate' }} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="disponibilidad">
-                <th mat-header-cell *matHeaderCellDef> Disponibilidad </th>
-                <td mat-cell *matCellDef="let event">
-                    <button *ngIf="!event.enrolled" (click)="enrollEvent(event.id)">Inscribir</button>
-                    <span *ngIf="event.enrolled">Inscrito</span>
-                </td>
-            </ng-container>
-          <tr mat-header-row *matHeaderRowDef="eventsDisplayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: eventsDisplayedColumns;"></tr>
-        </table>
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2>{{ 'listServicesPublishedTitle' | translate }}</h2>
+    <table mat-table [dataSource]="servicesDataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef>{{ 'listServicesPublishedName' | translate }}</th>
+        <td mat-cell *matCellDef="let service">{{ service.name }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="descripcion">
+        <th mat-header-cell *matHeaderCellDef>{{ 'listServicesPublishedDescription' | translate }}</th>
+        <td mat-cell *matCellDef="let service">{{ service.description }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="costo">
+        <th mat-header-cell *matHeaderCellDef>{{ 'listServicesPublishedRate' | translate }}</th>
+        <td mat-cell *matCellDef="let service">{{ service.rate }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="disponibilidad">
+        <th mat-header-cell *matHeaderCellDef>Disponibilidad</th>
+        <td mat-cell *matCellDef="let service">
+          <button *ngIf="!service.purchased" (click)="purchaseService(service.id)">{{ 'purchaseButton' | translate }}</button>
+          <span *ngIf="service.purchased">{{ 'purchasedLabel' | translate }}</span>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="servicesDisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: servicesDisplayedColumns;"></tr>
+    </table>
+  
+    <h2>{{ 'listEventsPublishedTitle' | translate }}</h2>
+    <table mat-table [dataSource]="eventsDataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef>{{ 'listEventsPublishedName' | translate }}</th>
+        <td mat-cell *matCellDef="let event">{{ event.name }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="descripcion">
+        <th mat-header-cell *matHeaderCellDef>{{ 'listEventsPublishedDescription' | translate }}</th>
+        <td mat-cell *matCellDef="let event">{{ event.description }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="costo">
+        <th mat-header-cell *matHeaderCellDef>{{ 'listEventPublishedRate' | translate }}</th>
+        <td mat-cell *matCellDef="let event">{{ event.fee }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="fechaEvento">
+        <th mat-header-cell *matHeaderCellDef>{{ 'listEventsPublishedEventDate' | translate }}</th>
+        <td mat-cell *matCellDef="let event">{{ event.event_date | date: 'mediumDate' }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="disponibilidad">
+        <th mat-header-cell *matHeaderCellDef>Disponibilidad</th>
+        <td mat-cell *matCellDef="let event">
+          <button *ngIf="!event.enrolled" (click)="enrollEvent(event.id)">{{ 'enrollButton' | translate }}</button>
+          <span *ngIf="event.enrolled">{{ 'enrolledLabel' | translate }}</span>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="eventsDisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: eventsDisplayedColumns;"></tr>
+    </table>
   </div>
+  

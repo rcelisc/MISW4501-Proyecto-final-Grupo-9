@@ -1,44 +1,46 @@
 <div class="container">
-    <h2 i18n="@@sportInfoTitle" class="title">Agregar informacion deportiva</h2>
-    <form [formGroup]="sportInfoForm" (ngSubmit)="onSubmit()">
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-          <mat-label i18n="@@sportInfoTrainingFrequency">Frecuencia de entrenamiento</mat-label>
-          <input matInput formControlName="training_frequency">
-        </mat-form-field>
-      </div>
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <h2 class="title">{{ 'sportInfoTitle' | translate }}</h2>
+  <form [formGroup]="sportInfoForm" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'sportInfoTrainingFrequency' | translate }}</mat-label>
+        <input matInput formControlName="training_frequency">
+      </mat-form-field>
+    </div>
 
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-          <mat-label i18n="@@sportInfoSportsPracticed">Deporte practicados</mat-label>
-          <input matInput formControlName="sports_practiced">
-        </mat-form-field>
-      </div>
-  
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-          <mat-label i18n="@@sportInfoAverageSession">Duracion promedio de entrenamiento</mat-label>
-          <input matInput formControlName="average_session_duration" type="number">
-        </mat-form-field>
-      </div>
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'sportInfoSportsPracticed' | translate }}</mat-label>
+        <input matInput formControlName="sports_practiced">
+      </mat-form-field>
+    </div>
 
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-          <mat-label i18n="@@sportInfoRecoveryTime">Tiempo de recuperacion</mat-label>
-          <input matInput formControlName="recovery_time" type="number">
-        </mat-form-field>
-      </div>
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'sportInfoAverageSession' | translate }}</mat-label>
+        <input matInput formControlName="average_session_duration" type="number">
+      </mat-form-field>
+    </div>
 
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-            <mat-label i18n="@@sportInfoTrainingPace">Ritmo de entrenamiento</mat-label>
-            <input matInput formControlName="training_pace" type="text">
-        </mat-form-field>
-      </div>
-  
-      <div class="button-container">
-        <button mat-button class="create-button" type="submit" i18n="@@sportInfoButton" >Agregar</button>
-      </div>
-    </form>
-  </div>
-  
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'sportInfoRecoveryTime' | translate }}</mat-label>
+        <input matInput formControlName="recovery_time" type="number">
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'sportInfoTrainingPace' | translate }}</mat-label>
+        <input matInput formControlName="training_pace" type="text">
+      </mat-form-field>
+    </div>
+
+    <div class="button-container">
+      <button mat-button class="create-button" type="submit">{{ 'sportInfoButton' | translate }}</button>
+    </div>
+  </form>
+</div>

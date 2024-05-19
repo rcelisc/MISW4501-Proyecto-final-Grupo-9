@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, flush, tick } from '@angular/core
 import { ServiceListComponent } from './service-list.component';
 import { CreateServiceService } from '../../../../services/create-service.service';
 import { Router } from '@angular/router';
-import { MaterialModule } from '../../../../shared/material.module';
+import { MaterialModule } from '../../../../material.module';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { of, throwError } from 'rxjs';

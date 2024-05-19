@@ -12,14 +12,22 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { NotificationManagerComponent } from './notification/notification.component';
+import { MatIconModule } from '@angular/material/icon'
+import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
+}
 
 @NgModule({
   imports: [
     CalendarModule.forRoot({
       provide: DateAdapter,
-      useFactory: adapterFactory})
+      useFactory: adapterFactory
+    }),
+    TranslateModule
   ],
   exports: [
     MatFormFieldModule,
@@ -31,7 +39,9 @@ import { NotificationManagerComponent } from './notification/notification.compon
     MatNativeDateModule,
     MatGridListModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule,
+    TranslateModule
   ]
 })
 export class MaterialModule {}

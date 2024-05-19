@@ -1,71 +1,76 @@
 <div class="container">
-  <h2 i18n="@@listEventTitle">Mis Eventos</h2>
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <h2>{{ 'listEventTitle' | translate }}</h2>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows>
 
     <ng-container matColumnDef="nombre" >
-      <th mat-header-cell *matHeaderCellDef i18n="@@listEventsName"> Nombre </th>
-      <td mat-cell *matCellDef="let event"> {{ event.name }} </td>
+      <th mat-header-cell *matHeaderCellDef>{{ 'listEventsName' | translate }}</th>
+      <td mat-cell *matCellDef="let event">{{ event.name }}</td>
     </ng-container>
 
     <ng-container matColumnDef="descripcion">
-      <th mat-header-cell *matHeaderCellDef i18n="@@listEventsDescription"> Descripción </th>
-      <td mat-cell *matCellDef="let event"> {{ event.description }} </td>
+      <th mat-header-cell *matHeaderCellDef>{{ 'listEventsDescription' | translate }}</th>
+      <td mat-cell *matCellDef="let event">{{ event.description }}</td>
     </ng-container>
 
     <ng-container matColumnDef="fechaEvento">
-      <th mat-header-cell *matHeaderCellDef i18n="@@listEventsEventDate"> Fecha del Evento </th>
-      <td mat-cell *matCellDef="let event"> {{ event.event_date | date:'mediumDate' }} </td>
+      <th mat-header-cell *matHeaderCellDef>{{ 'listEventsEventDate' | translate }}</th>
+      <td mat-cell *matCellDef="let event">{{ event.event_date | date:'mediumDate' }}</td>
     </ng-container>
 
     <ng-container matColumnDef="duracion">
-      <th mat-header-cell *matHeaderCellDef i18n="@@listEventsDuration"> Duración </th>
-      <td mat-cell *matCellDef="let event"> {{ event.duration }} horas</td>
+      <th mat-header-cell *matHeaderCellDef>{{ 'listEventsDuration' | translate }}</th>
+      <td mat-cell *matCellDef="let event">{{ event.duration }} horas</td>
     </ng-container>
 
     <ng-container matColumnDef="ubicacion">
-      <th mat-header-cell *matHeaderCellDef i18n="@@listEventsLocation"> Ubicación </th>
-      <td mat-cell *matCellDef="let event"> {{ event.location }} </td>
+      <th mat-header-cell *matHeaderCellDef>{{ 'listEventsLocation' | translate }}</th>
+      <td mat-cell *matCellDef="let event">{{ event.location }}</td>
     </ng-container>
 
     <ng-container matColumnDef="categoria">
-      <th mat-header-cell *matHeaderCellDef i18n="@@listEventsCategory"> Categoría </th>
-      <td mat-cell *matCellDef="let event"> {{ event.category }} </td>
+      <th mat-header-cell *matHeaderCellDef>{{ 'listEventsCategory' | translate }}</th>
+      <td mat-cell *matCellDef="let event">{{ event.category }}</td>
     </ng-container>
 
     <ng-container matColumnDef="costo">
-      <th mat-header-cell *matHeaderCellDef i18n="@@listEventsFee"> Costo </th>
-      <td mat-cell *matCellDef="let event"> {{ event.fee | currency:'USD':'symbol' }} </td>
+      <th mat-header-cell *matHeaderCellDef>{{ 'listEventsFee' | translate }}</th>
+      <td mat-cell *matCellDef="let event">{{ event.fee | currency:'USD':'symbol' }}</td>
     </ng-container>
 
     <ng-container matColumnDef="estado">
-      <th mat-header-cell *matHeaderCellDef i18n="@@listEventsStatus"> Estado </th>
+      <th mat-header-cell *matHeaderCellDef>{{ 'listEventsStatus' | translate }}</th>
       <td mat-cell *matCellDef="let event">
         <button mat-button (click)="onPublishEvent(event)" [disabled]="event.status === 'published'">
           <ng-container *ngIf="event.status === 'published'; else publishEvent">
-            <span i18n="@@eventPublished">Publicado</span>
+            {{ 'eventPublished' | translate }}
           </ng-container>
           <ng-template #publishEvent>
-            <span i18n="@@publishEvent">Publicar evento</span>
+            {{ 'publishEvent' | translate }}
           </ng-template>
         </button>
       </td>
     </ng-container>
+
     <ng-container matColumnDef="expandToggle">
-      <th mat-header-cell *matHeaderCellDef> Usuarios Inscritos </th>
+      <th mat-header-cell *matHeaderCellDef> {{ 'eventListToggleUsers' | translate }} </th>
       <td mat-cell *matCellDef="let element">
         <button mat-button (click)="toggleRow(element); $event.stopPropagation()">
-          {{ element.isExpanded ? 'Ocultar Usuarios' : 'Listar Usuarios' }}
+          {{ element.isExpanded ? ('eventListHideUsers' | translate) : ('eventListToggleUsers' | translate) }}
         </button>
       </td>
     </ng-container>
+
     <ng-container matColumnDef="expandedDetail">
-      <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length" >
-        <div *ngIf="element.isExpanded && element.userData && element.userData.length > 0;" class="user-details-container">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+        <div *ngIf="element.isExpanded && element.userData && element.userData.length > 0" class="user-details-container">
           <table class="inner-table mat-elevation-z2">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Surname</th>
+                <th>{{ 'eventListUserTableHeaderName' | translate }}</th>
+                <th>{{ 'eventListUserTableHeaderSurname' | translate }}</th>
               </tr>
             </thead>
             <tbody>
@@ -78,11 +83,12 @@
         </div>
       </td>
     </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let element; columns: displayedColumns;" 
+    <tr mat-row *matRowDef="let element; columns: displayedColumns;"
         class="user-element-row"
         (click)="toggleRow(element); $event.stopPropagation();">
     </tr>
-    <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];when: isExpandedRow" class="user-detail-row"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpandedRow" class="user-detail-row"></tr>
   </table>
 </div>

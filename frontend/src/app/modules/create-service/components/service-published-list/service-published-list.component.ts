@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { MaterialModule } from '../../../../shared/material.module';
+import { MaterialModule } from '../../../../material.module';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { CreateServiceService } from '../../../../services/create-service.service';
 import { CreateEventService } from '../../../../services/create-event.service';
 import { AuthService } from '../../../../services/auth.service';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-service-published-list',
   standalone: true,
-  imports: [MaterialModule, CommonModule],
+  imports: [MaterialModule, CommonModule, TranslateModule],
   templateUrl: './service-published-list.component.html',
-  styleUrl: './service-published-list.component.scss'
+  styleUrls: ['./service-published-list.component.scss']
 })
 export class ServicePublishedListComponent implements OnInit {
   servicesDataSource = new MatTableDataSource<any>([]);
@@ -21,13 +22,19 @@ export class ServicePublishedListComponent implements OnInit {
   eventsDisplayedColumns: string[] = ['nombre', 'descripcion', 'costo', 'fechaEvento', 'disponibilidad'];
   userId: number = 0;
 
-
   constructor(
     private createServiceService: CreateServiceService,
     private createEventService: CreateEventService,
     private authService: AuthService,
     private router: Router,
-  ) {}
+    private translate: TranslateService
+  ) {
+    this.translate.setDefaultLang('en');
+  }
+
+  switchLanguage(language: string) {
+    this.translate.use(language);
+  }
 
   ngOnInit(): void {
     this.setUserIdFromToken();
@@ -69,7 +76,7 @@ export class ServicePublishedListComponent implements OnInit {
         const event = this.eventsDataSource.data.find((e: any) => e.id === eventId);
         if (event) {
           event.enrolled = true;
-          this.eventsDataSource.data = this.eventsDataSource.data.slice(); 
+          this.eventsDataSource.data = this.eventsDataSource.data.slice();
         }
       },
       error: (error) => console.error('Error enrolling in event', error)
@@ -92,5 +99,9 @@ export class ServicePublishedListComponent implements OnInit {
       },
       error: (error) => console.error('Error purchasing service', error)
     });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/athlete-dashboard']);
   }
 }
