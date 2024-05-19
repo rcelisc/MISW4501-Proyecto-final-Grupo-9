@@ -3,14 +3,15 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DemographicInfoService } from '../../../../services/demographic-info.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MaterialModule } from '../../../../shared/material.module';
+import { MaterialModule } from '../../../../material.module';
 import { AuthService } from '../../../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-demographic-info',
   standalone: true,
-  imports: [MaterialModule, ReactiveFormsModule],
+  imports: [MaterialModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './demographic-info.component.html',
   styleUrls: ['./demographic-info.component.scss']
 })
@@ -23,7 +24,8 @@ export class DemographicInfoComponent implements OnInit {
     private demographicInfoService: DemographicInfoService,
     private snackBar: MatSnackBar,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private translate: TranslateService
   ) {
     this.demographicInfoForm = this.fb.group({
       ethnicity: ['', Validators.required],
@@ -58,20 +60,26 @@ export class DemographicInfoComponent implements OnInit {
     this.demographicInfoForm.markAllAsTouched();
 
     if (!this.demographicInfoForm.valid) {
-      this.snackBar.open('Por favor, complete los campos requeridos.', 'Cerrar', {
-        duration: 3000,
-        panelClass: ['snack-bar-error']
+      this.translate.get('requiredFieldsError').subscribe((res: string) => {
+        this.snackBar.open(res, 'Cerrar', {
+          duration: 3000,
+          panelClass: ['snack-bar-error']
+        });
       });
       return;
     }
 
     this.demographicInfoService.createDemographicInfo(this.userId, this.demographicInfoForm.value).subscribe({
       next: (response) => {
-        this.snackBar.open('Información demográfica agregada exitosamente', 'Cerrar', { duration: 3000 });
-        this.router.navigate(['/athlete-dashboard']);
+        this.translate.get('demographicInfoAddedSuccess').subscribe((res: string) => {
+          this.snackBar.open(res, 'Cerrar', { duration: 3000 });
+          this.router.navigate(['/athlete-dashboard']);
+        });
       },
       error: (error) => {
-        this.snackBar.open('Error al agregar información demográfica del usuario', 'Cerrar', { duration: 3000 });
+        this.translate.get('demographicInfoAddedError').subscribe((res: string) => {
+          this.snackBar.open(res, 'Cerrar', { duration: 3000 });
+        });
       }
     });
   }

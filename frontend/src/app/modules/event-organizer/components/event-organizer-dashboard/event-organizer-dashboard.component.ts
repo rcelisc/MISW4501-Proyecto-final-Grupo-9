@@ -1,29 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import { MaterialModule } from '../../../../shared/material.module';
+import { MaterialModule } from '../../../../material.module';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-event-organizer-dashboard',
   standalone: true,
-  imports: [MaterialModule, CommonModule, RouterModule],
+  imports: [MaterialModule, CommonModule, RouterModule, TranslateModule],
   templateUrl: './event-organizer-dashboard.component.html',
-  styleUrl: './event-organizer-dashboard.component.scss'
+  styleUrls: ['./event-organizer-dashboard.component.scss']
 })
-export class EventOrganizerDashboardComponent implements OnInit{
-  dashboardItems = [
-    { title: 'Crear Eventos', content: 'Crea eventos para que los usuarios puedan asistir', link: '/create-event' },
-    { title: 'Ver y Publicar Eventos', content: 'Visualiza todos los eventos que has creado y cuales se han publicado y cuales no', link: '/event-list' },
-    { title: 'Ver Calendario de Eventos', content: 'Visualiza todos los eventos en un calendario para programar mejor proximos eventos', link: '/event-calendar' },
-  ];
-  
+export class EventOrganizerDashboardComponent implements OnInit {
+  dashboardItems: any[] = [];
   userData: any;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private translate: TranslateService) {
+    this.translate.setDefaultLang('en');
+  }
 
   ngOnInit() {
     this.fetchUserData();
+    this.setDashboardItems();
   }
 
   fetchUserData() {
@@ -43,5 +42,13 @@ export class EventOrganizerDashboardComponent implements OnInit{
         console.error('Token is invalid or expired');
       }
     }
+  }
+
+  setDashboardItems() {
+    this.dashboardItems = [
+      { titleKey: 'createEvents', contentKey: 'createEventsContent', link: '/create-event' },
+      { titleKey: 'viewAndPublishEvents', contentKey: 'viewAndPublishEventsContent', link: '/event-list' },
+      { titleKey: 'viewEventCalendar', contentKey: 'viewEventCalendarContent', link: '/event-calendar' }
+    ];
   }
 }

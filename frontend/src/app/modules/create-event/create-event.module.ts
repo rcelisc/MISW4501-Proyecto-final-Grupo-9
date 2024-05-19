@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateEventComponent } from './components/create-event/create-event.component';
 import { EventListComponent } from './components/event-list/event-list.component';
-import { MaterialModule } from '../../shared/material.module';
+import { MaterialModule } from '../../material.module';
 
 @NgModule({
   declarations: [
-    CreateEventComponent,
-    EventListComponent
+
   ],
   imports: [
     CommonModule,

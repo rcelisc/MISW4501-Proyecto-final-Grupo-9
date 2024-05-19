@@ -2,45 +2,45 @@
   <button mat-icon-button (click)="goBack()">
     <mat-icon>arrow_back</mat-icon>
   </button>
-  <h2 i18n="@@demographicInfoTitle" class="title">Agregar información demográfica y de salud</h2>
+  <h2 class="title">{{ 'demographicInfoTitle' | translate }}</h2>
   <form [formGroup]="demographicInfoForm" (ngSubmit)="onSubmit()">
     <div class="form-field">
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@demographicInfoEthnicity">Etnia</mat-label>
+        <mat-label>{{ 'demographicInfoEthnicity' | translate }}</mat-label>
         <input matInput formControlName="ethnicity">
       </mat-form-field>
     </div>
 
     <div class="form-field">
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@demographicInfoHeartRate">Frecuencia Cardiaca</mat-label>
+        <mat-label>{{ 'demographicInfoHeartRate' | translate }}</mat-label>
         <input matInput formControlName="heart_rate" type="number">
       </mat-form-field>
     </div>
 
     <div class="form-field">
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@demographicInfoVO2Max">VO2 Max</mat-label>
+        <mat-label>{{ 'demographicInfoVO2Max' | translate }}</mat-label>
         <input matInput formControlName="vo2_max" type="number">
       </mat-form-field>
     </div>
 
     <div class="form-field">
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@demographicInfoBloodPressure">Presión Sanguínea</mat-label>
+        <mat-label>{{ 'demographicInfoBloodPressure' | translate }}</mat-label>
         <input matInput formControlName="blood_pressure" type="text">
       </mat-form-field>
     </div>
 
     <div class="form-field">
       <mat-form-field appearance="fill">
-        <mat-label i18n="@@emographicInfoRespiratoryRate">Frecuencia Respiratoria</mat-label>
+        <mat-label>{{ 'demographicInfoRespiratoryRate' | translate }}</mat-label>
         <input matInput formControlName="respiratory_rate" type="number">
       </mat-form-field>
     </div>
 
     <div class="button-container">
-      <button mat-button class="create-button" type="submit" i18n="@@demographicInfoButton">Agregar</button>
+      <button mat-button class="create-button" type="submit">{{ 'demographicInfoButton' | translate }}</button>
     </div>
   </form>
 </div>
