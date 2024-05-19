@@ -5,7 +5,7 @@
     <header>
       <nav class="navbar navbar-expand">
         <div class="container-fluid">
-          <a class="navbar-brand" (click)="handleLogoClick()" style="cursor: pointer; font-size: 48px; font-weight: bold; margin-left: 100px; color: white;">
+          <a class="navbar-brand" (click)="handleLogoClick()" style="cursor: pointer;">
             SportApp<span class="app-version"> v2.0</span>
           </a>
           <div class="language-switcher">
@@ -13,7 +13,7 @@
             <button (click)="switchLanguage('es')">Español</button>
           </div>
           <button *ngIf="showLogoutButton" (click)="logout()" class="logout-button">
-            Logout
+            {{ 'logoutButton' | translate }}
           </button>
         </div>
       </nav>

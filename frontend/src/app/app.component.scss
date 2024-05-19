@@ -1,0 +1,92 @@
+@use '@angular/material' as mat;
+@use '../custom-theme.scss' as theme;
+
+nav {
+  background-color: #00355F;
+  font-family: 'Lato';
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+
+  .navbar-brand {
+    font-size: 48px;
+    font-weight: bold;
+    color: white;
+    position: relative; /* Allows positioning of the version span */
+    display: inline-block; /* Ensures the layout respects dimensions and positioning */
+    margin-left: 100px; /* Adjust based on your design */
+
+    .app-version {
+      font-size: 24px; /* Smaller font size for the version */
+      color: white;
+      opacity: 0; /* Start as invisible */
+      transition: opacity 0.3s ease-in-out; /* Smooth transition for the hover effect */
+      margin-left: 10px; /* Space between title and version */
+    }
+
+    &:hover .app-version {
+      opacity: 1; /* Make the version visible on hover */
+    }
+  }
+
+  .language-switcher {
+    display: flex;
+    gap: 1rem;
+
+    button {
+      font-size: 1.0rem;
+      padding: 0.5rem 1rem;
+      width: 120px; /* Fixed width */
+      border-radius: 8px;
+      background-color: mat.get-color-from-palette(theme.$custom-primary, 600);
+      color: white;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s ease;
+
+      &:hover, &:focus {
+        background-color: mat.get-color-from-palette(theme.$custom-primary, 700);
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+
+  .logout-button {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    width: 200px; /* Fixed width */
+    border-radius: 8px;
+    background-color: mat.get-color-from-palette(theme.$custom-primary, 600);
+    color: white;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+
+    &:hover, &:focus {
+      background-color: mat.get-color-from-palette(theme.$custom-primary, 700);
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+a {
+  font-size: 48px;
+  color: white;
+  position: relative;
+  display: inline-block;
+
+  .app-version {
+    font-size: 24px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    margin-left: 10px;
+  }
+
+  &:hover .app-version {
+    opacity: 1;
+  }
+}

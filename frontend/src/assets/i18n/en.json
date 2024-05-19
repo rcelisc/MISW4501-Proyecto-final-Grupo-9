@@ -218,6 +218,8 @@
     "trainingPlanSubmitErrorDetail": "Failed to submit data. Please try again later.",
     "trainingPlanCompleteFields": "Please complete all required fields.",
     "welcomeTitle": "Transform your athletic performance with SportApp",
-    "welcomeSubtitle": "Whether you are an athlete looking to improve your records, a sports professional offering personalized services, or an event organizer seeking efficiency and reach, SportApp is your perfect ally. We design training routines and nutrition plans tailored to the needs of the diverse Latin American population."
+    "welcomeSubtitle": "Whether you are an athlete looking to improve your records, a sports professional offering personalized services, or an event organizer seeking efficiency and reach, SportApp is your perfect ally. We design training routines and nutrition plans tailored to the needs of the diverse Latin American population.",
+    "logoutButton": "Logout",
+    "closeButton": "Close"
   }
   
