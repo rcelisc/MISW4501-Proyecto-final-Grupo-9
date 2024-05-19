@@ -1,7 +1,7 @@
 <div class="container">
   <div class="user-info">
     <h3>{{ 'professionalDashboardWelcome' | translate:{ name: userData?.name } }}</h3>
-    <p>{{ 'professionalDashboardRole' | translate:{ role: userData?.type } }}</p>
+    <p>{{ 'roleLabel' | translate:{ role: userData?.translatedRole | translate } }}</p>
   </div>
   <h2 class="dashboard-title">{{ 'professionalDashboardTitle' | translate }}</h2>
   <div class="card-container">

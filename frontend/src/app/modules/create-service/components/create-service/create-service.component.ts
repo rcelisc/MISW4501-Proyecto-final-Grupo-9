@@ -46,7 +46,7 @@ export class CreateServiceComponent {
     this.createServiceService.createService(this.createServiceForm.value).subscribe({
       next: (response) => {
         this.snackBar.open(this.translate.instant('serviceCreated'), 'Cerrar', { duration: 3000 });
-        this.router.navigate(['/service-list']);
+        this.router.navigate(['/professional-dashboard']);
       },
       error: (error) => {
         this.snackBar.open(this.translate.instant('serviceCreationError'), 'Cerrar', { duration: 3000 });
