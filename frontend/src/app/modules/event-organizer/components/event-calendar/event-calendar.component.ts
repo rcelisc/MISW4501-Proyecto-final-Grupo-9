@@ -1,21 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CalendarEvent, CalendarEventAction, CalendarView } from 'angular-calendar';
-import { CreateEventService } from '../../../../services/create-event.service'
-import { MaterialModule } from '../../../../shared/material.module';
+import { CreateEventService } from '../../../../services/create-event.service';
+import { MaterialModule } from '../../../../material.module';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CommonModule } from '@angular/common';
 import { MonthViewDay } from 'calendar-utils';
-
+import { Router } from '@angular/router';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-event-calendar',
   standalone: true,
   imports: [
-    MaterialModule, CalendarModule, CommonModule
+    MaterialModule, CalendarModule, CommonModule, TranslateModule
   ],
   templateUrl: './event-calendar.component.html',
-  styleUrl: './event-calendar.component.scss'
+  styleUrls: ['./event-calendar.component.scss']
 })
 export class EventCalendarComponent implements OnInit {
   viewDate: Date = new Date();
@@ -25,7 +26,10 @@ export class EventCalendarComponent implements OnInit {
   selectedEvents: CalendarEvent[] = [];
   isDetailsVisible: boolean = false;
 
-  constructor(private createEventService: CreateEventService) {}
+  constructor(private createEventService: CreateEventService,
+              private router: Router,
+              private translate: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.fetchEvents();
@@ -83,5 +87,8 @@ export class EventCalendarComponent implements OnInit {
   closeDetails(): void {
     this.isDetailsVisible = false;
   }
-  
+
+  goBack(): void {
+    this.router.navigate(['/organizer-dashboard']);
+  }
 }

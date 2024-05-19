@@ -1,23 +1,25 @@
 import { Component } from '@angular/core';
-import { MaterialModule } from '../../../shared/material.module';
+import { MaterialModule } from '../../../material.module';
 import { Router } from '@angular/router';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-welcome-page',
   standalone: true,
-  imports: [MaterialModule],
+  imports: [MaterialModule, TranslateModule],
   templateUrl: './welcome-page.component.html',
-  styleUrl: './welcome-page.component.scss'
+  styleUrls: ['./welcome-page.component.scss']
 })
 export class WelcomePageComponent {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private translate: TranslateService) {
+    this.translate.setDefaultLang('en');
+  }
   
   navigateToLogin(): void {
     this.router.navigate(['/login']);
   }
 
-  // Method to navigate to register
   navigateToRegister(): void {
     this.router.navigate(['/register']);
   }

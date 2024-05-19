@@ -2,28 +2,36 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TrainingPlanService } from '../../../../services/training-plan.service'
 import { AuthService } from '../../../../services/auth.service';
-import { MaterialModule } from '../../../../shared/material.module';
+import { MaterialModule } from '../../../../material.module';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-training-history',
   standalone: true,
-  imports: [MaterialModule, CommonModule],
+  imports: [MaterialModule, CommonModule, TranslateModule],
   templateUrl: './training-history.component.html',
   styleUrl: './training-history.component.scss'
 })
 export class TrainingHistoryComponent implements OnInit {
   trainings: any[] = [];
   dataSource = new MatTableDataSource<any>([]);
-  displayedColumns: string[] = ['tipo_entrenamiento', 'fecha', 'duracion', 'notas'];
+  displayedColumns: string[] = ['training_type', 'date', 'duration', 'notes'];
   userId: number = 0;
 
   constructor(
     private trainingPlanService: TrainingPlanService,
     private authService: AuthService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private translate: TranslateService
+  ) {
+    this.translate.setDefaultLang('en');
+  }
+
+  switchLanguage(language: string) {
+    this.translate.use(language);
+  }
 
   ngOnInit(): void {
     this.setUserIdFromToken();
@@ -56,5 +64,9 @@ export class TrainingHistoryComponent implements OnInit {
         }
       });
     }
+  }
+
+  goBack(): void {
+    this.router.navigate(['/athlete-dashboard']);
   }
 }
