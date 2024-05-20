@@ -220,6 +220,7 @@
     "welcomeTitle": "Transforma tu rendimiento deportivo con SportApp",
     "welcomeSubtitle": "Ya seas un atleta buscando mejorar tus marcas, un profesional del deporte ofreciendo servicios personalizados, o un organizador de eventos buscando eficiencia y alcance, SportApp es tu aliado perfecto. Diseñamos rutinas de entrenamiento y planes de nutrición adaptados a las necesidades de la diversa población latinoamericana.",
     "logoutButton": "Cerrar sesión",
-    "closeButton": "Cerrar"
+    "closeButton": "Cerrar",
+    "loginFailed": "Error al iniciar sesión. Por favor, verifique su número de ID y contraseña."
   }
   

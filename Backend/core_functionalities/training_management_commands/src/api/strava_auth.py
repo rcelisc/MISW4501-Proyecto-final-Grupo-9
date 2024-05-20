@@ -10,6 +10,8 @@ strava_auth_blueprint = Blueprint('strava_auth', __name__)
 CLIENT_ID = os.getenv('STRAVA_CLIENT_ID')
 CLIENT_SECRET = os.getenv('STRAVA_CLIENT_SECRET')
 REDIRECT_URI = os.getenv('STRAVA_REDIRECT_URI')
+MOBILE_APP_URI_SCHEME = "myapp://strava-callback"
+
 
 @strava_auth_blueprint.route('/authorize_strava')
 def authorize_strava():
