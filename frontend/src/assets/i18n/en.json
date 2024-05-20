@@ -220,6 +220,7 @@
     "welcomeTitle": "Transform your athletic performance with SportApp",
     "welcomeSubtitle": "Whether you are an athlete looking to improve your records, a sports professional offering personalized services, or an event organizer seeking efficiency and reach, SportApp is your perfect ally. We design training routines and nutrition plans tailored to the needs of the diverse Latin American population.",
     "logoutButton": "Logout",
-    "closeButton": "Close"
+    "closeButton": "Close",
+    "loginFailed": "Login failed. Please check your ID number and password."
   }
   
