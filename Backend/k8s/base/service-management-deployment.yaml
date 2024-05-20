@@ -25,4 +25,21 @@ spec:
           value: postgresql://postgres:smServices@db-service-management:5432/db_service_management
         - name: EVENTS_SERVICE_URL
           value: http://event-management-queries.default.svc.cluster.local:3002
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /secrets/service-account.json
+        volumeMounts:
+        - mountPath: /secrets
+          name: sa-key-volume
+          readOnly: true
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+      volumes:
+      - name: sa-key-volume
+        secret:
+          secretName: sa-key
       restartPolicy: Always

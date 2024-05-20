@@ -5,6 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../../services/auth.service';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-login',
@@ -20,7 +22,8 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private snackBar: MatSnackBar
   ) {
     this.translate.setDefaultLang('en');
     this.loginForm = this.fb.group({
@@ -52,6 +55,9 @@ export class LoginComponent {
         }
       },
       error: (err) => {
+        this.translate.get('loginFailed').subscribe((res: string) => {
+          this.snackBar.open(res, 'Close', { duration: 3000, panelClass: ['snack-bar-error'] });
+        });
         console.error('Login failed:', err);
       }
     });

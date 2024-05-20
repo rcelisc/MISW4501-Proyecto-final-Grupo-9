@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class PlanService {
-  private baseUrl = environment.baseUrlCommandsUser;
+  private baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) {}
 
