@@ -119,14 +119,14 @@ spec:
               number: 3005
 
       # Training Management Commands
-      - path: /authorize-strava
+      - path: /authorize_strava
         pathType: Prefix
         backend:
           service:
             name: training-management-commands
             port:
               number: 3004
-      - path: /strava-callback
+      - path: /strava_callback
         pathType: Prefix
         backend:
           service:
@@ -168,7 +168,7 @@ spec:
             name: training-management-commands
             port:
               number: 3004
-      - path: /fetch-strava-activities
+      - path: /fetch_strava_activities
         pathType: Prefix
         backend:
           service:
