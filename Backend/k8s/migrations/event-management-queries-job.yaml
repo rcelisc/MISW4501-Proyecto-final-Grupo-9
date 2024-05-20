@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: event-management-queries-migration
+spec:
+  template:
+    spec:
+      containers:
+      - name: migrate
+        image: gcr.io/miso-proyecto-de-grado-g09/event-management-queries:latest
+        command: ["flask", "db", "upgrade"]
+        env:
+        - name: DATABASE_URL
+          value: postgresql://postgres:emQueries@db-event-management-queries:5432/db_event_management_queries
+      restartPolicy: OnFailure
+  ttlSecondsAfterFinished: 30

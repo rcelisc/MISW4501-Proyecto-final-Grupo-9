@@ -191,7 +191,6 @@ spec:
             name: training-management-queries
             port:
               number: 3003
-
       - path: /training-plan/([0-9]+)
         pathType: ImplementationSpecific
         backend:
