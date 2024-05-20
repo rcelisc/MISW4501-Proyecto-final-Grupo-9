@@ -14,7 +14,7 @@ REDIRECT_URI = os.getenv('STRAVA_REDIRECT_URI')
 @strava_auth_blueprint.route('/authorize_strava')
 def authorize_strava():
     #strava_auth_url = f"https://www.strava.com/oauth/authorize?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&approval_prompt=force&scope=read,activity:read"
-    strava_auth_url = f"https://www.strava.com/oauth/authorize?client_id=125409&response_type=code&redirect_uri=myapp://strava-callback&approval_prompt=force&scope=read,activity:read"
+    strava_auth_url = f"https://www.strava.com/oauth/authorize?client_id=125409&response_type=code&redirect_uri=https://mysportapp.duckdns.org/strava-callback&approval_prompt=force&scope=read,activity:read"
     return redirect(strava_auth_url)
 
 @strava_auth_blueprint.route('/strava_callback')
