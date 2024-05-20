@@ -1,132 +1,211 @@
 package com.example.sportapp.ui.views
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.sportapp.R
-import com.example.sportapp.ui.home.Home
 import androidx.recyclerview.widget.RecyclerView
-import android.view.View
-import com.example.sportapp.SportApp
+import com.example.sportapp.R
+import com.example.sportapp.data.model.Event
+import com.example.sportapp.data.model.CalendarEventsAndServicesResponse
+import com.example.sportapp.data.model.Service
 import com.example.sportapp.data.repository.DataRepository
-import com.example.sportapp.data.services.RetrofitEventsManagementQueries
-import com.example.sportapp.data.model.CalendarEvent
+import com.example.sportapp.data.services.RetrofitClient
+import com.example.sportapp.ui.home.Home
+import com.example.sportapp.utils.BadgeUtils
+import com.example.sportapp.utils.UtilRedirect
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class CalendarEvents : AppCompatActivity() {
+    private lateinit var eventsAdapter: EventsAdapter
+    private lateinit var servicesAdapter: ServicesAdapter
+    private val repository = DataRepository(RetrofitClient.getEventsAndServicesService(this))
+    private val utilRedirect = UtilRedirect()
 
-    private lateinit var tableAdapter: TableAdapter
-    private val repository = DataRepository(RetrofitEventsManagementQueries.createApiService())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar_events)
 
-        val ivHome = findViewById<ImageView>(R.id.ivHome)
-        val ivRunExe = findViewById<ImageView>(R.id.ivRunExe)
-        val ivNotif = findViewById<ImageView>(R.id.ivNotifications)
-        val btnDevice = findViewById<ImageView>(R.id.ivWatch)
+        setUpNavigationButtons()
 
+        val eventsRecyclerView = findViewById<RecyclerView>(R.id.rvEvents)
+        eventsRecyclerView.layoutManager = LinearLayoutManager(this)
+        eventsAdapter = EventsAdapter()
+        eventsRecyclerView.adapter = eventsAdapter
 
+        val servicesRecyclerView = findViewById<RecyclerView>(R.id.rvServices)
+        servicesRecyclerView.layoutManager = LinearLayoutManager(this)
+        servicesAdapter = ServicesAdapter()
+        servicesRecyclerView.adapter = servicesAdapter
 
+        fetchCalendarEventsAndServices()
+    }
 
-        //Redirige a la Actividad Device
-        btnDevice.setOnClickListener{
-            val device = Intent(this, ConnectDevice::class.java)
-            startActivity(device)
-        }
+    override fun onResume() {
+        super.onResume()
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.top_navigation)
+        BadgeUtils.updateNotificationBadge(this, bottomNavigationView)
+    }
 
-        ivHome.setOnClickListener{
-            val home = Intent(this, Home::class.java)
-            startActivity(home)
-        }
-
-        ivRunExe.setOnClickListener{
-            val home = Intent(this, StartTraining::class.java)
-            startActivity(home)
-        }
-
-        ivNotif.setOnClickListener{
-            val notif = Intent(this, Notifications::class.java)
-            startActivity(notif)
-        }
-
-
-        //Tabla de eventos
-        val recyclerView = findViewById<RecyclerView>(R.id.rvEvents)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        tableAdapter = TableAdapter()
-        recyclerView.adapter = tableAdapter
-
-
-        repository.getCalendarEvents(SportApp.userCodeId).enqueue(object : Callback<List<CalendarEvent>> {
-            override fun onResponse(call: Call<List<CalendarEvent>>, response: Response<List<CalendarEvent>>) {
+    private fun fetchCalendarEventsAndServices() {
+        Log.d("DEBUG", "Fetching calendar events and services")
+        repository.getCalendarEventsAndServices().enqueue(object : Callback<CalendarEventsAndServicesResponse> {
+            override fun onResponse(call: Call<CalendarEventsAndServicesResponse>, response: Response<CalendarEventsAndServicesResponse>) {
                 if (response.isSuccessful) {
-                    val calendarResponse = response.body()
-                    if (calendarResponse != null) {
-                        for (event in calendarResponse) {
-                            tableAdapter.addItem(event)
-                        }
-                    } else {
-                        // Manejar el caso en que la respuesta del servidor sea nula
-                        Log.d("DEBUG", "La respuesta del servidor es nula")
-                    }
+                    response.body()?.let {
+                        Log.d("DEBUG", "Fetched events: ${it.events}")
+                        Log.d("DEBUG", "Fetched services: ${it.services}")
+                        eventsAdapter.addItems(it.events)
+                        servicesAdapter.addItems(it.services)
+                    } ?: Log.d("DEBUG", "Server response is null")
                 } else {
-                    // Manejar el caso en que la respuesta del servidor no sea exitosa
-                    Log.d("DEBUG", "La llamada al servicio no fue exitosa. Código de error: ${response.code()}")
+                    Log.d("DEBUG", "Service call not successful. Error code: ${response.code()}")
                 }
             }
 
-            override fun onFailure(call: Call<List<CalendarEvent>>, t: Throwable) {
-                // Manejar errores de red o de llamada al servicio
-                Log.d("DEBUG", "Error en la llamada al servicio: ${t.message}")
+            override fun onFailure(call: Call<CalendarEventsAndServicesResponse>, t: Throwable) {
+                Log.d("DEBUG", "Error calling the service: ${t.message}")
                 t.printStackTrace()
             }
         })
-
-
     }
 
-    class TableAdapter : RecyclerView.Adapter<TableAdapter.ViewHolder>() {
+    private fun setUpNavigationButtons() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_run -> {
+                    utilRedirect.redirectToActivity(this, DashboardTraining::class.java)
+                    true
+                }
 
-        private val data = mutableListOf<CalendarEvent>()
+                R.id.nav_clock -> {
+                    utilRedirect.redirectToActivity(this, DashboardTrainingPlans::class.java)
+                    true
+                }
+
+                R.id.nav_start -> {
+                    utilRedirect.redirectToActivity(this, StartTraining::class.java)
+                    true
+                }
+
+                R.id.nav_watch -> {
+                    utilRedirect.redirectToActivity(this, ConnectDevice::class.java)
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        val topNavigationView = findViewById<BottomNavigationView>(R.id.top_navigation)
+        topNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+
+                R.id.nav_home -> {
+                    utilRedirect.redirectToActivity(this, Home::class.java)
+                    true
+                }
+
+                R.id.nav_calendar -> {
+                    utilRedirect.redirectToActivity(this, CalendarEvents::class.java)
+                    true
+                }
+
+                R.id.nav_notifications -> {
+                    utilRedirect.redirectToActivity(this, Notifications::class.java)
+                    true
+                }
+
+                else -> false
+            }
+        }
+    }
+
+    class EventsAdapter : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
+        private val data = mutableListOf<Event>()
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_event, parent, false)
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_layout_event, parent, false)
             return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val item = data[position]
-            holder.bind(item)
+            val event = data[position]
+            holder.bind(event)
+            Log.d("DEBUG", "Binding event item: $event")
         }
 
-        override fun getItemCount(): Int {
-            return data.size
-        }
+        override fun getItemCount() = data.size
 
-        fun addItem(item: CalendarEvent) {
-            data.add(item)
-            notifyItemInserted(data.size - 1)
+        fun addItems(items: List<Event>) {
+            val startInsertPosition = data.size
+            data.addAll(items)
+            notifyItemRangeInserted(startInsertPosition, items.size)
         }
 
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val column1TextView: TextView = itemView.findViewById(R.id.textViewColumn1)
-            val column2TextView: TextView = itemView.findViewById(R.id.textViewColumn2)
-            val column3TextView: TextView = itemView.findViewById(R.id.textViewColumn3)
+            private val eventNameTextView: TextView = itemView.findViewById(R.id.textViewEventName)
+            private val eventDateTextView: TextView = itemView.findViewById(R.id.textViewEventDate)
+            private val eventDescriptionTextView: TextView =
+                itemView.findViewById(R.id.textViewEventDescription)
+            private val eventFeeTextView: TextView = itemView.findViewById(R.id.textViewEventFee)
 
+            fun bind(event: Event) {
+                eventNameTextView.text = event.name
+                eventDateTextView.text = event.event_date
+                eventDescriptionTextView.text = event.description
+                eventFeeTextView.text = event.fee.toString()
+            }
+        }
+    }
 
-            fun bind(item: CalendarEvent) {
-                column1TextView.text = item.nombre
-                column2TextView.text = item.fecha
-                column3TextView.text = item.descripción
+    class ServicesAdapter : RecyclerView.Adapter<ServicesAdapter.ViewHolder>() {
+        private val data = mutableListOf<Service>()
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_layout_service, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val service = data[position]
+            holder.bind(service)
+            Log.d("DEBUG", "Binding service item: $service")
+        }
+
+        override fun getItemCount() = data.size
+
+        fun addItems(items: List<Service>) {
+            val startInsertPosition = data.size
+            data.addAll(items)
+            notifyItemRangeInserted(startInsertPosition, items.size)
+        }
+
+        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            private val serviceNameTextView: TextView =
+                itemView.findViewById(R.id.textViewServiceName)
+            private val serviceDescriptionTextView: TextView =
+                itemView.findViewById(R.id.textViewServiceDescription)
+            private val serviceRateTextView: TextView =
+                itemView.findViewById(R.id.textViewServiceRate)
+            private val serviceStatusTextView: TextView =
+                itemView.findViewById(R.id.textViewServiceStatus)
+
+            fun bind(service: Service) {
+                serviceNameTextView.text = service.name
+                serviceDescriptionTextView.text = service.description
+                serviceRateTextView.text = service.rate.toString()
+                serviceStatusTextView.text = service.status
             }
         }
     }

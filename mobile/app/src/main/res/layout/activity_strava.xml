@@ -1,201 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backcolorapp">
+    android:background="@color/colorBackground"
+    tools:context=".ui.views.StravaViewConnect">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="0dp"
-        tools:context=".HomeActivity"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="92dp">
+    <!-- Top Menu Container -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/top_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/colorOnBackground"
+        app:itemTextColor="@color/colorOnBackground"
+        app:menu="@menu/top_nav_menu"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <FrameLayout
-            android:id="@+id/top_menu_container"
+    <!-- Main Content -->
+    <FrameLayout
+        android:id="@+id/content_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="?attr/colorBackgroundFloating"
+        app:layout_constraintTop_toBottomOf="@id/top_navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!-- Contenido del menu superior -->
-            <TableLayout
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="0dp"
+            android:orientation="vertical">
+
+            <!-- Strava Image -->
+            <ImageView
+                android:id="@+id/imgStrava"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/backmenuppal"
-                android:stretchColumns="0,1,2,3">
+                android:layout_height="40dp"
+                android:layout_gravity="top"
+                android:layout_marginTop="50dp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/logostrava" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/ivSugerencias"
-                        android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/sugerencias" />
-
-                    <ImageView
-                        android:id="@+id/ivHome"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/home" />
-
-                    <ImageView
-                        android:id="@+id/ivCalendar"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/calendario" />
-
-                    <ImageView
-                        android:id="@+id/ivNotifications"
-                        android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/notificaciones" />
-
-                </TableRow>
-            </TableLayout>
-        </FrameLayout>
-
-        <!-- Contenido principal de la vista -->
-
-        <FrameLayout
-            android:id="@+id/content_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-            <!-- Aquí coloca el contenido principal de tu vista -->
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="0dp"
-                android:orientation="horizontal">
-
-                <!-- Imagen en la parte inferior -->
-                <ImageView
-                    android:id="@+id/imgStrava"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_gravity="top"
-                    android:layout_marginTop="50dp"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/logostrava" />
-            </LinearLayout>
-
-            <Button
+            <!-- Strava Button -->
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSendStrava"
                 android:layout_width="226dp"
                 android:layout_height="50dp"
-                android:layout_gravity="bottom|center"
-                android:layout_marginBottom="100dp"
-                android:background="@drawable/button_background"
-
-                android:enabled="true"
-                android:fontFamily="@font/lato_bold_font"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="?attr/colorPrimary"
                 android:text="@string/action_send_strava"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/colorBackground"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.529"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:fontFamily="@font/lato_bold_font"
+                app:cornerRadius="8dp" />
 
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/bottom_menu_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!-- Contenido del menu inferior -->
-            <TableLayout
+            <!-- Activities RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/activitiesRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/backmenuppal"
-                android:stretchColumns="0,1,2,3">
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                android:visibility="visible"/>
+        </LinearLayout>
+    </FrameLayout>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/ivRun"
-                        android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/run" />
-
-                    <ImageView
-                        android:id="@+id/ivClockW"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/calend_clock" />
-
-                    <ImageView
-                        android:id="@+id/ivRunExe"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/start_exe" />
-
-                    <ImageView
-                        android:id="@+id/ivWatch"
-                        android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/watch" />
-                </TableRow>
-            </TableLayout>
-        </FrameLayout>
-
-    </LinearLayout>
+    <!-- Bottom Menu -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/colorOnBackground"
+        app:itemTextColor="@color/colorOnBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

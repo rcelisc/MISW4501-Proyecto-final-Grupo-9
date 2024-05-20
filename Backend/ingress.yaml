@@ -5,10 +5,16 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
     kubernetes.io/ingress.class: "nginx"
+    networking.gke.io/managed-certificates: my-sport-app-cert
 spec:
   ingressClassName: "nginx"
+  tls:
+  - hosts:
+    - mysportapp.duckdns.org
+    secretName: my-sport-app-cert-tls
   rules:
-  - http:
+  - host: mysportapp.duckdns.org
+    http:
       paths:
       # Event Management Commands
       - path: /events
@@ -18,14 +24,21 @@ spec:
             name: event-management-commands
             port:
               number: 3001
-      - path: /events/<int:event_id>
+      - path: /events/([0-9]+)/publish
         pathType: ImplementationSpecific
         backend:
           service:
             name: event-management-commands
             port:
               number: 3001
-      - path: /events/<int:event_id>/add
+      - path: /events/([0-9]+)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: event-management-commands
+            port:
+              number: 3001
+      - path: /events/([0-9]+)/add
         pathType: ImplementationSpecific
         backend:
           service:
@@ -40,7 +53,21 @@ spec:
             name: event-management-queries
             port:
               number: 3002
-      - path: /user/([0-9]+)/calendar
+      - path: /events/([0-9]+)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: event-management-queries
+            port:
+              number: 3002
+      - path: /events/published
+        pathType: Prefix
+        backend:
+          service:
+            name: event-management-queries
+            port:
+              number: 3002
+      - path: /events/user/([0-9]+)
         pathType: ImplementationSpecific
         backend:
           service:
@@ -48,6 +75,13 @@ spec:
             port:
               number: 3002
       # Service Management
+      - path: /nutrition-plans
+        pathType: Prefix
+        backend:
+          service:
+            name: service-management
+            port:
+              number: 3005
       - path: /services
         pathType: Prefix
         backend:
@@ -55,8 +89,50 @@ spec:
             name: service-management
             port:
               number: 3005
+      - path: /services/published
+        pathType: Prefix
+        backend:
+          service:
+            name: service-management
+            port:
+              number: 3005
+      - path: /services/([0-9]+)/publish
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: service-management
+            port:
+              number: 3005
+      - path: /services/([0-9]+)/purchase
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: service-management
+            port:
+              number: 3005
+      - path: /services/user/([0-9]+)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: service-management
+            port:
+              number: 3005
 
       # Training Management Commands
+      - path: /authorize_strava
+        pathType: Prefix
+        backend:
+          service:
+            name: training-management-commands
+            port:
+              number: 3004
+      - path: /strava_callback
+        pathType: Prefix
+        backend:
+          service:
+            name: training-management-commands
+            port:
+              number: 3004
       - path: /calculate-ftp-vo2max
         pathType: Prefix
         backend:
@@ -64,7 +140,6 @@ spec:
             name: training-management-commands
             port:
               number: 3004
-
       - path: /training-plan
         pathType: Prefix
         backend:
@@ -72,7 +147,6 @@ spec:
             name: training-management-commands
             port:
               number: 3004
-
       - path: /start-training
         pathType: Prefix
         backend:
@@ -80,7 +154,6 @@ spec:
             name: training-management-commands
             port:
               number: 3004
-
       - path: /stop-training
         pathType: Prefix
         backend:
@@ -88,8 +161,21 @@ spec:
             name: training-management-commands
             port:
               number: 3004
-
       - path: /receive_session-data
+        pathType: Prefix
+        backend:
+          service:
+            name: training-management-commands
+            port:
+              number: 3004
+      - path: /fetch_strava_activities
+        pathType: Prefix
+        backend:
+          service:
+            name: training-management-commands
+            port:
+              number: 3004
+      - path: /activities
         pathType: Prefix
         backend:
           service:
@@ -105,7 +191,6 @@ spec:
             name: training-management-queries
             port:
               number: 3003
-
       - path: /training-plan/([0-9]+)
         pathType: ImplementationSpecific
         backend:
@@ -113,7 +198,13 @@ spec:
             name: training-management-queries
             port:
               number: 3003
-
+      - path: /training-plans/([A-Za-z0-9-_]+)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: training-management-queries
+            port:
+              number: 3003
       - path: /training-sessions
         pathType: Prefix
         backend:
@@ -121,7 +212,6 @@ spec:
             name: training-management-queries
             port:
               number: 3003
-
       - path: /training-sessions/([0-9]+)
         pathType: ImplementationSpecific
         backend:
@@ -129,3 +219,75 @@ spec:
             name: training-management-queries
             port:
               number: 3003
+      - path: /training-sessions/user/([0-9]+)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: training-management-queries
+            port:
+              number: 3003
+      # User Management Commands
+      - path: /login
+        pathType: Prefix
+        backend:
+          service:
+            name: user-management-commands
+            port:
+              number: 3006
+      - path: /logout
+        pathType: Prefix
+        backend:
+          service:
+            name: user-management-commands
+            port:
+              number: 3006
+      - path: /users
+        pathType: Prefix
+        backend:
+          service:
+            name: user-management-commands
+            port:
+              number: 3006
+      - path: /users/([0-9]+)/demographic_data
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: user-management-commands
+            port:
+              number: 3006
+      - path: /users/([0-9]+)/food_data
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: user-management-commands
+            port:
+              number: 3006
+      - path: /users/([0-9]+)/sports_habits
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: user-management-commands
+            port:
+              number: 3006
+      - path: /users/([0-9]+)/plan
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: user-management-commands
+            port:
+              number: 3006
+      # User Management Queries
+      - path: /users/get
+        pathType: Prefix
+        backend:
+          service:
+            name: user-management-queries
+            port:
+              number: 3007
+      - path: /users/([0-9]+)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: user-management-queries
+            port:
+              number: 3007

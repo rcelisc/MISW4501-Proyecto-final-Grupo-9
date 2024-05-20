@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -11,11 +11,18 @@ export class NutritionPlanService {
   private baseUrl: string;
 
   constructor(private http: HttpClient) { 
-    this.baseUrl = `${environment.baseUrlNutrition}/nutrition-plans`;
+    this.baseUrl = `${environment.baseUrl}/nutrition-plans`;
   }
 
   createMealPlan(mealPlanData: any): Observable<any> {
-    return this.http.post(this.baseUrl, mealPlanData);
+    const headers = this.createAuthorizationHeader();
+    return this.http.post(this.baseUrl, mealPlanData, { headers });
   }
 
+  private createAuthorizationHeader(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
 }

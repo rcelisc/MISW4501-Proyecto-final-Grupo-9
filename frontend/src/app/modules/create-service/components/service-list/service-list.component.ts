@@ -1,19 +1,18 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CreateServiceService } from '../../../../services/create-service.service'
-import { MaterialModule } from '../../../../shared/material.module';
+import { CreateServiceService } from '../../../../services/create-service.service';
+import { MaterialModule } from '../../../../material.module';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-service-list',
   standalone: true,
-  imports: [MaterialModule, CommonModule],
+  imports: [MaterialModule, CommonModule, TranslateModule],
   templateUrl: './service-list.component.html',
-  styleUrl: './service-list.component.scss'
+  styleUrls: ['./service-list.component.scss']
 })
-
-
 export class ServiceListComponent implements OnInit {
   services: any[] = [];
   dataSource = new MatTableDataSource<any>([]);
@@ -21,8 +20,11 @@ export class ServiceListComponent implements OnInit {
 
   constructor(
     private createServiceService: CreateServiceService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private translate: TranslateService
+  ) {
+    this.translate.setDefaultLang('en');
+  }
 
   ngOnInit(): void {
     this.loadServices();
@@ -30,9 +32,8 @@ export class ServiceListComponent implements OnInit {
 
   loadServices(): void {
     this.createServiceService.getServices().subscribe({
-      next: (response:any) => {
-        // Assuming the response format is the one shown above
-        this.dataSource.data = response.services; // Accessing the 'services' array directly
+      next: (services: any[]) => {
+        this.dataSource.data = services;  // Now 'services' is directly the array
       },
       error: (error) => {
         console.error('Failed to load services', error);
@@ -53,5 +54,9 @@ export class ServiceListComponent implements OnInit {
         console.error('Failed to publish service', error);
       }
     });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/professional-dashboard']);
   }
 }

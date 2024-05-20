@@ -1,30 +1,69 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { MaterialModule } from '../../../../shared/material.module';
+import { MaterialModule } from '../../../../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../../../services/auth.service';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MaterialModule, ReactiveFormsModule],
+  imports: [MaterialModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private translate: TranslateService,
+    private snackBar: MatSnackBar
+  ) {
+    this.translate.setDefaultLang('en');
     this.loginForm = this.fb.group({
-      email: '',
-      password: ''
+      id_number: ['', Validators.required],
+      password: ['', Validators.required]
     });
   }
 
-  onLogin() {
-    // Here goes the authentication logic
-    // After login, route based on user type
-    this.router.navigate(['/professional-dashboard']); // Redirect to professional dashboard
+  switchLanguage(language: string) {
+    this.translate.use(language);
+  }
 
+  onLogin() {
+    this.authService.loginUser(this.loginForm.value).subscribe({
+      next: (res) => {
+        localStorage.setItem('token', res.token); // Store token in localStorage
+        const decoded = this.authService.decodeToken(res.token);
+        localStorage.setItem('userRole', decoded.role); // Store user role
+        
+        // Navigate based on role
+        if (decoded.role === 'athlete') {
+          this.router.navigate(['/athlete-dashboard']);
+        } else if (decoded.role === 'event_organizer') {
+          this.router.navigate(['/organizer-dashboard']);
+        } else if (decoded.role === 'complementary_services_professional') {
+          this.router.navigate(['/professional-dashboard']);
+        } else {
+          this.router.navigate(['/login']); // Redirect if the role is not recognized
+        }
+      },
+      error: (err) => {
+        this.translate.get('loginFailed').subscribe((res: string) => {
+          this.snackBar.open(res, 'Close', { duration: 3000, panelClass: ['snack-bar-error'] });
+        });
+        console.error('Login failed:', err);
+      }
+    });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/']);
   }
 }

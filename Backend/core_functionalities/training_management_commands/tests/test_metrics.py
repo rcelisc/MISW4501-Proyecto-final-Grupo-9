@@ -6,6 +6,7 @@ from src.extensions import db
 from src.models.training_session import TrainingSession
 import uuid
 from datetime import datetime, timedelta
+import jwt
 
 class TestTrainingMetrics(TestCase):
     def create_app(self):
@@ -14,6 +15,7 @@ class TestTrainingMetrics(TestCase):
         return app
 
     def setUp(self):
+        super(TestTrainingMetrics, self).setUp()
         db.create_all()
         self.session_id = uuid.uuid4()  # Generate a unique session ID
         start_time = datetime.now() - timedelta(hours=1)
@@ -23,18 +25,27 @@ class TestTrainingMetrics(TestCase):
                                   max_heart_rate=180, resting_heart_rate=60)
         db.session.add(session)
         db.session.commit()
+        self.valid_token = self.generate_fake_token('athlete')
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+    
+    def generate_fake_token(self,role):
+        payload = {
+            'user_id': 1,
+            'role': role,
+            'exp': datetime.utcnow() + timedelta(days=1)
+        }
+        return jwt.encode(payload, 'login_key', algorithm='HS256')
 
     def test_calculate_ftp_vo2max_success(self):
         # Mock the pubsub publisher
         with patch('google.cloud.pubsub_v1.PublisherClient') as mock_publisher:
             mock_publisher_instance = MagicMock()
             mock_publisher.return_value = mock_publisher_instance
-
-            response = self.client.post('/calculate-ftp-vo2max', json={'session_id': str(self.session_id)})
+            headers = {'Authorization': 'Bearer ' + self.valid_token}
+            response = self.client.post('/calculate-ftp-vo2max', json={'session_id': str(self.session_id)}, headers=headers)
             self.assert200(response)
             expected_results = {"FTP": 7.916666666666666, "VO2max": 45.0}
             self.assertEqual(response.json, expected_results)
@@ -43,6 +54,7 @@ class TestTrainingMetrics(TestCase):
     def test_calculate_ftp_vo2max_session_not_found(self):
         non_existent_id = uuid.uuid4()  # Generate a non-existent session UUID
         with patch('google.cloud.pubsub_v1.PublisherClient'):
-            response = self.client.post('/calculate-ftp-vo2max', json={'session_id': str(non_existent_id)})
+            headers = {'Authorization': 'Bearer ' + self.valid_token}
+            response = self.client.post('/calculate-ftp-vo2max', json={'session_id': str(non_existent_id)}, headers=headers)
             self.assert200(response)
             self.assertEqual(response.json, {"error": "Session not found"})

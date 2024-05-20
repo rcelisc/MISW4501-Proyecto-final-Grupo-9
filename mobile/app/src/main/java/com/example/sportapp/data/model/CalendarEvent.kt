@@ -1,26 +1,36 @@
 package com.example.sportapp.data.model
-import java.util.*
-data class CalendarEvent (
-    val descripción: String,
-    val fecha: String,
-    val nombre: String,
-    val ubicación : String
-)
 
-data class EventsSuggestionsResponse(
-    val id: Int,
-    val name: String,
+data class Event(
+    val additional_info: String?,
     val category: String,
     val description: String,
-    val eventDate: Date,
     val duration: Int,
+    val event_date: String,
     val fee: Double,
+    val id: Int,
     val location: String,
-    val additionalInfo: AdditionalInfo
+    val name: String
 )
 
-data class AdditionalInfo(
-    val maxParticipants: Int,
-    val minAge: Int,
-    val registrationDeadline: Date
+data class EventSuggestion(
+    val descripción: String,
+    val fecha: String,
+    val id: Int,
+    val nombre: String,
+    val ubicación: String
 )
+
+data class Service(
+    val available: Boolean,
+    val description: String,
+    val id: Int,
+    val name: String,
+    val rate: Double,
+    val status: String
+)
+
+data class CalendarEventsAndServicesResponse(
+    val events: List<Event>,
+    val services: List<Service>
+)
+

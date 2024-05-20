@@ -1,17 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CalendarEvent, CalendarEventAction, CalendarView } from 'angular-calendar';
 import { CreateServiceService } from '../../../../services/create-service.service'
-import { MaterialModule } from '../../../../shared/material.module';
-import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NotificationService } from '../../../../services/notification.service';
+import { MaterialModule } from '../../../../material.module';
+import { CalendarModule } from 'angular-calendar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { MonthViewDay } from 'calendar-utils';
+import { NotificationManagerComponent } from '../../../../shared/notification/notification.component';
+import { Router } from '@angular/router';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-athlete-calendar',
   standalone: true,
   imports: [
-    MaterialModule, CalendarModule, CommonModule
+    MaterialModule, CalendarModule, CommonModule, NotificationManagerComponent, TranslateModule
   ],
   templateUrl: './athlete-calendar.component.html',
   styleUrl: './athlete-calendar.component.scss'
@@ -24,7 +28,13 @@ export class AthleteCalendarComponent implements OnInit {
   selectedEvents: CalendarEvent[] = [];
   isDetailsVisible: boolean = false;
 
-  constructor(private createServiceService: CreateServiceService) {}
+  constructor(
+    private createServiceService: CreateServiceService,
+    private notificationService: NotificationService,
+    private snackBar: MatSnackBar,
+    private router: Router,
+    private translate: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.fetchEvents();
@@ -34,7 +44,7 @@ export class AthleteCalendarComponent implements OnInit {
     this.createServiceService.getServicesPublished().subscribe((response: any) => {
       const eventsMapped = (response.events as any[]).map(event => ({
         start: new Date(event.event_date),
-        end: new Date(new Date(event.event_date).getTime() + event.duration * 60000),
+        end: new Date(new Date(event.event_date).getTime() + event.duration * 3600000),
         title: event.name,
         color: {
           primary: '#1e90ff', // blue for events
@@ -72,6 +82,47 @@ export class AthleteCalendarComponent implements OnInit {
       }));
   
       this.events = [...eventsMapped, ...servicesMapped]; // Combine events and services
+      this.notifyUpcomingEvents();
+    });
+  }
+
+  notifyUpcomingEvents(): void {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+
+    let todayEvents:any = [];
+    let tomorrowEvents:any = [];
+
+    this.events.forEach(event => {
+      const eventDate = new Date(event.start);
+      eventDate.setHours(0, 0, 0, 0); // Clear the time portion for accurate comparison
+      if (eventDate.getTime() === today.getTime()) {
+        todayEvents.push(event.title);
+      } else if (eventDate.getTime() === tomorrow.getTime()) {
+        tomorrowEvents.push(event.title);
+      }
+    });
+
+    if (todayEvents.length > 0) {
+      this.translate.get('todayEvents', { events: todayEvents.join(', ') }).subscribe((res: string) => {
+        this.notificationService.showNotification(res);
+      });
+    }
+    if (tomorrowEvents.length > 0) {
+      this.translate.get('tomorrowEvents', { events: tomorrowEvents.join(', ') }).subscribe((res: string) => {
+        this.notificationService.showNotification(res);
+      });
+    }
+  }
+
+  showNotification(message: string, position: 'top' | 'bottom'): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 10000, // Notification duration
+      horizontalPosition: 'right', // Horizontal position
+      verticalPosition: position // Vertical position either top or bottom
     });
   }
 
@@ -105,5 +156,9 @@ export class AthleteCalendarComponent implements OnInit {
 
   closeDetails(): void {
     this.isDetailsVisible = false;
+  }
+
+  goBack(): void {
+    this.router.navigate(['/athlete-dashboard']);
   }
 }

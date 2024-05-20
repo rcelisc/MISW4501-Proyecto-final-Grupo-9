@@ -1,21 +1,23 @@
 <div class="container">
-    <h2 class="title">Iniciar Sesión</h2>
-    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-          <mat-label>Correo electrónico</mat-label>
-          <input matInput formControlName="email">
-        </mat-form-field>
-      </div>
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-          <mat-label>Contraseña</mat-label>
-          <input matInput type="password" formControlName="password">
-        </mat-form-field>
-      </div>
-      <div class="button-container">
-        <button mat-button class="action-button" type="submit">Iniciar Sesión</button>
-      </div>
-    </form>
-  </div>
-  
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <h2 class="title">{{ 'loginTitle' | translate }}</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'loginIdNumber' | translate }}</mat-label>
+        <input matInput formControlName="id_number">
+      </mat-form-field>
+    </div>
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'loginPassword' | translate }}</mat-label>
+        <input matInput type="password" formControlName="password">
+      </mat-form-field>
+    </div>
+    <div class="button-container">
+      <button mat-button class="action-button" type="submit">{{ 'loginButton' | translate }}</button>
+    </div>
+  </form>
+</div>

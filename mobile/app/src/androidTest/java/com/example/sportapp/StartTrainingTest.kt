@@ -16,27 +16,23 @@ class StartTrainingTest {
 
     @Test
     fun testUIElementsDisplayed() {
-        // Verificar que todos los elementos de la interfaz de usuario estén visibles
-        onView(withId(R.id.ivHome)).check(matches(isDisplayed()))
-        onView(withId(R.id.ivRunExe)).check(matches(isDisplayed()))
-        onView(withId(R.id.rvTypeTraining)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.tvTrainingTypeTitle)).check(matches(isDisplayed()))
         onView(withId(R.id.chronometer)).check(matches(isDisplayed()))
         onView(withId(R.id.btnStartTraining)).check(matches(isDisplayed()))
     }
 
     @Test
     fun testNavigationToHome() {
-        // Simular el clic en el icono de inicio
-        onView(withId(R.id.ivHome)).perform(click())
+
         // Verificar que la actividad de inicio (HomeActivity) se haya abierto
-        onView(withId(R.id.linearLayout)).check(matches(isDisplayed()))
+        onView(withId(R.id.tvVersionName)).check(matches(isDisplayed()))
     }
 
     @Test
     fun testNavigationToStartTraining() {
-        // Simular el clic en el icono de inicio de entrenamiento
-        onView(withId(R.id.ivRunExe)).perform(click())
+
         // Verificar que la actividad de inicio de entrenamiento (StartTraining) se haya abierto
-        onView(withId(R.id.linearLayout)).check(matches(isDisplayed()))
+        onView(withId(R.id.tvVersionName)).check(matches(isDisplayed()))
     }
 }

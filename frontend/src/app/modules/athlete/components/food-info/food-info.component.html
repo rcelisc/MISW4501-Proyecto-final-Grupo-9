@@ -1,0 +1,46 @@
+<div class="container">
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <h2 class="title">{{ 'foodInfoTitle' | translate }}</h2>
+  <form [formGroup]="foodInfoForm" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'foodInfoDailyCalories' | translate }}</mat-label>
+        <input matInput formControlName="daily_calories" type="number">
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'foodInfoDailyProtein' | translate }}</mat-label>
+        <input matInput formControlName="daily_protein" type="number">
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'foodInfoDailyLiquid' | translate }}</mat-label>
+        <input matInput formControlName="daily_liquid" type="number">
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'foodInfoDailyCarbs' | translate }}</mat-label>
+        <input matInput formControlName="daily_carbs" type="number">
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'foodInfoMealFrecuency' | translate }}</mat-label>
+        <input matInput formControlName="meal_frequency" type="text">
+      </mat-form-field>
+    </div>
+
+    <div class="button-container">
+      <button mat-button class="create-button" type="submit">{{ 'foodInfoButton' | translate }}</button>
+    </div>
+  </form>
+</div>

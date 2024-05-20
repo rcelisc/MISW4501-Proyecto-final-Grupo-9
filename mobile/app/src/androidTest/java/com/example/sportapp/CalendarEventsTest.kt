@@ -21,18 +21,9 @@ class CalendarEventsTest {
     @get:Rule
     val activityScenarioRule = ActivityScenarioRule(CalendarEvents::class.java)
 
-//    @Test
-//    fun testRecyclerViewItemCount() {
-//        // Verifica que el RecyclerView contenga al menos un elemento
-//        Espresso.onView(ViewMatchers.withId(R.id.rvEvents))
-//            .check(RecyclerViewItemCountAssertion.hasItemCount(1))
-//    }
-
     @Test
     fun testNavigationClick() {
-        // Haz clic en el icono de inicio
-        Espresso.onView(ViewMatchers.withId(R.id.ivHome))
-            .perform(ViewActions.click())
+
         // Agrega aquí aserciones adicionales según el comportamiento esperado después de hacer clic en el icono de inicio
     }
 

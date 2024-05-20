@@ -17,6 +17,7 @@ spec:
       containers:
       - name: training-management-commands-container
         image: gcr.io/miso-proyecto-de-grado-g09/training-management-commands:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3004
         env:
@@ -48,6 +49,13 @@ spec:
         - mountPath: /secrets
           name: sa-key-volume
           readOnly: true
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
       volumes:
       - name: sa-key-volume
         secret:

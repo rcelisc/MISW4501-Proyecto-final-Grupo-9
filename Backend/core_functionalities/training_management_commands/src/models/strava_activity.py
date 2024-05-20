@@ -1,8 +1,8 @@
 from ..extensions import db
 
 class StravaActivity(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    athlete_id = db.Column(db.Integer, index=True)
+    id = db.Column(db.BigInteger, primary_key=True)
+    athlete_id = db.Column(db.BigInteger, index=True)
     name = db.Column(db.String(255))
     distance = db.Column(db.Float)  # in meters
     moving_time = db.Column(db.Integer)  # in seconds

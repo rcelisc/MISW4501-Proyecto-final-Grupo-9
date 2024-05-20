@@ -1,217 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@color/backcolorapp">
-
-<LinearLayout
-    android:id="@+id/linearLayout"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="0dp"
-    tools:context=".HomeActivity"
-    tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="92dp">
+    android:background="@color/colorBackground"
+    tools:context=".ui.views.StartTraining">
 
-    <FrameLayout
-        android:id="@+id/top_menu_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <!-- Contenido del menu superior -->
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/backmenuppal"
-            android:stretchColumns="0,1,2,3">
+    <!-- Top Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/top_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/colorOnBackground"
+        app:itemTextColor="@color/colorOnBackground"
+        app:menu="@menu/top_nav_menu"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/ivSugerencias"
-                    android:layout_width="0dp"
-                    android:layout_height="75dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/sugerencias" />
-
-                <ImageView
-                    android:id="@+id/ivHome"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/home" />
-
-                <ImageView
-                    android:id="@+id/ivCalendar"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/calendario" />
-
-                <ImageView
-                    android:id="@+id/ivNotifications"
-                    android:layout_width="0dp"
-                    android:layout_height="75dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/notificaciones" />
-
-            </TableRow>
-        </TableLayout>
-    </FrameLayout>
-
-    <!-- Contenido principal de la vista -->
-
-    <FrameLayout
-        android:id="@+id/content_container"
-        android:layout_width="match_parent"
+    <!-- Main Content -->
+    <ScrollView
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1">
-        <!-- Aquí coloca el contenido principal de tu vista -->
+        android:layout_margin="16dp"
+        android:background="@color/colorBackground"
+        app:layout_constraintTop_toBottomOf="@id/top_navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            android:gravity="top"> <!-- Alineación vertical por la parte inferior -->
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <!-- TextView -->
+            <!-- Training Type Title -->
             <TextView
-                android:id="@+id/tvwWelcome"
-                android:layout_width="0dp"
+                android:id="@+id/tvTrainingTypeTitle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginBottom="8dp"
                 android:text="@string/type_training"
                 android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="22dp" />
+                android:textColor="@color/colorOnBackground"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-            <!-- RecyclerView -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTypeTraining"
-                android:layout_width="0dp"
+            <!-- Training Type Spinner -->
+            <Spinner
+                android:id="@+id/spinnerTrainingType"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
-        </LinearLayout>
+                android:layout_marginBottom="16dp" />
 
+            <!-- Chronometer -->
+            <Chronometer
+                android:id="@+id/chronometer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:text="00 : 00 : 00"
+                android:textColor="@color/colorOnBackground"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp" />
 
-        <Chronometer
-            android:id="@+id/chronometer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:text="00 : 00 : 00"
-            android:textColor="@color/white"
-            android:layout_marginTop="250dp"
-            android:layout_gravity="center_horizontal"
-            android:visibility="visible" />
-
-
-            <Button
+            <!-- Start Training Button -->
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnStartTraining"
-                android:layout_width="226dp"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom|center"
-                android:layout_marginBottom="100dp"
-                android:background="@drawable/button_background"
-
-                android:enabled="true"
-                android:fontFamily="@font/lato_bold_font"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimary"
                 android:text="@string/start_training"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/colorOnPrimary"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.529"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:fontFamily="@font/lato_bold_font"
+                app:cornerRadius="8dp"
+                android:layout_marginBottom="16dp" />
 
-
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/bottom_menu_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <!-- Contenido del menu inferior -->
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/backmenuppal"
-            android:stretchColumns="0,1,2,3">
-
-            <TableRow
+            <!-- Finish Training Details -->
+            <TextView
+                android:id="@+id/tvwTimeTotal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/lato_bold_font"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/colorOnBackground"
+                android:textSize="22sp"
+                android:visibility="gone" />
 
-                <ImageView
-                    android:id="@+id/ivRun"
-                    android:layout_width="0dp"
-                    android:layout_height="75dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/run" />
+            <TextView
+                android:id="@+id/tvwDateTraining"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/lato_bold_font"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/colorOnBackground"
+                android:textSize="22sp"
+                android:visibility="gone" />
 
-                <ImageView
-                    android:id="@+id/ivClockW"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/calend_clock" />
+            <TextView
+                android:id="@+id/tvwCalTraining"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/lato_bold_font"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/colorOnBackground"
+                android:textSize="22sp"
+                android:visibility="gone" />
 
-                <ImageView
-                    android:id="@+id/ivRunExe"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/start_exe" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFTPVO2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="@string/boton_finish"
+                android:textAllCaps="false"
+                android:textColor="@color/colorBackground"
+                android:textSize="24sp"
+                android:fontFamily="@font/lato_bold_font"
+                app:cornerRadius="8dp"
+                android:visibility="gone" />
 
-                <ImageView
-                    android:id="@+id/ivWatch"
-                    android:layout_width="0dp"
-                    android:layout_height="75dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/watch" />
-            </TableRow>
-        </TableLayout>
-    </FrameLayout>
-</LinearLayout>
+            <TextView
+                android:id="@+id/tvwFTP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/lato_bold_font"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/colorOnBackground"
+                android:textSize="22sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvwVO2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/lato_bold_font"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/colorOnBackground"
+                android:textSize="22sp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/colorOnBackground"
+        app:itemTextColor="@color/colorOnBackground"
+        app:menu="@menu/bottom_nav_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

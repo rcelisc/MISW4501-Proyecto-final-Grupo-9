@@ -13,3 +13,4 @@ spec:
         - name: DATABASE_URL
           value: postgresql://postgres:tmCommands@db-training-management-commands:5432/db_training_management_commands
       restartPolicy: OnFailure
+  ttlSecondsAfterFinished: 30

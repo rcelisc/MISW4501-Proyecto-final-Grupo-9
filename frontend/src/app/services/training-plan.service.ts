@@ -7,30 +7,43 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-
 export class TrainingPlanService {
 
   private baseCommandsUrl: string;
   private baseQueriesUrl: string;
 
   constructor(private http: HttpClient) {
-    this.baseCommandsUrl = `${environment.baseUrlCommandsTraining}/training-plan`;
-    this.baseQueriesUrl = `${environment.baseUrlQueriesTraining}`;
+    this.baseCommandsUrl = `${environment.baseUrl}/training-plan`;
+    this.baseQueriesUrl = `${environment.baseUrl}`;
   }
 
   createPlan(plan: TrainingPlanRequest): Observable<TrainingPlanResponse> {
-    return this.http.post<TrainingPlanResponse>(this.baseCommandsUrl, plan)
+    const headers = this.createAuthorizationHeader();
+    return this.http.post<TrainingPlanResponse>(this.baseCommandsUrl, plan, { headers })
       .pipe(
         catchError(this.handleError)
       );
   }
 
   getTrainingSessions(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseQueriesUrl}/training-sessions`);
+    const headers = this.createAuthorizationHeader();
+    return this.http.get<any[]>(`${this.baseQueriesUrl}/training-sessions`, { headers });
+  }
+
+  getTrainingSessionByUser(userId: number): Observable<any[]> {
+    const headers = this.createAuthorizationHeader();
+    return this.http.get<any[]>(`${this.baseQueriesUrl}/training-sessions/user/${userId}`, { headers });
+  }
+
+  private createAuthorizationHeader(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
   }
 
   private handleError(error: any) {
-    console.error('Error en la solicitud:', error);
-    return throwError('Error en la solicitud. Por favor, inténtalo de nuevo más tarde.'); // O puedes lanzar un error personalizado
+    console.error('Error in request:', error);
+    return throwError(() => new Error('Error in request. Please try again later.'));
   }
 }

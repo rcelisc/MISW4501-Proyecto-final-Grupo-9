@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-management-queries
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-management-queries
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: user-management-queries
+    spec:
+      containers:
+      - name: user-management-queries-container
+        image: gcr.io/miso-proyecto-de-grado-g09/user-management-queries:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3007
+        env:
+        - name: DATABASE_URL
+          value: postgresql://postgres:umQueries@db-user-management-queries:5432/db_user_management_queries
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /secrets/service-account.json
+        volumeMounts:
+        - mountPath: /secrets
+          name: sa-key-volume
+          readOnly: true
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+      volumes:
+      - name: sa-key-volume
+        secret:
+          secretName: sa-key
+      restartPolicy: Always

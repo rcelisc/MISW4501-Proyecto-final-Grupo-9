@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MaterialModule } from '../../../../shared/material.module';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MaterialModule } from '../../../../material.module';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 type UserType = 'athlete' | 'complementary_services_professional' | 'event_organizer';
 
@@ -17,23 +18,27 @@ const routes: { [key in UserType]: string } = {
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [MaterialModule, ReactiveFormsModule, CommonModule],
+  imports: [MaterialModule, ReactiveFormsModule, CommonModule, TranslateModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
 
   constructor(
-    private fb: FormBuilder, 
-    private authService: AuthService, 
-    private router: Router
-  ){
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private router: Router,
+    private translate: TranslateService
+  ) {
+    this.translate.setDefaultLang('en');
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
       surname: ['', Validators.required],
       id_type: ['', Validators.required],
       id_number: ['', Validators.required],
+      password: ['', Validators.required],
       city_of_living: [''],
       country_of_living: [''],
       type: ['', Validators.required],
@@ -49,6 +54,32 @@ export class RegisterComponent {
     });
   }
 
+  switchLanguage(language: string) {
+    this.translate.use(language);
+  }
+
+  ngOnInit(): void {
+    this.registerForm.get('type')?.valueChanges.subscribe(userType => {
+      this.updateValidators(userType);
+    });
+  }
+
+  updateValidators(userType: UserType) {
+    const athleteFields = ['age', 'gender', 'weight', 'height', 'city_of_birth', 'country_of_birth', 'sports', 'profile_type'];
+
+    if (userType === 'athlete') {
+      athleteFields.forEach(field => {
+        this.registerForm.get(field)?.setValidators(Validators.required);
+        this.registerForm.get(field)?.updateValueAndValidity();
+      });
+    } else {
+      athleteFields.forEach(field => {
+        this.registerForm.get(field)?.clearValidators();
+        this.registerForm.get(field)?.updateValueAndValidity();
+      });
+    }
+  }
+
   onRegister() {
     if (this.registerForm.valid) {
       let userData = this.registerForm.value;
@@ -56,31 +87,27 @@ export class RegisterComponent {
 
       // Clear unrelated data for non-athlete types
       if (userType !== 'athlete') {
-        delete userData.age;
-        delete userData.gender;
-        delete userData.weight;
-        delete userData.height;
-        delete userData.city_of_birth;
-        delete userData.country_of_birth;
-        delete userData.sports;
-        delete userData.profile_type;
+        const fieldsToRemove = ['age', 'gender', 'weight', 'height', 'city_of_birth', 'country_of_birth', 'sports', 'profile_type'];
+        fieldsToRemove.forEach(field => delete userData[field]);
       }
 
       this.authService.registerUser(userData).subscribe({
         next: (response) => {
           console.log('User registered successfully:', response);
-          this.navigateToDashboard(userType);
+          this.router.navigate(['/login']);
         },
         error: (error) => {
           console.error('Registration error:', error);
+          this.snackBar.open(this.translate.instant('registerError'), 'Cerrar', { duration: 3000 });
         }
       });
     } else {
       console.error('Form is not valid');
+      this.snackBar.open(this.translate.instant('registerRequiredFieldsError'), 'Cerrar', { duration: 3000 });
     }
   }
 
-  private navigateToDashboard(userType: UserType) {
-    this.router.navigate([routes[userType] || '/']);
+  goBack(): void {
+    this.router.navigate(['/']);
   }
 }

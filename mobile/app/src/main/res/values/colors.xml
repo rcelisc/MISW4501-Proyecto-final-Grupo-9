@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="backtittle">#00355F</color>
-    <color name="backmenuppal">#006494</color>
-    <color name="backcolorapp">#0582CA</color>
-    <color name="selected_background_color">#0582CA</color>
+    <color name="colorPrimary">#1E88E5</color>
+    <color name="colorPrimaryDark">#1565C0</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentLight">#FF80AB</color>
+    <color name="colorAccentDark">#F50057</color>
+    <color name="colorError">#D32F2F</color>
+    <color name="colorBackground">#F0F0F0</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSecondary">#212121</color>
+    <color name="colorOnBackground">#212121</color>
+    <color name="colorOnSurface">#212121</color>
+    <!-- Additional colors for suggestions/notifications -->
+    <color name="colorSuggestionTraining">#99c9f3</color>
+    <color name="colorSuggestionEvent">#76B6EF</color>
+    <color name="colorSuggestionRoute">#76B6EF</color>
+    <color name="colorSuggestionService">#76B6EF</color>
+    <color name="colorSuggestionFoodBeverage">#76B6EF</color>
+    <color name="colorNotification">#FFCDD2</color> <!-- Light Red -->
 </resources>
