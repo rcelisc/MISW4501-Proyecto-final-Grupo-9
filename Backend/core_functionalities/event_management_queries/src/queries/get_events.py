@@ -1,8 +1,10 @@
 from ..models.event import Event
+from flask import g
 
 class GetEventsQueryHandler:
     def handle(self):
-        events = Event.query.all()
+        user_id = str(g.current_user_id)
+        events = Event.query.filter_by(user_id=user_id).all()
         events_data = [{
             'id': event.id,
             'name': event.name,

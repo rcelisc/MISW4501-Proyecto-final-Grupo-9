@@ -5,6 +5,7 @@ from ..models.event import Event, db
 from sqlalchemy.exc import IntegrityError
 from ..logger import configure_logging
 import logging
+from flask import g
 logger = configure_logging()
 
 class CreateEventCommandHandler:
@@ -51,14 +52,15 @@ class CreateEventCommandHandler:
         self.check_overlap(data)
         
         try:
-            event = Event(**data)
+            user_id = str(g.current_user_id)
+            event = Event(**data, user_id=user_id)
             db.session.add(event)
             db.session.commit()
 
             # Ensuring event_date is a string
             kafka_data = data.copy()
             kafka_data['event_date'] = kafka_data['event_date'].isoformat() if 'event_date' in kafka_data else None
-
+            kafka_data['user_id'] = g.current_user_id
             # Publish an event to PubSub after successfully creating the event
             message = {
                 "type": "EventCreated",
