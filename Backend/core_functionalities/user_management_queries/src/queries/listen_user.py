@@ -55,5 +55,5 @@ class EventUpdatesListener:
 def start_listener_in_background(app):
     listener = EventUpdatesListener(app)
     thread = threading.Thread(target=listener.start_listening)
-    thread.daemon = True  # This ensures the thread doesn't prevent the app from exiting
+    thread.daemon = True
     thread.start()
