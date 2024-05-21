@@ -188,7 +188,7 @@
     "mealPlanObjectives": "Nutritional Objectives",
     "mealPlanDescription": "Description",
     "mealPlanFrequency": "Meal Frequency",
-    "mealPlanType": "Food Types",
+    "mealPlanType": "Profile Type",
     "mealPlanButton": "Create Plan",
     "newNutritionPlanNotification": "New Nutrition Plan Created: {{details}}",
     "errorFetchingUsers": "Error while fetching users. Please try again later.",

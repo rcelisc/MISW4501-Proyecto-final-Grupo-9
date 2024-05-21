@@ -2,6 +2,7 @@ from google.cloud import pubsub_v1
 from ..models.user import Athlete, ComplementaryServicesProfessional, EventOrganizer, db, User
 from werkzeug.security import generate_password_hash
 import json
+import logging
 
 class CreateUserCommandHandler:
     def __init__(self):
@@ -29,7 +30,9 @@ class CreateUserCommandHandler:
         db.session.commit()
 
         event_data = self.create_event_data(user, user_type)
-        self.publisher.publish(self.topic_path, json.dumps(event_data).encode('utf-8'))
+        future = self.publisher.publish(self.topic_path, json.dumps(event_data).encode('utf-8'))
+        future.add_done_callback(self._publish_callback)
+        
         return user.id
     
     def create_event_data(self, user, user_type):
@@ -48,3 +51,10 @@ class CreateUserCommandHandler:
         }
         event_data['data']['type'] = user_type
         return event_data
+    
+    def _publish_callback(self, future):
+        try:
+            message_id = future.result()
+            logging.info(f"Message published to Pub/Sub with ID: {message_id}")
+        except Exception as e:
+            logging.error(f"Failed to publish message to Pub/Sub: {e}")
