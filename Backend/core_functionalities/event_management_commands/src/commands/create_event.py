@@ -3,6 +3,9 @@ import json
 from datetime import datetime, timedelta
 from ..models.event import Event, db
 from sqlalchemy.exc import IntegrityError
+from ..logger import configure_logging
+import logging
+logger = configure_logging()
 
 class CreateEventCommandHandler:
     
@@ -64,8 +67,18 @@ class CreateEventCommandHandler:
             }
 
             # Publish an event to Pub/Sub
-            self.publisher.publish(self.topic_path, json.dumps(message).encode('utf-8'))
+            future = self.publisher.publish(self.topic_path, json.dumps(message).encode('utf-8'))
+            future.add_done_callback(self._publish_callback)
+
             return event.id
         except IntegrityError:
             db.session.rollback()
             raise ValueError("Failed to create event due to a database error.")
+        
+    def _publish_callback(self, future):
+        try:
+            message_id = future.result()
+            logger.info(f"SOY LOGGER Message published to Pub/Sub with ID: {message_id}")
+            logging.info(f"SOY LOGGING Message published to Pub/Sub with ID: {message_id}")
+        except Exception as e:
+            logger.error(f"Failed to publish message to Pub/Sub: {e}")

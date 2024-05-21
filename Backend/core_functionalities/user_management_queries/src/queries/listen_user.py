@@ -2,6 +2,7 @@ from google.cloud import pubsub_v1
 from flask import current_app
 from ..models.user import User, db, Athlete, ComplementaryServicesProfessional, EventOrganizer
 import json
+import logging
 import threading
 
 class EventUpdatesListener:
@@ -12,7 +13,7 @@ class EventUpdatesListener:
     
     def callback(self, message):
         with self.app.app_context():  # Ensure app context is used within callback
-            print(f"Received message: {message.data}")
+            logging.info(f"Received message: {message.data}")
             message_data = json.loads(message.data.decode('utf-8'))
             message.ack()
 
@@ -22,14 +23,15 @@ class EventUpdatesListener:
     
     def start_listening(self):
         streaming_pull_future = self.subscriber.subscribe(self.subscription_path, callback=self.callback)
-        print("Listening for messages on {}".format(self.subscription_path))
+        logging.info(f"Listening for messages on {self.subscription_path}")
 
         with self.subscriber:
             try:
                 streaming_pull_future.result()  # Block indefinitely.
-            except TimeoutError:
-                streaming_pull_future.cancel()  # Trigger the shutdown.
-                streaming_pull_future.result()  # Block until the shutdown is complete.
+            except Exception as e:
+                streaming_pull_future.cancel()
+                logging.error(f"Listening stopped due to error: {e}")
+                streaming_pull_future.result()
 
     
     def process_user_created(self, message):
@@ -45,9 +47,9 @@ class EventUpdatesListener:
             new_user = user_class(**user_data)
             db.session.add(new_user)
             db.session.commit()
-            print(f"User {new_user.id} created in query service.")
+            logging.info(f"User {new_user.id} created in query service.")
         except Exception as e:
-            print(f"Failed to create user in query service: {e}")
+            logging.error(f"Failed to create user in query service: {e}")
             db.session.rollback()
 
 def start_listener_in_background(app):
