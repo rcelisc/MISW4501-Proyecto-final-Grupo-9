@@ -1,0 +1,1274 @@
+swagger: '2.0'
+info:
+  title: MySportApp API Gateway
+  description: Gateway to route to microservices
+  version: '1.0'
+host: mysportapp.duckdns.org
+schemes:
+  - https
+basePath: /api/v1
+paths:
+  /events:
+    post:
+      summary: Create an event
+      operationId: createEvent
+      x-google-backend:
+        address: https://event-management-commands:3001/events
+      parameters:
+        - in: body
+          name: body
+          description: Create Event
+          required: true
+          schema:
+            $ref: '#/definitions/Event'
+      responses:
+        201:
+          description: Event created
+          schema:
+            type: object
+            properties:
+              event_id:
+                type: integer
+              message:
+                type: string
+            example:
+              event_id: 2
+              message: Event created successfully
+
+  /events/{event_id}/publish:
+    post:
+      summary: Publish an event
+      operationId: publishEvent
+      parameters:
+        - name: event_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://event-management-commands:3001/events/{event_id}/publish
+      responses:
+        200:
+          description: Event published
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            example:
+              message: Event published successfully
+
+  /events/{event_id}/add:
+    post:
+      summary: Add user to an event
+      operationId: addUserToEvent
+      parameters:
+        - name: event_id
+          in: path
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Add user to event
+          required: true
+          schema:
+            $ref: '#/definitions/AddUserToEvent'
+      x-google-backend:
+        address: https://event-management-commands:3001/events/{event_id}/add
+      responses:
+        200:
+          description: User added to event
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            example:
+              message: User added successfully
+
+  /events/get:
+    get:
+      summary: Get all events for the user
+      operationId: getEvents
+      x-google-backend:
+        address: https://event-management-queries:3002/events/get
+      responses:
+        200:
+          description: Returns a list of events
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/EventData'
+
+  /events/{event_id}:
+    get:
+      summary: Get an event
+      operationId: getEvent
+      parameters:
+        - name: event_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://event-management-queries:3002/events/{event_id}
+      responses:
+        200:
+          description: Returns a single event
+          schema:
+            $ref: '#/definitions/EventData'
+
+  /events/published:
+    get:
+      summary: Get all published events
+      operationId: getPublishedEvents
+      x-google-backend:
+        address: https://event-management-queries:3002/events/published
+      responses:
+        200:
+          description: Returns a list of published events
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/EventData'
+
+  /events/user/{user_id}:
+    get:
+      summary: Get user's calendar
+      operationId: getUserCalendar
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://event-management-queries:3002/events/user/{user_id}
+      responses:
+        200:
+          description: Returns a list of events for the user
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserEvent'
+
+  /nutrition-plans:
+    get:
+      summary: Get all nutrition plans
+      operationId: getNutritionPlans
+      x-google-backend:
+        address: https://service-management:3005/nutrition-plans
+      responses:
+        200:
+          description: Returns a list of nutrition plans
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NutritionPlan'
+    post:
+      summary: Create a nutrition plan
+      operationId: createNutritionPlan
+      x-google-backend:
+        address: https://service-management:3005/nutrition-plans
+      parameters:
+        - in: body
+          name: body
+          description: Create Nutrition Plan
+          required: true
+          schema:
+            $ref: '#/definitions/NutritionPlan'
+      responses:
+        201:
+          description: Nutrition plan created
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              nutrition_plan_id:
+                type: integer
+            example:
+              message: Nutrition plan created successfully
+              nutrition_plan_id: 1
+
+  /services:
+    get:
+      summary: Get all services
+      operationId: getServices
+      x-google-backend:
+        address: https://service-management:3005/services
+      responses:
+        200:
+          description: Returns a list of services and events
+          schema:
+            type: object
+            properties:
+              services:
+                type: array
+                items:
+                  $ref: '#/definitions/Service'
+              events:
+                type: array
+                items:
+                  $ref: '#/definitions/EventData'
+    post:
+      summary: Create a service
+      operationId: createService
+      x-google-backend:
+        address: https://service-management:3005/services
+      parameters:
+        - in: body
+          name: body
+          description: Create Service
+          required: true
+          schema:
+            $ref: '#/definitions/Service'
+      responses:
+        201:
+          description: Service created
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              service_id:
+                type: integer
+            example:
+              message: Service created successfully
+              service_id: 1
+
+  /services/published:
+    get:
+      summary: Get all published services
+      operationId: getPublishedServices
+      x-google-backend:
+        address: https://service-management:3005/services/published
+      responses:
+        200:
+          description: Returns a list of published services and events
+          schema:
+            type: object
+            properties:
+              services:
+                type: array
+                items:
+                  $ref: '#/definitions/Service'
+              events:
+                type: array
+                items:
+                  $ref: '#/definitions/EventData'
+
+  /services/{service_id}/publish:
+    post:
+      summary: Publish a service
+      operationId: publishService
+      parameters:
+        - name: service_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://service-management:3005/services/{service_id}/publish
+      responses:
+        200:
+          description: Service published
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            example:
+              message: Service published successfully
+
+  /services/{service_id}/purchase:
+    post:
+      summary: Purchase a service
+      operationId: purchaseService
+      parameters:
+        - name: service_id
+          in: path
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Purchase Service
+          required: true
+          schema:
+            $ref: '#/definitions/PurchaseService'
+      x-google-backend:
+        address: https://service-management:3005/services/{service_id}/purchase
+      responses:
+        200:
+          description: Service purchased
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              service_id:
+                type: integer
+            example:
+              message: Service purchased successfully
+              service_id: 1
+
+  /services/user/{user_id}:
+    get:
+      summary: Get services purchased by user
+      operationId: getServicesPurchasedByUser
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://service-management:3005/services/user/{user_id}
+      responses:
+        200:
+          description: Returns a list of services purchased by the user
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Service'
+
+  /authorize_strava:
+    get:
+      summary: Authorize Strava
+      operationId: authorizeStrava
+      x-google-backend:
+        address: https://training-management-commands:3004/authorize_strava
+      responses:
+        302:
+          description: Redirect to Strava authorization URL
+
+  /strava_callback:
+    get:
+      summary: Strava callback
+      operationId: stravaCallback
+      x-google-backend:
+        address: https://training-management-commands:3004/strava_callback
+      responses:
+        200:
+          description: Returns Strava access token
+          schema:
+            type: object
+            properties:
+              access_token:
+                type: string
+            example:
+              access_token: your_access_token_here
+
+  /calculate-ftp-vo2max:
+    post:
+      summary: Calculate FTP and VO2Max
+      operationId: calculateFtpVo2max
+      x-google-backend:
+        address: https://training-management-commands:3004/calculate-ftp-vo2max
+      parameters:
+        - in: body
+          name: body
+          description: Session ID for metrics calculation
+          required: true
+          schema:
+            $ref: '#/definitions/CalculateMetrics'
+      responses:
+        200:
+          description: Metrics calculated
+          schema:
+            type: object
+            properties:
+              FTP:
+                type: number
+              VO2max:
+                type: number
+            example:
+              FTP: 250
+              VO2max: 50
+
+  /training-plan:
+    post:
+      summary: Create a training plan
+      operationId: createTrainingPlan
+      x-google-backend:
+        address: https://training-management-commands:3004/training-plan
+      parameters:
+        - in: body
+          name: body
+          description: Details of the training plan to create
+          required: true
+          schema:
+            $ref: '#/definitions/TrainingPlan'
+      responses:
+        201:
+          description: Training plan created
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+            example:
+              id: 1
+
+  /fetch_strava_activities:
+    get:
+      summary: Fetch Strava activities
+      operationId: fetchStravaActivities
+      x-google-backend:
+        address: https://training-management-commands:3004/fetch_strava_activities
+      responses:
+        200:
+          description: Returns a list of Strava activities
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/StravaActivity'
+
+  /activities:
+    get:
+      summary: Get activities
+      operationId: getActivities
+      x-google-backend:
+        address: https://training-management-commands:3004/activities
+      responses:
+        200:
+          description: Returns a list of activities
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Activity'
+
+  /receive_session-data:
+    post:
+      summary: Submit session data
+      operationId: submitSessionData
+      x-google-backend:
+        address: https://training-management-commands:3004/receive_session-data
+      parameters:
+        - in: body
+          name: body
+          description: Session data
+          required: true
+          schema:
+            $ref: '#/definitions/SessionData'
+      responses:
+        200:
+          description: Session data updated
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            example:
+              message: Session data updated successfully
+
+  /stop-training:
+    post:
+      summary: Stop a training session
+      operationId: stopTrainingSession
+      x-google-backend:
+        address: https://training-management-commands:3004/stop-training
+      parameters:
+        - in: body
+          name: body
+          description: Training session details
+          required: true
+          schema:
+            $ref: '#/definitions/StopTraining'
+      responses:
+        200:
+          description: Training session stopped
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              session_id:
+                type: string
+            example:
+              message: Training session stopped successfully
+              session_id: 7a887cbc-66db-4894-b880-b4fd71aa65af
+
+  /start-training:
+    post:
+      summary: Start a training session
+      operationId: startTrainingSession
+      x-google-backend:
+        address: https://training-management-commands:3004/start-training
+      parameters:
+        - in: body
+          name: body
+          description: Start training session details
+          required: true
+          schema:
+            $ref: '#/definitions/StartTraining'
+      responses:
+        201:
+          description: Training session started
+          schema:
+            type: object
+            properties:
+              session_id:
+                type: string
+            example:
+              session_id: 7a887cbc-66db-4894-b880-b4fd71aa65af
+
+  /training-plan/{plan_id}:
+    get:
+      summary: Get a training plan
+      operationId: getTrainingPlan
+      parameters:
+        - name: plan_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://training-management-queries:3003/training-plan/{plan_id}
+      responses:
+        200:
+          description: Returns a single training plan
+          schema:
+            $ref: '#/definitions/TrainingPlanData'
+
+  /training-plans/{profile}:
+    get:
+      summary: Get training plans by profile
+      operationId: getTrainingPlansByProfile
+      parameters:
+        - name: profile
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: https://training-management-queries:3003/training-plans/{profile}
+      responses:
+        200:
+          description: Returns a list of training plans by profile
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TrainingPlanData'
+
+  /training-sessions:
+    get:
+      summary: Get all training sessions
+      operationId: getAllTrainingSessions
+      x-google-backend:
+        address: https://training-management-queries:3003/training-sessions
+      responses:
+        200:
+          description: Returns a list of training sessions
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TrainingSessionData'
+
+  /training-sessions/{session_id}:
+    get:
+      summary: Get a training session
+      operationId: getTrainingSession
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          type: string
+          format: uuid
+      x-google-backend:
+        address: https://training-management-queries:3003/training-sessions/{session_id}
+      responses:
+        200:
+          description: Returns a single training session
+          schema:
+            $ref: '#/definitions/TrainingSessionData'
+
+  /training-sessions/user/{user_id}:
+    get:
+      summary: Get training sessions by user
+      operationId: getTrainingSessionsByUser
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://training-management-queries:3003/training-sessions/user/{user_id}
+      responses:
+        200:
+          description: Returns a list of training sessions by user
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TrainingSessionData'
+
+  /login:
+    post:
+      summary: User login
+      operationId: login
+      x-google-backend:
+        address: https://user-management-commands:3006/login
+      parameters:
+        - in: body
+          name: body
+          description: Login credentials
+          required: true
+          schema:
+            $ref: '#/definitions/Login'
+      responses:
+        200:
+          description: Login successful
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+            example:
+              token: your_token_here
+
+  /logout:
+    post:
+      summary: User logout
+      operationId: logout
+      x-google-backend:
+        address: https://user-management-commands:3006/logout
+      parameters:
+        - in: body
+          name: body
+          description: User ID for logout
+          required: true
+          schema:
+            $ref: '#/definitions/Logout'
+      responses:
+        200:
+          description: Logout successful
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            example:
+              message: Logout successful
+
+  /users:
+    post:
+      summary: Create a user
+      operationId: createUser
+      x-google-backend:
+        address: https://user-management-commands:3006/users
+      parameters:
+        - in: body
+          name: body
+          description: User details
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        201:
+          description: User created
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+            example:
+              id: 1
+
+  /users/{user_id}/demographic_data:
+    post:
+      summary: Register demographic data
+      operationId: registerDemographicData
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Demographic data
+          required: true
+          schema:
+            $ref: '#/definitions/DemographicData'
+      x-google-backend:
+        address: https://user-management-commands:3006/users/{user_id}/demographic_data
+      responses:
+        200:
+          description: Demographic data updated
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            example:
+              message: Demographic data updated successfully
+
+  /users/{user_id}/food_data:
+    post:
+      summary: Register food data
+      operationId: registerFoodData
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Food data
+          required: true
+          schema:
+            $ref: '#/definitions/FoodData'
+      x-google-backend:
+        address: https://user-management-commands:3006/users/{user_id}/food_data
+      responses:
+        200:
+          description: Food data updated
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            example:
+              message: Food data updated successfully
+
+  /users/{user_id}/sports_habits:
+    post:
+      summary: Register sports habits
+      operationId: registerSportsHabits
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Sports habits
+          required: true
+          schema:
+            $ref: '#/definitions/SportsHabits'
+      x-google-backend:
+        address: https://user-management-commands:3006/users/{user_id}/sports_habits
+      responses:
+        200:
+          description: Sports habits data updated
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            example:
+              message: Sports habit data updated successfully
+
+  /users/{user_id}/plan:
+    post:
+      summary: Update user plan
+      operationId: updateUserPlan
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Plan type
+          required: true
+          schema:
+            $ref: '#/definitions/UserPlan'
+      x-google-backend:
+        address: https://user-management-commands:3006/users/{user_id}/plan
+      responses:
+        200:
+          description: Plan updated
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              plan_type:
+                type: string
+            example:
+              message: Plan updated successfully
+              plan_type: basic
+
+  /users/get:
+    get:
+      summary: Get all users
+      operationId: getUsers
+      x-google-backend:
+        address: https://user-management-queries:3007/users/get
+      responses:
+        200:
+          description: Returns a list of users
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserData'
+
+  /users/{user_id}:
+    get:
+      summary: Get a user
+      operationId: getUser
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+      x-google-backend:
+        address: https://user-management-queries:3007/users/{user_id}
+      responses:
+        200:
+          description: Returns a single user
+          schema:
+            $ref: '#/definitions/UserData'
+
+definitions:
+  Event:
+    type: object
+    required:
+      - name
+      - description
+      - event_date
+      - duration
+      - location
+      - category
+      - fee
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      event_date:
+        type: string
+        format: date-time
+      duration:
+        type: integer
+      location:
+        type: string
+      category:
+        type: string
+      fee:
+        type: number
+      additional_info:
+        $ref: '#/definitions/AdditionalInfo'
+  AdditionalInfo:
+    type: object
+    properties:
+      registration_deadline:
+        type: string
+        format: date
+      max_participants:
+        type: integer
+      min_age:
+        type: integer
+  AddUserToEvent:
+    type: object
+    required:
+      - user_id
+    properties:
+      user_id:
+        type: integer
+        description: ID of the user to add to the event
+  EventData:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      event_date:
+        type: string
+        format: date-time
+      duration:
+        type: integer
+      location:
+        type: string
+      category:
+        type: string
+      fee:
+        type: number
+      status:
+        type: string
+      additional_info:
+        $ref: '#/definitions/AdditionalInfo'
+  UserEvent:
+    type: object
+    properties:
+      id:
+        type: integer
+      fecha:
+        type: string
+      nombre:
+        type: string
+      ubicación:
+        type: string
+      descripción:
+        type: string
+  NutritionPlan:
+    type: object
+    required:
+      - nutritional_objectives
+      - description
+      - user_id
+      - meal_frequency
+      - food_types
+    properties:
+      id:
+        type: integer
+      nutritional_objectives:
+        type: string
+      description:
+        type: string
+      user_id:
+        type: integer
+      meal_frequency:
+        type: string
+      food_types:
+        type: string
+  Service:
+    type: object
+    required:
+      - name
+      - description
+      - available
+      - rate
+      - status
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      available:
+        type: boolean
+      rate:
+        type: number
+      status:
+        type: string
+  PurchaseService:
+    type: object
+    required:
+      - user_id
+    properties:
+      user_id:
+        type: integer
+  CalculateMetrics:
+    type: object
+    required:
+      - session_id
+    properties:
+      session_id:
+        type: string
+        format: uuid
+  TrainingPlan:
+    type: object
+    required:
+      - objectives
+      - description
+      - exercises
+      - frequency
+      - duration
+    properties:
+      objectives:
+        type: string
+        description: Main objectives of the training plan
+      description:
+        type: string
+        description: Detailed description of the training plan
+      exercises:
+        type: string
+        description: Types of exercises included in the plan
+      frequency:
+        type: string
+        description: How often the plan should be executed
+      duration:
+        type: string
+        description: Duration of the training plan in weeks
+  TrainingPlanData:
+    type: object
+    properties:
+      id:
+        type: integer
+      description:
+        type: string
+      exercises:
+        type: string
+      duration:
+        type: string
+      frequency:
+        type: string
+      objectives:
+        type: string
+      profile_type:
+        type: string
+      assigned_users:
+        type: string
+  SessionData:
+    type: object
+    required:
+      - session_id
+      - power_output
+      - max_heart_rate
+      - resting_heart_rate
+    properties:
+      session_id:
+        type: string
+        format: uuid
+      power_output:
+        type: integer
+        description: Average power output in watts
+      max_heart_rate:
+        type: integer
+        description: Maximum heart rate during the session
+      resting_heart_rate:
+        type: integer
+        description: Resting heart rate before the session
+  StopTraining:
+    type: object
+    required:
+      - session_id
+      - end_time
+      - duration
+      - calories_burned
+    properties:
+      session_id:
+        type: string
+        format: uuid
+      end_time:
+        type: string
+        format: date-time
+      duration:
+        type: integer
+        description: Duration of the training session in minutes
+      calories_burned:
+        type: number
+        description: Estimated calories burned during the session
+      notes:
+        type: string
+  StartTraining:
+    type: object
+    required:
+      - user_id
+      - training_type
+    properties:
+      user_id:
+        type: integer
+      training_type:
+        type: string
+        description: Type of training session
+  StravaActivity:
+    type: object
+    properties:
+      id:
+        type: integer
+      athlete_id:
+        type: integer
+      name:
+        type: string
+      distance:
+        type: number
+      moving_time:
+        type: integer
+      elapsed_time:
+        type: integer
+      total_elevation_gain:
+        type: number
+      type:
+        type: string
+  Activity:
+    type: object
+    properties:
+      id:
+        type: integer
+      athlete_id:
+        type: integer
+      name:
+        type: string
+      distance:
+        type: number
+      moving_time:
+        type: integer
+      elapsed_time:
+        type: integer
+      total_elevation_gain:
+        type: number
+      type:
+        type: string
+  TrainingSessionData:
+    type: object
+    properties:
+      id:
+        type: integer
+      user_id:
+        type: integer
+      duration:
+        type: integer
+      training_type:
+        type: string
+      end_time:
+        type: string
+        format: date-time
+      notes:
+        type: string
+  Login:
+    type: object
+    required:
+      - id_number
+      - password
+    properties:
+      id_number:
+        type: string
+      password:
+        type: string
+  Logout:
+    type: object
+    required:
+      - user_id
+    properties:
+      user_id:
+        type: integer
+  User:
+    type: object
+    required:
+      - type
+      - name
+      - surname
+      - id_type
+      - id_number
+      - profile_type
+    properties:
+      type:
+        type: string
+      name:
+        type: string
+      surname:
+        type: string
+      id_type:
+        type: string
+      id_number:
+        type: string
+      profile_type:
+        type: string
+      city_of_living:
+        type: string
+      country_of_living:
+        type: string
+      age:
+        type: integer
+      gender:
+        type: string
+      weight:
+        type: number
+      height:
+        type: number
+      city_of_birth:
+        type: string
+      country_of_birth:
+        type: string
+      sports:
+        type: string
+  DemographicData:
+    type: object
+    properties:
+      ethnicity:
+        type: string
+      heart_rate:
+        type: number
+      vo2_max:
+        type: number
+      blood_pressure:
+        type: string
+      respiratory_rate:
+        type: number
+  FoodData:
+    type: object
+    properties:
+      daily_calories:
+        type: number
+      daily_protein:
+        type: number
+      daily_liquid:
+        type: number
+      daily_carbs:
+        type: number
+      meal_frequency:
+        type: string
+  SportsHabits:
+    type: object
+    properties:
+      training_frequency:
+        type: string
+      sports_practiced:
+        type: string
+      average_session_duration:
+        type: number
+      recovery_time:
+        type: number
+      training_pace:
+        type: string
+  UserPlan:
+    type: object
+    properties:
+      plan_type:
+        type: string
+  UserData:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      surname:
+        type: string
+      id_type:
+        type: string
+      id_number:
+        type: string
+      city_of_living:
+        type: string
+      country_of_living:
+        type: string
+      type:
+        type: string
+      age:
+        type: integer
+      gender:
+        type: string
+      weight:
+        type: number
+      height:
+        type: number
+      city_of_birth:
+        type: string
+      country_of_birth:
+        type: string
+      sports:
+        type: string
+      profile_type:
+        type: string
+      heart_rate:
+        type: number
+      vo2_max:
+        type: number
+      blood_pressure:
+        type: string
+      respiratory_rate:
+        type: number
+      training_frequency:
+        type: string
+      sports_practiced:
+        type: string
+      average_session_duration:
+        type: number
+      recovery_time:
+        type: number
+      training_pace:
+        type: string
+      ethnicity:
+        type: string
+      plan_type:
+        type: string
+      daily_calories:
+        type: number
+      daily_protein:
+        type: number
+      daily_liquid:
+        type: number
+      daily_carbs:
+        type: number
+      meal_frequency:
+        type: string
