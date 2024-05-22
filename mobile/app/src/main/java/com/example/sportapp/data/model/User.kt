@@ -13,24 +13,24 @@ data class User(
     val gender: String,
     val weight: Float,
     val height: Float,
-    val city_of_birth: String?,
-    val country_of_birth: String?,
-    val sports: String?, // Changed to String
+    val city_of_birth: String,
+    val country_of_birth: String,
+    val sports: String?, // Comma-separated list of sports
     val profile_type: String?,
     val heart_rate: Int?,
     val vo2_max: Float?,
     val blood_pressure: String?,
     val respiratory_rate: Int?,
-    val training_frequency: Int?,
+    val training_frequency: String?, // Changed to String to match Python
     val sports_practiced: String?,
-    val average_session_duration: Float?,
+    val average_session_duration: Int?, // Changed to Int to match Python
     val recovery_time: Int?,
-    val training_pace: Float?,
+    val training_pace: String?, // Changed to String to match Python
     val ethnicity: String?,
-    val plan_type: String?,
+    val plan_type: String? = "basic", // Default value
     val daily_calories: Int?,
     val daily_protein: Int?,
     val daily_liquid: Int?,
     val daily_carbs: Int?,
-    val meal_frequency: Int?
+    val meal_frequency: String? // Changed to String to match Python
 )
