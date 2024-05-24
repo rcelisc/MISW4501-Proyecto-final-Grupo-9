@@ -41,7 +41,9 @@ class TestUpdateEvent(TestCase):
             location="Initial Location",
             category="Initial Category",
             fee=20.0,
-            attendees={}
+            attendees={},
+            user_id=1  # Set the user_id here
+
         )
         db.session.add(event)
         db.session.commit()

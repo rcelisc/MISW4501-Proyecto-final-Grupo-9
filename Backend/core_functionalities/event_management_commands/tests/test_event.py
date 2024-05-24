@@ -42,7 +42,9 @@ class TestEventService(TestCase):
                 "duration": 5,
                 "location": "Downtown City Park",
                 "category": "Running",
-                "fee": 50
+                "fee": 50,
+                "user_id":1  # Set the user_id here
+
             }
             headers = {'Authorization': f'Bearer {self.valid_token}'}
             response = self.client.post('/events', json=event_data, headers=headers)
@@ -69,9 +71,16 @@ class TestEventService(TestCase):
             self.assertIn("Missing mandatory field(s): name, location", response.json['error'])
 
     @patch('src.extensions.db.session.commit')
-    def test_create_event_database_error(self, mock_commit):
+    @patch('src.commands.create_event.g')
+    def test_create_event_database_error(self, mock_g, mock_commit):
+        # Mock the g object to include current_user_id
+        mock_g.current_user_id = 1
+
+        # Mock commit to raise IntegrityError
         mock_commit.side_effect = IntegrityError('mocking a db error', 'statement', 'params')
+        
         handler = CreateEventCommandHandler()
+        
         with self.assertRaises(ValueError) as context:
             handler.handle({
                 "name": "Another Test Event",
@@ -82,4 +91,5 @@ class TestEventService(TestCase):
                 "category": "Test",
                 "fee": 10
             })
+        
         self.assertIn("Failed to create event due to a database error", str(context.exception))

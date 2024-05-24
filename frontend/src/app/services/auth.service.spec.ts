@@ -31,7 +31,7 @@ describe('AuthService', () => {
       expect(response).toEqual(mockResponse); // Check if response matches mock response
     });
 
-    const req = httpMock.expectOne('http://localhost:3006/users');
+    const req = httpMock.expectOne('https://mysportapp.duckdns.org/users');
     expect(req.request.method).toBe('POST'); // Check if POST request is sent
     req.flush(mockResponse); // Simulate server response
   });

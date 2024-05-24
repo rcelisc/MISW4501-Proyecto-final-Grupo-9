@@ -43,7 +43,8 @@ class TestPublishEvent(TestCase):
             category="Initial Category",
             fee=20.0,
             attendees={},
-            status='created'  # Ensure the event is in a creatable state
+            status='created',
+            user_id=1  # Set the user_id here
         )
         db.session.add(event)
         db.session.commit()

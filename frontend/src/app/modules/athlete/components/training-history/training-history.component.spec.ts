@@ -1,26 +1,30 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { TrainingHistoryComponent } from './training-history.component';
 import { TrainingPlanService } from '../../../../services/training-plan.service';
+import { AuthService } from '../../../../services/auth.service';
 import { Router } from '@angular/router';
 import { MaterialModule } from '../../../../material.module';
 import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
+import { TranslateModule } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 
 describe('TrainingHistoryComponent', () => {
   let component: TrainingHistoryComponent;
   let fixture: ComponentFixture<TrainingHistoryComponent>;
   let mockTrainingPlanService: jasmine.SpyObj<TrainingPlanService>;
+  let mockAuthService: jasmine.SpyObj<AuthService>;
   let mockRouter: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
-    mockTrainingPlanService = jasmine.createSpyObj('TrainingPlanService', ['getTrainingSessions']);
+    mockTrainingPlanService = jasmine.createSpyObj('TrainingPlanService', ['getTrainingSessionByUser']);
+    mockAuthService = jasmine.createSpyObj('AuthService', ['decodeToken']);
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [CommonModule, MaterialModule, MatTableModule, TrainingHistoryComponent],
+      imports: [CommonModule, MaterialModule, TranslateModule.forRoot(), TrainingHistoryComponent],
       providers: [
         { provide: TrainingPlanService, useValue: mockTrainingPlanService },
+        { provide: AuthService, useValue: mockAuthService },
         { provide: Router, useValue: mockRouter }
       ]
     }).compileComponents();
@@ -33,18 +37,47 @@ describe('TrainingHistoryComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load trainings on init', () => {
-    const mockTrainings = [{ tipo_entrenamiento: 'Cardio', fecha: '2021-01-01', duracion: '30 mins', notas: 'Intense' }];
-    mockTrainingPlanService.getTrainingSessions.and.returnValue(of(mockTrainings));
+  it('should set user ID from token and load trainings on init', () => {
+    const mockUserId = 1;
+    const mockToken = 'mock-token';
+    const mockTrainings = [{ training_type: 'Cardio', end_time: '2021-01-01T00:00:00Z', duration: '30 mins', notes: 'Intense' }];
+    
+    spyOn(localStorage, 'getItem').and.returnValue(mockToken);
+    mockAuthService.decodeToken.and.returnValue({ user_id: mockUserId });
+    mockTrainingPlanService.getTrainingSessionByUser.and.returnValue(of(mockTrainings));
+
     fixture.detectChanges(); // ngOnInit is called here
+
+    expect(mockAuthService.decodeToken).toHaveBeenCalledWith(mockToken);
+    expect(component.userId).toBe(mockUserId);
     expect(component.dataSource.data).toEqual(mockTrainings);
-    expect(mockTrainingPlanService.getTrainingSessions).toHaveBeenCalled();
+    expect(mockTrainingPlanService.getTrainingSessionByUser).toHaveBeenCalledWith(mockUserId);
   });
 
-  it('should handle errors when loading trainings fails', () => {
+  it('should handle invalid token', () => {
+    spyOn(localStorage, 'getItem').and.returnValue(null);
+
+    fixture.detectChanges(); // ngOnInit is called here
+
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+  });
+
+  it('should handle error when loading trainings fails', () => {
     const consoleSpy = spyOn(console, 'error'); // Spy on console.error
-    mockTrainingPlanService.getTrainingSessions.and.returnValue(throwError(() => new Error('Failed to load')));
-    fixture.detectChanges();
-    expect(consoleSpy).toHaveBeenCalledWith('Failed to load trainings', jasmine.any(Error));
+    const mockUserId = 1;
+    const mockToken = 'mock-token';
+
+    spyOn(localStorage, 'getItem').and.returnValue(mockToken);
+    mockAuthService.decodeToken.and.returnValue({ user_id: mockUserId });
+    mockTrainingPlanService.getTrainingSessionByUser.and.returnValue(throwError(() => new Error('Failed to load')));
+
+    fixture.detectChanges(); // ngOnInit is called here
+
+    expect(consoleSpy).toHaveBeenCalledWith('Error loading trainings', jasmine.any(Error));
+  });
+
+  it('should navigate to athlete-dashboard on goBack', () => {
+    component.goBack();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/athlete-dashboard']);
   });
 });

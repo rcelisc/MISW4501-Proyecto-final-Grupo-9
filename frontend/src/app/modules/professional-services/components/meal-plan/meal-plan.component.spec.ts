@@ -4,6 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NutritionPlanService } from '../../../../services/nutrition-plan.service';
 import { SocketService } from '../../../../services/socket.service';
+import { AuthService } from '../../../../services/auth.service';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { MealPlanComponent } from './meal-plan.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of, throwError } from 'rxjs';
@@ -14,26 +16,37 @@ describe('MealPlanComponent', () => {
   let mockNutritionPlanService: jasmine.SpyObj<NutritionPlanService>;
   let mockSnackBar: jasmine.SpyObj<MatSnackBar>;
   let mockSocketService: jasmine.SpyObj<SocketService>;
+  let mockAuthService: jasmine.SpyObj<AuthService>;
 
   beforeEach(async () => {
     mockNutritionPlanService = jasmine.createSpyObj('NutritionPlanService', ['createMealPlan']);
     mockSnackBar = jasmine.createSpyObj('MatSnackBar', ['open']);
     mockSocketService = jasmine.createSpyObj('SocketService', ['fromEvent', 'disconnect']);
+    mockAuthService = jasmine.createSpyObj('AuthService', ['getUsers']);
 
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, RouterTestingModule, NoopAnimationsModule, MealPlanComponent],
+      imports: [
+        ReactiveFormsModule,
+        RouterTestingModule,
+        NoopAnimationsModule,
+        TranslateModule.forRoot(),
+        MealPlanComponent // Import the standalone component here
+      ],
       providers: [
         { provide: FormBuilder, useValue: new FormBuilder() },
         { provide: NutritionPlanService, useValue: mockNutritionPlanService },
         { provide: MatSnackBar, useValue: mockSnackBar },
-        { provide: SocketService, useValue: mockSocketService }
+        { provide: SocketService, useValue: mockSocketService },
+        { provide: AuthService, useValue: mockAuthService }
       ]
     }).compileComponents();
   });
 
   beforeEach(() => {
     mockSocketService.fromEvent.and.returnValue(of({ details: 'Sample data' }));
-    mockNutritionPlanService.createMealPlan.and.returnValue(of({ message: 'Success' })); 
+    mockNutritionPlanService.createMealPlan.and.returnValue(of({ message: 'Success' }));
+    mockAuthService.getUsers.and.returnValue(of([{ id: 1, name: 'John', surname: 'Doe' }]));
+
     fixture = TestBed.createComponent(MealPlanComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -52,14 +65,20 @@ describe('MealPlanComponent', () => {
     expect(form.controls['meal_frequency'].value).toEqual('');
     expect(form.controls['food_types'].value).toEqual('');
   });
-  
+
   it('should listen for nutrition plan notifications on init', () => {
     expect(mockSocketService.fromEvent).toHaveBeenCalledWith('nutrition_plan_notification');
   });
 
+  it('should load users on init', () => {
+    expect(mockAuthService.getUsers).toHaveBeenCalledWith('athlete');
+    expect(component.users.length).toBe(1);
+    expect(component.users[0].name).toBe('John');
+    expect(component.users[0].surname).toBe('Doe');
+  });
+
   it('should submit the form and navigate on successful creation', () => {
     spyOn(component, 'crearPlanAlimentacion').and.callThrough();
-    mockNutritionPlanService.createMealPlan.and.returnValue(of({ message: 'Success' }));
     component.formulario.setValue({
       user_id: '1',
       nutritional_objectives: 'Gain Muscle',
@@ -67,13 +86,14 @@ describe('MealPlanComponent', () => {
       meal_frequency: '5 meals a day',
       food_types: 'High protein foods'
     });
-  
+
     component.crearPlanAlimentacion();
     expect(component.crearPlanAlimentacion).toHaveBeenCalled();
-
+    expect(mockNutritionPlanService.createMealPlan).toHaveBeenCalledWith(component.formulario.value);
   });
-  
+
   it('should display an error message if form submission fails', () => {
+    mockNutritionPlanService.createMealPlan.and.returnValue(throwError(() => new Error('Failed to create meal plan')));
     component.formulario.setValue({
       user_id: '1',
       nutritional_objectives: 'Lose Weight',
@@ -81,8 +101,7 @@ describe('MealPlanComponent', () => {
       meal_frequency: '3 meals a day',
       food_types: 'Low carb foods'
     });
-    mockNutritionPlanService.createMealPlan.and.returnValue(throwError(() => new Error('Failed to create meal plan')));
-  
+
     component.crearPlanAlimentacion();
     expect(mockNutritionPlanService.createMealPlan).toHaveBeenCalled();
   });
@@ -93,5 +112,4 @@ describe('MealPlanComponent', () => {
     expect(mockSocketService.disconnect).toHaveBeenCalled();
     expect(spy).toHaveBeenCalled();
   });
-  
 });

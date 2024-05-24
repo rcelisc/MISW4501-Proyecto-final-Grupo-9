@@ -43,7 +43,9 @@ class TestAddUserToEvent(TestCase):
             location="Test Location",
             category="Test Category",
             fee=0.0,
-            attendees={'user_ids': []}
+            attendees={'user_ids': []},
+            user_id=1  # Set the user_id here
+
         )
         db.session.add(event)
         db.session.commit()

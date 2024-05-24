@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { TrainingPlanService } from '../../../../services/training-plan.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -23,11 +24,13 @@ describe('TrainingPlanComponent', () => {
         MatSnackBarModule,
         RouterTestingModule,
         BrowserAnimationsModule,
+        TranslateModule.forRoot(),
         TrainingPlanComponent
       ],
       providers: [
         { provide: TrainingPlanService, useValue: trainingPlanServiceSpy },
-        FormBuilder
+        FormBuilder,
+        TranslateService
       ]
     }).compileComponents();
 
@@ -63,7 +66,7 @@ describe('TrainingPlanComponent', () => {
     };
   
     component.formulario.setValue(formData);
-    trainingPlanService.createPlan.and.returnValue(of({ id:1, message: 'Success' }));
+    trainingPlanService.createPlan.and.returnValue(of({ id: 1, message: 'Success' }));
   
     component.enviarFormulario();
   
@@ -73,20 +76,20 @@ describe('TrainingPlanComponent', () => {
   });
   
   it('should display error message when form submission fails', () => {
-    component.formulario.setValue({
+    const formData = {
       description: 'Test Plan',
       exercises: '10 push-ups',
       duration: '30 minutes',
       frequency: '5 days a week',
       objectives: 'Increase strength',
       profile_type: 'Athlete'
-    });
+    };
+    component.formulario.setValue(formData);
     trainingPlanService.createPlan.and.returnValue(throwError(() => new Error('Failed')));
   
     component.enviarFormulario();
   
-    expect(component.errorMessage).toBe('Failed to submit data. Please try again later.');
+    expect(trainingPlanService.createPlan).toHaveBeenCalledWith(formData);
+    expect(component.errorMessage).toBe('trainingPlanSubmitErrorDetail');
   });
-  
-  
 });

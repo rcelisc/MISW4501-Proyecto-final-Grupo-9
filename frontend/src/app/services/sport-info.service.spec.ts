@@ -32,7 +32,7 @@ describe('SportInfoService', () => {
       expect(response).toEqual(mockResponse); // Check if response matches mock response
     });
 
-    const req = httpMock.expectOne(`http://localhost:3006/users/${userId}/sports_habits`);
+    const req = httpMock.expectOne(`https://mysportapp.duckdns.org/users/${userId}/sports_habits`);
     expect(req.request.method).toBe('POST'); // Check if POST request is sent
     expect(req.request.body).toEqual(sportData); // Check if request body matches the expected payload
     req.flush(mockResponse); // Simulate server response

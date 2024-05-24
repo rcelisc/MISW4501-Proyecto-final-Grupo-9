@@ -2,6 +2,7 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { WelcomePageComponent } from './welcome-page.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('WelcomePageComponent', () => {
   let component: WelcomePageComponent;
@@ -12,14 +13,15 @@ describe('WelcomePageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([]),
-        WelcomePageComponent 
+        TranslateModule.forRoot(),
+        WelcomePageComponent // Import the standalone component here
       ],
-      declarations: [  ]
+      declarations: []
     }).compileComponents();
 
     fixture = TestBed.createComponent(WelcomePageComponent);
     component = fixture.componentInstance;
-    router = TestBed.get(Router); // Deprecated use TestBed.inject
+    router = TestBed.inject(Router); // Correct way to inject Router
     fixture.detectChanges();
   });
 

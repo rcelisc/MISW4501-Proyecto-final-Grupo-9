@@ -44,7 +44,8 @@ class TestEventQueries(TestCase):
             category="Public",
             fee=0.0,
             status='published',
-            additional_info={}
+            additional_info={},
+            user_id=1
         )
         event2 = Event(
             id=2,
@@ -56,7 +57,8 @@ class TestEventQueries(TestCase):
             category="Private",
             fee=20.0,
             status='created',
-            additional_info={}
+            additional_info={},
+            user_id=1
         )
         db.session.add(event1)
         db.session.add(event2)

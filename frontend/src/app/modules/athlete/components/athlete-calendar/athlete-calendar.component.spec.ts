@@ -2,30 +2,47 @@ import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angul
 import { AthleteCalendarComponent } from './athlete-calendar.component';
 import { CreateServiceService } from '../../../../services/create-service.service';
 import { NotificationService } from '../../../../services/notification.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { of } from 'rxjs';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { MaterialModule } from '../../../../material.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 describe('AthleteCalendarComponent', () => {
   let component: AthleteCalendarComponent;
   let fixture: ComponentFixture<AthleteCalendarComponent>;
-  let mockCreateService: any;
-  let mockNotificationService: any;
-  let mockSnackBar: any;
+  let mockCreateService: jasmine.SpyObj<CreateServiceService>;
+  let mockNotificationService: jasmine.SpyObj<NotificationService>;
+  let mockSnackBar: jasmine.SpyObj<MatSnackBar>;
+  let notificationsSubject: Subject<any>;
 
   beforeEach(waitForAsync(() => {
     mockCreateService = jasmine.createSpyObj('CreateServiceService', ['getServicesPublished']);
     mockNotificationService = jasmine.createSpyObj('NotificationService', ['showNotification']);
     mockSnackBar = jasmine.createSpyObj('MatSnackBar', ['open']);
-    mockNotificationService.notifications = of({ /* mock data that resembles what would be emitted */ });
-
+    notificationsSubject = new Subject<any>();
 
     TestBed.configureTestingModule({
-      imports: [ AthleteCalendarComponent ], // Change here from declarations to imports
+      imports: [
+        AthleteCalendarComponent, // Standalone component import
+        CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
+        MaterialModule,
+        TranslateModule.forRoot(),
+        HttpClientTestingModule,
+        RouterTestingModule,
+        NoopAnimationsModule,
+        MatSnackBarModule
+      ],
       providers: [
         { provide: CreateServiceService, useValue: mockCreateService },
         { provide: NotificationService, useValue: mockNotificationService },
-        { provide: MatSnackBar, useValue: mockSnackBar }
+        { provide: MatSnackBar, useValue: mockSnackBar },
+        TranslateService
       ],
       schemas: [NO_ERRORS_SCHEMA] // Use this schema to ignore unknown elements and attributes
     }).compileComponents();
@@ -38,6 +55,10 @@ describe('AthleteCalendarComponent', () => {
       events: [{ event_date: new Date(), name: 'Event 1', duration: 60 }],
       services: []
     }));
+    
+    // Mock the notifications observable
+    Object.defineProperty(mockNotificationService, 'notifications', { get: () => notificationsSubject.asObservable() });
+    
     fixture.detectChanges();
   });
 

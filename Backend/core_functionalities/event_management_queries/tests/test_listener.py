@@ -42,7 +42,8 @@ class TestEventUpdatesListener(unittest.TestCase):
                 "duration": 3,
                 "location": "New Park",
                 "category": "Outdoor",
-                "fee": 10
+                "fee": 10,
+                "user_id":1
             }
         }
         message_data = json.dumps(event_data).encode('utf-8')
