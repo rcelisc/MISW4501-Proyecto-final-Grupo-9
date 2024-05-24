@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1E88E5</color>
+    <color name="colorPrimaryDark">#1565C0</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentLight">#FF80AB</color>
+    <color name="colorAccentDark">#F50057</color>
+    <color name="colorError">#D32F2F</color>
+    <color name="colorBackground">#1E1E1E</color>
+    <color name="colorSurface">#121212</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+    <color name="colorOnBackground">#FFFFFF</color>
+    <color name="colorOnSurface">#FFFFFF</color>
+    <!-- Additional colors for suggestions/notifications -->
+    <color name="colorSuggestionTraining">#37474F</color>
+    <color name="colorSuggestionEvent">#263238</color>
+    <color name="colorSuggestionRoute">#263238</color>
+    <color name="colorSuggestionService">#263238</color>
+    <color name="colorSuggestionFoodBeverage">#263238</color>
+    <color name="colorNotification">#E57373</color> <!-- Darker Red -->
+</resources>

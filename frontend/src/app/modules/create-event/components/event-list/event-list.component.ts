@@ -1,27 +1,35 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CreateEventService } from '../../../../services/create-event.service'
-import { MaterialModule } from '../../../../shared/material.module';
+import { CreateEventService } from '../../../../services/create-event.service';
+import { AuthService } from '../../../../services/auth.service';
+import { MaterialModule } from '../../../../material.module';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
+import { Observable, forkJoin } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-event-list',
   standalone: true,
-  imports: [MaterialModule, CommonModule],
+  imports: [MaterialModule, CommonModule, TranslateModule],
   templateUrl: './event-list.component.html',
-  styleUrl: './event-list.component.scss'
+  styleUrls: ['./event-list.component.scss']
 })
-
-
 export class EventListComponent implements OnInit {
   events: any[] = [];
   dataSource = new MatTableDataSource<any>([]);
-  displayedColumns: string[] = ['nombre', 'descripcion', 'fechaEvento', 'duracion', 'ubicacion', 'categoria', 'costo', 'estado'];
+  displayedColumns: string[] = [
+    'nombre', 'descripcion', 'fechaEvento', 'duracion', 'ubicacion', 
+    'categoria', 'costo', 'estado', 'expandToggle'
+  ];
 
   constructor(
     private createEventService: CreateEventService,
-    private router: Router
+    private authService: AuthService,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -30,14 +38,42 @@ export class EventListComponent implements OnInit {
 
   loadEvents(): void {
     this.createEventService.getEvents().subscribe({
-      next: (response:any) => {
-        // Assuming the response format is the one shown above
-        this.dataSource.data = response;
+      next: (response: any) => {
+        this.dataSource.data = response.map((event: any) => ({
+          ...event,
+          isExpanded: false,
+          userData: []
+        }));
       },
       error: (error) => {
         console.error('Failed to load events', error);
       }
     });
+  }
+
+  isExpandedRow = (i: number, element: any) => element.isExpanded;
+
+  toggleRow(element: any): void {
+    element.isExpanded = !element.isExpanded;
+
+    if (element.isExpanded && (!element.userData || element.userData.length === 0)) {
+      this.fetchUserDetails(element.attendees.user_ids).subscribe(userDetails => {
+        element.userData = userDetails;
+        this.refreshTable();
+      });
+    } else {
+      this.refreshTable();
+    }
+  }
+
+  refreshTable() {
+    this.dataSource.data = [...this.dataSource.data];
+    this.cdr.detectChanges();
+  }
+
+  fetchUserDetails(userIds: number[]): Observable<any[]> {
+    let requests = userIds.map(id => this.authService.getUserById(id));
+    return forkJoin(requests);
   }
 
   onPublishEvent(event: any): void {
@@ -52,5 +88,9 @@ export class EventListComponent implements OnInit {
         console.error('Failed to publish event', error);
       }
     });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/organizer-dashboard']);
   }
 }

@@ -1,31 +1,33 @@
 <div class="calendar-container">
-    <h2 class="calendar-title">Calendario de Eventos</h2>
-        <div class="calendar-header">
-            <button class="nav-btn" (click)="previousMonth()">‹ Prev</button>
-            <h3 class="month-label">{{ viewDate | date: 'MMMM y' }}</h3>
-            <button class="nav-btn" (click)="nextMonth()">Next ›</button>
-        </div>
-    <mwl-calendar-month-view
-        [viewDate]="viewDate"
-        [events]="events"
-        (dayClicked)="dayClicked($event.day)">
-    </mwl-calendar-month-view>
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <h2 class="calendar-title">{{ 'eventCalendarTitle' | translate }}</h2>
+  <div class="calendar-header">
+    <button class="nav-btn" (click)="previousMonth()">{{ 'eventCalendarPrevMonth' | translate }}</button>
+    <h3 class="month-label">{{ viewDate | date: 'MMMM y' }}</h3>
+    <button class="nav-btn" (click)="nextMonth()">{{ 'eventCalendarNextMonth' | translate }}</button>
+  </div>
+  <mwl-calendar-month-view
+    [viewDate]="viewDate"
+    [events]="events"
+    (dayClicked)="dayClicked($event.day)">
+  </mwl-calendar-month-view>
 </div>
 <div *ngIf="selectedEvents.length > 0" class="event-list">
-    <h3>Events on {{ viewDate | date: 'longDate' }}</h3>
-    <ul>
-      <li *ngFor="let event of selectedEvents" (click)="selectEvent(event)">
-        {{ event.title }}
-      </li>
-    </ul>
-  </div>
-  <div *ngIf="isDetailsVisible" class="event-details">
-    <button class="close-btn" (click)="closeDetails()">Close</button>
-    <h3>Event Details</h3>
-    <p><strong>Title:</strong> {{ selectedEvent?.title }}</p>
-    <p><strong>Start:</strong> {{ selectedEvent?.start | date: 'longDate' }}</p>
-    <p><strong>End:</strong> {{ selectedEvent?.end | date: 'longDate' }}</p>
-    <p><strong>Location:</strong> {{ selectedEvent?.meta.location }}</p>
-    <p><strong>Description:</strong> {{ selectedEvent?.meta.description }}</p>
-  </div>
-  
+  <h3>{{ 'eventCalendarEventsOn' | translate }} {{ viewDate | date: 'longDate' }}</h3>
+  <ul>
+    <li *ngFor="let event of selectedEvents" (click)="selectEvent(event)">
+      {{ event.title }}
+    </li>
+  </ul>
+</div>
+<div *ngIf="isDetailsVisible" class="event-details">
+  <button class="close-btn" (click)="closeDetails()">{{ 'eventCalendarClose' | translate }}</button>
+  <h3>{{ 'eventCalendarEventDetails' | translate }}</h3>
+  <p><strong>{{ 'eventCalendarEventTitle' | translate }}:</strong> {{ selectedEvent?.title }}</p>
+  <p><strong>{{ 'eventCalendarEventStart' | translate }}:</strong> {{ selectedEvent?.start | date: 'longDate' }}</p>
+  <p><strong>{{ 'eventCalendarEventEnd' | translate }}:</strong> {{ selectedEvent?.end | date: 'longDate' }}</p>
+  <p><strong>{{ 'eventCalendarEventLocation' | translate }}:</strong> {{ selectedEvent?.meta.location }}</p>
+  <p><strong>{{ 'eventCalendarEventDescription' | translate }}:</strong> {{ selectedEvent?.meta.description }}</p>
+</div>

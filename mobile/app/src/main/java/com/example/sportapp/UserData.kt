@@ -5,23 +5,30 @@ import android.app.Application
 // En el archivo MyApp.kt
 class SportApp : Application() {
     companion object {
-        var userSesionId: String = ""
-        var userCodeId: Int = 0
+        var userSessionId: String = ""
+        var userRole: String? = null
+        var userCodeId: Int = -1
         var powerOutput: Int = 0
         var maxHeartRate: Int = 0
         var restingHeartRate: Int = 0
-        var profile: String = ""
+        var profile: String? = ""
+        var plan_type: String? = ""
         var startDevice: Boolean = false
         var isMale: Boolean = true
-        var age: Int = 30
-        var weight: Int = 80 // kg
-        var height: Int = 174 // cm
-
+        var age: Int = 0
+        var weight: Float = 0.0F // kg
+        var height: Float = 0.0F // cm
+        var calories: Int = 0 // cm
+        var steps: Int = 0 // cm
     }
 
     override fun onCreate() {
         super.onCreate()
-        userSesionId = ""
+        resetUserData()
+    }
+
+    private fun resetUserData() {
+        userSessionId = ""
         userCodeId = 0
         powerOutput = 0
         maxHeartRate = 0
@@ -29,8 +36,10 @@ class SportApp : Application() {
         profile = ""
         startDevice = false
         isMale = true
-        age = 40
-        weight = 80
-        height = 174
+        age = 0
+        weight = 0.0F
+        height = 0.0F
+        calories = 0
+        steps = 0
     }
 }

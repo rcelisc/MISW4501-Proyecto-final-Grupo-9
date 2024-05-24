@@ -3,6 +3,8 @@ from ..commands.create_user import CreateUserCommandHandler
 from ..commands.register_demographic_data import RegisterDemographicDataCommandHandler
 from ..commands.register_sports_habits import RegisterSportsHabitDataCommandHandler
 from ..commands.update_user_plan import UpdateUserPlanCommandHandler
+from ..commands.register_food_data import RegisterFoodDataCommandHandler
+from ..middlewares.auth import token_required
 
 user_blueprint = Blueprint('user', __name__)
 
@@ -15,6 +17,7 @@ def create_user():
     return jsonify({"id": user_id}), 201
 
 @user_blueprint.route('/users/<int:user_id>/demographic_data', methods=['POST'])
+@token_required('athlete')
 def register_demographic_data(user_id):
     data = request.get_json()
     handler = RegisterDemographicDataCommandHandler()
@@ -26,7 +29,21 @@ def register_demographic_data(user_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 400
     
+@user_blueprint.route('/users/<int:user_id>/food_data', methods=['POST'])
+@token_required('athlete')
+def register_food_data(user_id):
+    data = request.get_json()
+    handler = RegisterFoodDataCommandHandler()
+    try:
+        handler.handle(user_id, data)
+        return jsonify({"message": "Food data updated successfully"}), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    
 @user_blueprint.route('/users/<int:user_id>/sports_habits', methods=['POST'])
+@token_required('athlete')
 def register_sports_habits(user_id):
     data = request.get_json()
     handler = RegisterSportsHabitDataCommandHandler()
@@ -39,6 +56,7 @@ def register_sports_habits(user_id):
         return jsonify({"error": str(e)}), 400
     
 @user_blueprint.route('/users/<int:user_id>/plan', methods=['POST'])
+@token_required('athlete')
 def update_user_plan(user_id):
     data = request.get_json()
     plan_type = data.get('plan_type')

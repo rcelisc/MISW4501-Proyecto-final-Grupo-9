@@ -1,60 +1,62 @@
 <div class="container">
-    <h2 i18n="@@createEventTitle" class="title">Crear Evento</h2>
-    <form [formGroup]="createEventForm" (ngSubmit)="onSubmit()">
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-          <mat-label i18n="@@createEventName">Nombre</mat-label>
-          <input matInput formControlName="name">
-        </mat-form-field>
-      </div>
-  
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-          <mat-label i18n="@@createEventDescription">Descripción</mat-label>
-          <textarea matInput formControlName="description"></textarea>
-        </mat-form-field>
-      </div>
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <h2 class="title">{{ 'createEventTitle' | translate }}</h2>
+  <form [formGroup]="createEventForm" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'createEventName' | translate }}</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+    </div>
 
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-          <mat-label i18n="@@createEventDate">Fecha del Evento</mat-label>
-          <input matInput formControlName="event_date" [matDatepicker]="picker" type="text">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </div>
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'createEventDescription' | translate }}</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+      </mat-form-field>
+    </div>
 
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-          <mat-label i18n="@@createEventDuration">Duración (Horas)</mat-label>
-          <input matInput formControlName="duration" type="number">
-        </mat-form-field>
-      </div>
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'createEventDate' | translate }}</mat-label>
+        <input matInput formControlName="event_date" [matDatepicker]="picker" type="text">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
 
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-          <mat-label i18n="@@createEventLocation">Ubicación</mat-label>
-          <input matInput formControlName="location" type="text">
-        </mat-form-field>
-      </div>
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'createEventDuration' | translate }}</mat-label>
+        <input matInput formControlName="duration" type="number">
+      </mat-form-field>
+    </div>
 
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-          <mat-label i18n="@@createEventCategory">Categoría</mat-label>
-          <input matInput formControlName="category" type="text">
-        </mat-form-field>
-      </div>
-  
-      <div class="form-field">
-        <mat-form-field appearance="fill">
-          <mat-label i18n="@@createEventFee">Costo</mat-label>
-          <input matInput formControlName="fee" type="number">
-        </mat-form-field>
-      </div>
-  
-      <div class="button-container">
-        <button mat-button class="create-button" type="submit" i18n="@@createEventButton" >Crear</button>
-      </div>
-    </form>
-  </div>
-  
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'createEventLocation' | translate }}</mat-label>
+        <input matInput formControlName="location" type="text">
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'createEventCategory' | translate }}</mat-label>
+        <input matInput formControlName="category" type="text">
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'createEventFee' | translate }}</mat-label>
+        <input matInput formControlName="fee" type="number">
+      </mat-form-field>
+    </div>
+
+    <div class="button-container">
+      <button mat-button class="create-button" type="submit">{{ 'createEventButton' | translate }}</button>
+    </div>
+  </form>
+</div>

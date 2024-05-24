@@ -19,4 +19,4 @@ ENV FLASK_ENV=development
 EXPOSE 3004
 
 # Use Gunicorn to serve the app. Adjust the number of workers as needed.
-CMD ["gunicorn", "--workers=3", "--bind=0.0.0.0:3004","--timeout=120", "--log-level=debug", "src.main:create_app()"]
+CMD ["gunicorn", "--workers=3", "--bind=0.0.0.0:3004","--timeout=120", "--log-level=debug", "--access-logfile",  "-", "--error-logfile", "-", "src.main:create_app()"]

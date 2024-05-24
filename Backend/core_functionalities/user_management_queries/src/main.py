@@ -8,6 +8,7 @@ from .queries.listen_nutrition_plan import start_nutrition_plan_listener
 from .queries.listen_demographic_data import start_listener_in_background as start_demographic_data_listener
 from .queries.listen_sports_habits import start_listener_in_background as start_sports_habits_listener
 from .queries.listen_update_user_plan import start_listener_in_background as start_update_user_plan_listener
+from .queries.listen_food_data import start_listener_in_background as start_food_data_listener
 from .queries.socket_events import setup_socket_events
 from flask_cors import CORS
 import os
@@ -30,6 +31,7 @@ def create_app(config_class=DevelopmentConfig):
     app.register_blueprint(user_blueprint)
     start_listener_in_background(app)
     start_demographic_data_listener(app)
+    start_food_data_listener(app)
     start_sports_habits_listener(app)
     start_update_user_plan_listener(app)
     start_nutrition_plan_listener(app, socketio)

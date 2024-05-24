@@ -6,6 +6,7 @@ from src.extensions import db
 from src.models.training_session import TrainingSession
 from datetime import datetime, timedelta
 import uuid
+import jwt
 
 class TestTrainingSessionManagement(TestCase):
     def create_app(self):
@@ -15,6 +16,7 @@ class TestTrainingSessionManagement(TestCase):
         return app
 
     def setUp(self):
+        super(TestTrainingSessionManagement, self).setUp()
         # Create all database tables and seed test data
         db.create_all()
         session1 = TrainingSession(id='123e4567-e89b-12d3-a456-426614174000', session_id='123e4567-e89b-12d3-a456-426614174000', user_id=1, end_time=datetime.now() + timedelta(hours=1), training_type='cycling', duration=60, notes='Good session')
@@ -22,15 +24,26 @@ class TestTrainingSessionManagement(TestCase):
         db.session.add(session1)
         db.session.add(session2)
         db.session.commit()
+        self.valid_token = self.generate_fake_token('complementary_services_professional')
 
     def tearDown(self):
         # Drop all tables and clean up the test database
         db.session.remove()
         db.drop_all()
 
+    def generate_fake_token(self, role):
+        # Generate a fake JWT token for testing
+        payload = {
+            'user_id': 1,
+            'role': role,
+            'exp': datetime.utcnow() + timedelta(days=1)
+        }
+        return jwt.encode(payload, 'login_key', algorithm='HS256')
+
     def test_get_all_training_sessions(self):
         # Test retrieval of all training sessions
-        response = self.client.get('/training-sessions')
+        headers = {'Authorization': 'Bearer ' + self.valid_token}
+        response = self.client.get('/training-sessions', headers=headers)
         self.assert200(response)
         self.assertEqual(len(response.json), 2)  # Check if two sessions are returned
         self.assertTrue(any(session['id'] == '123e4567-e89b-12d3-a456-426614174000' for session in response.json))
@@ -38,7 +51,8 @@ class TestTrainingSessionManagement(TestCase):
 
     def test_get_training_session_by_id(self):
         # Test retrieval of a specific training session by UUID
-        response = self.client.get('/training-sessions/123e4567-e89b-12d3-a456-426614174000')
+        headers = {'Authorization': 'Bearer ' + self.valid_token}
+        response = self.client.get('/training-sessions/123e4567-e89b-12d3-a456-426614174000', headers=headers)
         self.assert200(response)
         # Check if the response has valid JSON data
         self.assertIsNotNone(response.json, "The response JSON should not be None")

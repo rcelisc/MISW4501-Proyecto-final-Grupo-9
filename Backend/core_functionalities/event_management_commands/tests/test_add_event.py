@@ -4,6 +4,8 @@ from flask_testing import TestCase
 from src.main import create_app
 from src.extensions import db
 from src.models.event import Event
+from datetime import datetime, timedelta
+import jwt
 
 class TestAddUserToEvent(TestCase):
 
@@ -13,12 +15,22 @@ class TestAddUserToEvent(TestCase):
         return app
 
     def setUp(self):
+        super(TestAddUserToEvent, self).setUp()
         db.create_all()
         self.create_initial_events()
+        self.valid_token = self.generate_fake_token()
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+    
+    def generate_fake_token(self):
+        payload = {
+            'user_id': 1,
+            'role': 'athlete',
+            'exp': datetime.utcnow() + timedelta(days=1)
+        }
+        return jwt.encode(payload, 'login_key', algorithm='HS256')
 
     def create_initial_events(self):
         # Create a default event to be used in tests
@@ -42,14 +54,16 @@ class TestAddUserToEvent(TestCase):
         mock_pubsub_client.return_value = mock_publisher
         
         with self.client:
-            response = self.client.post('/events/1/add', json={'user_id': 123})
+            headers = {'Authorization': f'Bearer {self.valid_token}'}
+            response = self.client.post('/events/1/add', json={'user_id': 123}, headers=headers)
             self.assertEqual(response.status_code, 200)
             self.assertIn("User added successfully", response.json['message'])
 
     @patch('src.commands.add_user_to_event.pubsub_v1.PublisherClient')
     def test_add_user_to_non_existent_event(self, mock_pubsub_client):
         with self.client:
-            response = self.client.post('/events/999/add', json={'user_id': 123})
+            headers = {'Authorization': f'Bearer {self.valid_token}'}
+            response = self.client.post('/events/999/add', json={'user_id': 123}, headers=headers)
             self.assertEqual(response.status_code, 404)
             self.assertIn("Event not found", response.json['error'])
 
@@ -61,7 +75,8 @@ class TestAddUserToEvent(TestCase):
         db.session.commit()
 
         with self.client:
-            response = self.client.post('/events/1/add', json={'user_id': 123})
+            headers = {'Authorization': f'Bearer {self.valid_token}'}
+            response = self.client.post('/events/1/add', json={'user_id': 123}, headers=headers)
             self.assertEqual(response.status_code, 200)
             self.assertIn("User added successfully", response.json['message'])
 
